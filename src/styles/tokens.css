@@ -1,0 +1,31 @@
+:root {
+  --bg: #fbfaf7;
+  --ink: #1d1d1f;
+  --muted: #6e6e73;
+
+  /* pastel palette */
+  --blue: #dbeafe;
+  --yellow: #fff3bf;
+  --pink: #fde2ee;
+  --mint: #d8f5e6;
+  --lilac: #e8e0fb;
+  --peach: #ffe6d5;
+  --white: #ffffff;
+
+  --radius: 28px;
+  --gap: 14px;
+  --pad: 16px;
+  --header-h: 64px;
+  --stage-h: calc(100dvh - var(--header-h) - var(--pad));
+  --rail-w: 210px;
+
+  --shadow: 0 1px 2px rgba(0, 0, 0, .04), 0 8px 24px rgba(30, 30, 60, .06);
+  --font: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Inter", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+@media (min-width: 900px) {
+  :root {
+    --pad: 20px;
+    --gap: 16px;
+  }
+}
