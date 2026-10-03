@@ -1,978 +1,341 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ishaan Parmar Portfolio</title>
-
-  <!--
-    - favicon
-  -->
-  <link rel="shortcut icon" href="./assets/images/ip.jpg" type="image/x-icon">
-
-  <!--
-    - custom css link
-  -->
-  <link rel="stylesheet" href="./assets/css/style.css">
-
-  <!--
-    - google font link
-  -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Ishaan Parmar · Senior AI Engineer</title>
+  <meta name="description" content="Ishaan Parmar — Senior AI Engineer in Singapore building production GenAI and ML systems. Projects, resume, hobbies and writing.">
+  <meta name="theme-color" content="#fbfaf7">
+  <link rel="shortcut icon" href="./assets/images/ip.jpg" type="image/jpeg">
+  <link rel="stylesheet" href="./assets/css/bento.css">
 </head>
-
 <body>
 
-  <!--
-    - #MAIN
-  -->
+  <!-- Navigation: top pill on desktop, bottom tab bar on mobile -->
+  <nav class="nav" aria-label="Sections">
+    <a href="#home" class="nav-link is-active" data-nav><span class="nav-ico">🏠</span><span>Home</span></a>
+    <a href="#projects" class="nav-link" data-nav><span class="nav-ico">🚀</span><span>Projects</span></a>
+    <a href="#resume" class="nav-link" data-nav><span class="nav-ico">📄</span><span>Resume</span></a>
+    <a href="#hobbies" class="nav-link" data-nav><span class="nav-ico">🎨</span><span>Hobbies</span></a>
+    <a href="#writing" class="nav-link" data-nav><span class="nav-ico">✍️</span><span>Writing</span></a>
+  </nav>
 
-  <main>
+  <main class="page">
 
-    <!--
-      - #SIDEBAR
-    -->
+    <!-- ============ HOME / ABOUT ============ -->
+    <section id="home" class="section" data-section>
+      <div class="bento">
 
-    <aside class="sidebar" data-sidebar>
+        <article class="card c-hero span-4 row-2">
+          <img class="avatar" src="./assets/images/my-pic.jpeg" alt="Ishaan Parmar" width="96" height="96">
+          <p class="eyebrow">Hi, I'm</p>
+          <h1>Ishaan Parmar</h1>
+          <p class="lead">Senior AI Engineer productionizing GenAI and machine-learning systems for complex enterprise data.</p>
+          <div class="chips">
+            <span class="chip">📍 Singapore</span>
+            <span class="chip">🎓 SMU Masters</span>
+            <span class="chip">🧪 Open to work</span>
+          </div>
+          <div class="hero-actions">
+            <a class="btn btn-dark" href="./assets/resume/Ishaan-parmar-resume.pdf" download="Ishaan-Parmar-Resume.pdf">Download resume ↓</a>
+            <a class="btn btn-light" href="#projects">See my work</a>
+          </div>
+        </article>
 
-      <div class="sidebar-info">
+        <article class="card c-blue span-2">
+          <p class="label">Currently</p>
+          <h3>Senior AI Engineer @ FileAI</h3>
+          <p class="muted">Series A startup transforming unstructured enterprise data with GenAI.</p>
+        </article>
 
-        <figure class="avatar-box">
-          <img src="./assets/images/my-pic.jpeg" alt="Ishaan Parmar" width="80">
-        </figure>
+        <a class="card c-yellow span-2 link" href="mailto:iparmar0505@gmail.com">
+          <p class="label">Say hello</p>
+          <h3>Email me ↗</h3>
+          <p class="muted small">iparmar0505@gmail.com</p>
+        </a>
 
-        <div class="info-content">
-          <h1 class="name" title="Ishaan Parmar">Ishaan Parmar</h1>
+        <article class="card c-mint span-2">
+          <p class="label">What I do</p>
+          <ul class="tags">
+            <li>GenAI &amp; LLMs</li>
+            <li>Agentic Workflows</li>
+            <li>Document Intelligence</li>
+            <li>ML Platforms &amp; MLOps</li>
+          </ul>
+        </article>
 
-          <p class="title">Data Scientist / ML Engineer</p>
-        </div>
+        <article class="card c-pink span-2">
+          <p class="label">Toolkit</p>
+          <ul class="tags">
+            <li>Python</li>
+            <li>PyTorch</li>
+            <li>LangGraph</li>
+            <li>AWS</li>
+            <li>FastAPI</li>
+            <li>Terraform</li>
+          </ul>
+        </article>
 
-        <button class="info_more-btn" data-sidebar-btn>
-          <span>Show Contacts</span>
+        <article class="card c-lilac span-2">
+          <p class="label">Certified</p>
+          <h3>DataCamp Data Scientist</h3>
+          <a class="inline-link" href="https://www.datacamp.com/certificate/DSA0018025332713" target="_blank" rel="noopener noreferrer">View certificate ↗</a>
+        </article>
 
-          <ion-icon name="chevron-down"></ion-icon>
-        </button>
+        <article class="card c-peach span-3">
+          <p class="label">Founder story</p>
+          <h3>Founded an AI startup in 2023</h3>
+          <p class="muted small">Nexie (formerly StealthAI) — multimodal AI automation.</p>
+        </article>
+
+        <article class="card c-white span-3 social">
+          <p class="label">Find me</p>
+          <div class="social-row">
+            <a href="https://www.linkedin.com/in/ishaan-parmar5/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+            <a href="https://github.com/ishu0505" target="_blank" rel="noopener noreferrer">GitHub</a>
+            <a href="https://www.kaggle.com/ishu0505" target="_blank" rel="noopener noreferrer">Kaggle</a>
+          </div>
+        </article>
 
       </div>
+    </section>
 
-      <div class="sidebar-info_more">
+    <!-- ============ PROJECTS ============ -->
+    <section id="projects" class="section" data-section>
+      <header class="section-head">
+        <h2>Projects</h2>
+        <p>Things I've built and shipped.</p>
+      </header>
 
-        <div class="separator"></div>
+      <div class="bento">
 
-        <ul class="contacts-list">
+        <a class="card project c-blue span-3 row-2 link" href="https://cancer-predictor-ml-app-st.streamlit.app/" target="_blank" rel="noopener noreferrer">
+          <img src="./assets/images/project-1.jpg" alt="" loading="lazy">
+          <div class="project-body">
+            <p class="label">Machine Learning</p>
+            <h3>Cancer Predictor</h3>
+            <p class="muted small">Logistic Regression · Streamlit · EDA</p>
+          </div>
+        </a>
 
-          <li class="contact-item">
+        <a class="card project c-yellow span-3 row-2 link" href="https://www.kaggle.com/code/ishu0505/xg-boost-credit-fraud-detection-roc-auc-0-979?scriptVersionId=215376122" target="_blank" rel="noopener noreferrer">
+          <img src="./assets/images/Project-3.jpg" alt="" loading="lazy">
+          <div class="project-body">
+            <p class="label">Kaggle</p>
+            <h3>Credit Card Fraud Detection</h3>
+            <p class="muted small">ROC-AUC 0.974 · XGBoost · CatBoost · AdaBoost</p>
+          </div>
+        </a>
 
-            <div class="icon-box">
-              <ion-icon name="mail-outline"></ion-icon>
-            </div>
+        <a class="card project c-pink span-4 link" href="https://medium.com/@ishu0505/explanatory-analysis-of-gender-disparities-in-digital-financial-access-in-uganda-4f31f877e0e9" target="_blank" rel="noopener noreferrer">
+          <div class="project-body">
+            <p class="label">Data Analytics</p>
+            <h3>Digital Financial Access in Uganda</h3>
+            <p class="muted small">SAS Viya · Logistic Regression</p>
+          </div>
+        </a>
 
-            <div class="contact-info">
-              <p class="contact-title">Email</p>
+        <a class="card c-mint span-2 link" href="https://scane.at/" target="_blank" rel="noopener noreferrer">
+          <p class="label">Product</p>
+          <h3>Scane.at ↗</h3>
+          <p class="muted small">Korean food recommender</p>
+        </a>
 
-              <a href="mailto:ishaan.p.2024@mitb.smu.edu.sg" class="contact-link">ishaan.p.2024@mitb.smu.edu.sg</a>
-            </div>
+        <a class="card c-lilac span-3 link" href="https://refundly.app" target="_blank" rel="noopener noreferrer">
+          <p class="label">Product</p>
+          <h3>Refundly ↗</h3>
+          <p class="muted small">Track orders &amp; refunds for SMEs</p>
+        </a>
 
-          </li>
-
-          <li class="contact-item">
-
-            <div class="icon-box">
-              <ion-icon name="phone-portrait-outline"></ion-icon>
-            </div>
-
-            <div class="contact-info">
-              <p class="contact-title">Phone</p>
-
-              <a href="tel:+6598992413" class="contact-link">+65 98992413</a>
-            </div>
-
-          </li>
-
-          <li class="contact-item">
-
-            <div class="icon-box">
-              <ion-icon name="calendar-outline"></ion-icon>
-            </div>
-
-            <div class="contact-info">
-              <p class="contact-title">Birthday</p>
-
-              <time datetime="1982-06-23">May 05, 2000</time>
-            </div>
-
-          </li>
-
-          <li class="contact-item">
-
-            <div class="icon-box">
-              <ion-icon name="location-outline"></ion-icon>
-            </div>
-
-            <div class="contact-info">
-              <p class="contact-title">Location</p>
-
-              <address>Killiney Road, Singapore</address>
-            </div>
-
-          </li>
-
-        </ul>
-
-        <div class="separator"></div>
-
-        <ul class="social-list">
-
-          <li class="social-item">
-            <a href="https://www.linkedin.com/in/ishaan-parmar5/" class="social-link" target="_blank" rel="noopener noreferrer">
-              <ion-icon name="logo-linkedin"></ion-icon>
-            </a>
-          </li>
-
-          <li class="social-item">
-            <a href="https://github.com/ishu0505" class="social-link" target="_blank" rel="noopener noreferrer">
-              <ion-icon name="logo-github"></ion-icon>
-            </a>
-          </li>
-          <li class="social-item">
-            <a href="https://www.kaggle.com/ishu0505" class="social-link" target="_blank" rel="noopener noreferrer">
-              <ion-icon name="kaggle" class="custom-icon"></ion-icon>
-            </a>
-          </li>
-          
-
-          <!-- <li class="social-item">
-            <a href="#" class="social-link">
-              <ion-icon name="logo-kaggle"></ion-icon>
-            </a>
-          </li> -->
-
-        </ul>
+        <a class="card c-white span-3 link" href="https://github.com/ishu0505" target="_blank" rel="noopener noreferrer">
+          <p class="label">More</p>
+          <h3>All code on GitHub ↗</h3>
+          <p class="muted small">github.com/ishu0505</p>
+        </a>
 
       </div>
+    </section>
 
-    </aside>
+    <!-- ============ RESUME ============ -->
+    <section id="resume" class="section" data-section>
+      <header class="section-head">
+        <h2>Resume</h2>
+        <p>Where I've studied and worked.</p>
+      </header>
 
+      <div class="bento">
 
-
-
-
-    <!--
-      - #main-content
-    -->
-
-    <div class="main-content">
-
-      <!--
-        - #NAVBAR
-      -->
-
-      <nav class="navbar">
-
-        <ul class="navbar-list">
-
-          <li class="navbar-item">
-            <button class="navbar-link  active" data-nav-link>About</button>
-          </li>
-
-          <li class="navbar-item">
-            <button class="navbar-link" data-nav-link>Resume</button>
-          </li>
-
-          <li class="navbar-item">
-            <button class="navbar-link" data-nav-link>Portfolio</button>
-          </li>
-
-          <li class="navbar-item">
-            <button class="navbar-link" data-nav-link>Blog</button>
-          </li>
-
-          <li class="navbar-item">
-            <button class="navbar-link" data-nav-link>Contact</button>
-          </li>
-
-        </ul>
-
-      </nav>
-
-
-
-
-
-      <!--
-        - #ABOUT
-      -->
-
-      <article class="about  active" data-page="about">
-
-        <header>
-          <h2 class="h2 article-title">About me</h2>
-        </header>
-
-        <section class="about-text">
-          <ul class="custom-bullet-list">
-              <li>- Certified Data Scientist by DataCamp. <a class='project-tech' href="https://www.datacamp.com/certificate/DSA0018025332713" target="_blank">Click here to view Certification</a></li><br>
-              <li>- Master's in data science and artificial intelligence from Singapore Management University.</li><br>
-              <li>- Programming Wizard in Python and C++.</li><br>
-              <li>- Expert in ML frameworks (Pytorch, TensorFlow and scikit-learn.)</li><br>
-              <li>- Started my own AI startup in 2023</li><br>
-              <li>- Can handle your data :)</li><br>
+        <article class="card c-peach span-6">
+          <p class="label">Experience · Current</p>
+          <h3>Senior AI Engineer</h3>
+          <p class="meta">FileAI (Bluesheets) · Singapore · Nov 2025 – Present</p>
+          <ul class="bullets">
+            <li>Architected a greenfield AI backend for enterprise unstructured data, taking it from R&amp;D to multi-region production across the US and APAC.</li>
+            <li>Designed a hybrid programmatic + frontier-LLM pipeline that turns irregular Excel workbooks into validated structured output.</li>
+            <li>Scaled processing of 1,000+ page documents: +200% throughput and −20% LLM inference cost.</li>
+            <li>Built resilient agentic workflows with multi-model routing, rate-limit-aware fallbacks and persistent state.</li>
+            <li>Set up evaluation, observability and CI/CD quality gates to catch extraction regressions.</li>
           </ul>
-      </section>
+        </article>
 
-
-        <!--
-          - service
-        -->
-
-        <section class="service">
-
-          <h3 class="h3 service-title">What i'm doing</h3>
-
-          <ul class="service-list">
-
-            <li class="service-item">
-
-              <div class="service-icon-box">
-                <img src="./assets/images/icon-dev.svg" alt="ML" width="40">
-              </div>
-
-              <div class="service-content-box">
-                <h4 class="h4 service-item-title">Machine Learning</h4>
-
-                <p class="service-item-text">
-                  Using XGboost, random forest and deep neural networks to solve business problems.
-                </p>
-              </div>
-
-            </li>
-
-            <li class="service-item">
-
-              <div class="service-icon-box">
-                <img src="./assets/images/ds2.webp" alt="DS" width="40">
-              </div>
-
-              <div class="service-content-box">
-                <h4 class="h4 service-item-title">Data Science</h4>
-
-                <p class="service-item-text">
-                  Expert in Cleaning ,manipulating and deriving insights from Data.
-                </p>
-              </div>
-
-            </li>
-
-            <li class="service-item">
-
-              <div class="service-icon-box">
-                <img src="./assets/images/gov2.webp" alt="Data-Gov" width="40">
-              </div>
-
-              <div class="service-content-box">
-                <h4 class="h4 service-item-title">Artificial Intelligence</h4>
-
-                <p class="service-item-text">
-                  Generative AI, Large Language Models, NLP
-                </p>
-              </div>
-
-            </li>
-
-            <li class="service-item">
-
-              <div class="service-icon-box">
-                <img src="./assets/images/swim.png" alt="Swim" width="40">
-              </div>
-
-              <div class="service-content-box">
-                <h4 class="h4 service-item-title">Data Governance</h4>
-
-                <p class="service-item-text">
-                  Data management, profiling CDEs, setting DQ rules.
-                </p>
-              </div>
-
-            </li>
-
+        <article class="card c-yellow span-3">
+          <p class="label">Experience</p>
+          <h3>AI &amp; ML Engineer</h3>
+          <p class="meta">Changi Airport Group · Singapore · Apr – Oct 2025</p>
+          <ul class="bullets">
+            <li>Built an AWS SageMaker fraud-detection model factory, contributing to an 80% reduction in fraud.</li>
+            <li>Shipped a RAG Narrative Dashboard on Microsoft Fabric for C-suite users, cutting reporting time by 70%.</li>
+            <li>Prototyped a GenAI pipeline from unstructured inputs to structured data.</li>
           </ul>
+        </article>
 
-        </section>
+        <article class="card c-mint span-3">
+          <p class="label">Experience</p>
+          <h3>Founder / Software Engineer</h3>
+          <p class="meta">Nexie (formerly StealthAI) · Bangalore · Jan 2023 – Jul 2024</p>
+          <p class="muted">Built a multimodal AI automation platform across image, speech and audio-generation models, cutting manual content effort by 70% and marketing costs by 40%.</p>
+        </article>
 
+        <article class="card c-lilac span-3">
+          <p class="label">Experience</p>
+          <h3>Associate Software Engineer</h3>
+          <p class="meta">Decimal Technologies · Gurugram · Jan – Nov 2022</p>
+          <p class="muted">Developed REST APIs, Angular micro-frontends and AWS Glue ETL pipelines: 50% faster data processing and 30% lower operating cost.</p>
+        </article>
 
-        <!--
-          - testimonials
-        -->
+        <article class="card c-blue span-3">
+          <p class="label">Education</p>
+          <h3>Singapore Management University</h3>
+          <p class="meta">Aug 2024 – Dec 2025</p>
+          <p class="muted">Master's in Artificial Intelligence and Data Science (MITB).</p>
+        </article>
 
-        <!-- <section class="testimonials">
+        <article class="card c-pink span-3">
+          <p class="label">Education</p>
+          <h3>NorthCap University</h3>
+          <p class="meta">Aug 2018 – Jun 2022</p>
+          <p class="muted">B.Tech Computer Science, Cyber Security &amp; Digital Forensics. 🥈 2nd place, Technovation 2022 (DevSecOps).</p>
+        </article>
 
-          <h3 class="h3 testimonials-title">Testimonials</h3>
-
-          <ul class="testimonials-list has-scrollbar">
-
-            <li class="testimonials-item">
-              <div class="content-card" data-testimonials-item>
-
-                <figure class="testimonials-avatar-box">
-                  <img src="./assets/images/avatar-1.png" alt="Daniel lewis" width="60" data-testimonials-avatar>
-                </figure>
-
-                <h4 class="h4 testimonials-item-title" data-testimonials-title>Daniel lewis</h4>
-
-                <div class="testimonials-text" data-testimonials-text>
-                  <p>
-                    Richard was hired to create a corporate identity. We were very pleased with the work done. She has a
-                    lot of experience
-                    and is very concerned about the needs of client. Lorem ipsum dolor sit amet, ullamcous cididt
-                    consectetur adipiscing
-                    elit, seds do et eiusmod tempor incididunt ut laborels dolore magnarels alia.
-                  </p>
-                </div>
-
-              </div>
-            </li>
-
-            <li class="testimonials-item">
-              <div class="content-card" data-testimonials-item>
-
-                <figure class="testimonials-avatar-box">
-                  <img src="./assets/images/avatar-2.png" alt="Jessica miller" width="60" data-testimonials-avatar>
-                </figure>
-
-                <h4 class="h4 testimonials-item-title" data-testimonials-title>Jessica miller</h4>
-
-                <div class="testimonials-text" data-testimonials-text>
-                  <p>
-                    Richard was hired to create a corporate identity. We were very pleased with the work done. She has a
-                    lot of experience
-                    and is very concerned about the needs of client. Lorem ipsum dolor sit amet, ullamcous cididt
-                    consectetur adipiscing
-                    elit, seds do et eiusmod tempor incididunt ut laborels dolore magnarels alia.
-                  </p>
-                </div>
-
-              </div>
-            </li>
-
-            <li class="testimonials-item">
-              <div class="content-card" data-testimonials-item>
-
-                <figure class="testimonials-avatar-box">
-                  <img src="./assets/images/avatar-3.png" alt="Emily evans" width="60" data-testimonials-avatar>
-                </figure>
-
-                <h4 class="h4 testimonials-item-title" data-testimonials-title>Emily evans</h4>
-
-                <div class="testimonials-text" data-testimonials-text>
-                  <p>
-                    Richard was hired to create a corporate identity. We were very pleased with the work done. She has a
-                    lot of experience
-                    and is very concerned about the needs of client. Lorem ipsum dolor sit amet, ullamcous cididt
-                    consectetur adipiscing
-                    elit, seds do et eiusmod tempor incididunt ut laborels dolore magnarels alia.
-                  </p>
-                </div>
-
-              </div>
-            </li>
-
-            <li class="testimonials-item">
-              <div class="content-card" data-testimonials-item>
-
-                <figure class="testimonials-avatar-box">
-                  <img src="./assets/images/avatar-4.png" alt="Henry william" width="60" data-testimonials-avatar>
-                </figure>
-
-                <h4 class="h4 testimonials-item-title" data-testimonials-title>Henry william</h4>
-
-                <div class="testimonials-text" data-testimonials-text>
-                  <p>
-                    Richard was hired to create a corporate identity. We were very pleased with the work done. She has a
-                    lot of experience
-                    and is very concerned about the needs of client. Lorem ipsum dolor sit amet, ullamcous cididt
-                    consectetur adipiscing
-                    elit, seds do et eiusmod tempor incididunt ut laborels dolore magnarels alia.
-                  </p>
-                </div>
-
-              </div>
-            </li>
-
+        <article class="card c-white span-3">
+          <p class="label">Certifications</p>
+          <h3>Credentials</h3>
+          <ul class="bullets">
+            <li>Data Scientist Associate — DataCamp</li>
+            <li>Agile Project Management — PMI</li>
           </ul>
+        </article>
 
-        </section> -->
-
-
-        <!--
-          - testimonials modal
-        -->
-
-        <div class="modal-container" data-modal-container>
-
-          <div class="overlay" data-overlay></div>
-
-          <section class="testimonials-modal">
-
-            <button class="modal-close-btn" data-modal-close-btn>
-              <ion-icon name="close-outline"></ion-icon>
-            </button>
-
-            <div class="modal-img-wrapper">
-              <figure class="modal-avatar-box">
-                <img src="./assets/images/avatar-1.png" alt="Daniel lewis" width="80" data-modal-img>
-              </figure>
-
-              <img src="./assets/images/icon-quote.svg" alt="quote icon">
-            </div>
-
-            <div class="modal-content">
-
-              <h4 class="h3 modal-title" data-modal-title>Daniel lewis</h4>
-
-              <time datetime="2021-06-14">14 June, 2021</time>
-
-              <div data-modal-text>
-                <p>
-                  Richard was hired to create a corporate identity. We were very pleased with the work done. She has a
-                  lot of experience
-                  and is very concerned about the needs of client. Lorem ipsum dolor sit amet, ullamcous cididt
-                  consectetur adipiscing
-                  elit, seds do et eiusmod tempor incididunt ut laborels dolore magnarels alia.
-                </p>
-              </div>
-
-            </div>
-
-          </section>
-
-        </div>
-
-
-        <!--
-          - clients
-        -->
-
-        <!-- <section class="clients">
-
-          <h3 class="h3 clients-title">Clients</h3>
-
-          <ul class="clients-list has-scrollbar">
-
-            <li class="clients-item">
-              <a href="#">
-                <img src="./assets/images/logo-1-color.png" alt="client logo">
-              </a>
-            </li>
-
-            <li class="clients-item">
-              <a href="#">
-                <img src="./assets/images/logo-2-color.png" alt="client logo">
-              </a>
-            </li>
-
-            <li class="clients-item">
-              <a href="#">
-                <img src="./assets/images/logo-3-color.png" alt="client logo">
-              </a>
-            </li>
-
-            <li class="clients-item">
-              <a href="#">
-                <img src="./assets/images/logo-4-color.png" alt="client logo">
-              </a>
-            </li>
-
-            <li class="clients-item">
-              <a href="#">
-                <img src="./assets/images/logo-5-color.png" alt="client logo">
-              </a>
-            </li>
-
-            <li class="clients-item">
-              <a href="#">
-                <img src="./assets/images/logo-6-color.png" alt="client logo">
-              </a>
-            </li>
-
+        <article class="card c-yellow span-6">
+          <p class="label">Skills</p>
+          <ul class="tags">
+            <li>LLMs</li><li>RAG</li><li>LangChain</li><li>LangGraph</li><li>Hugging Face</li>
+            <li>LoRA / qLoRA</li><li>DPO</li><li>LLM Evaluation</li><li>Guardrails</li>
+            <li>Vector DBs</li><li>Langfuse</li><li>SageMaker</li><li>ECS Fargate</li>
+            <li>Lambda</li><li>Docker</li><li>MLflow</li><li>SQL</li><li>Go</li>
           </ul>
+        </article>
 
-        </section> -->
-
-      </article>
-
-
-
-
-
-      <!--
-        - #RESUME
-      -->
-
-      <article class="resume" data-page="resume">
-        
-
-        <header>
-          <h2 class="h2 article-title">Resume</h2>
-        </header>
-        <button class="form-btn"  id="downloadBtn" >
-          <ion-icon name="Download"></ion-icon>
-          <span>Download</span>
-        </button>
-        <section class="timeline">
-
-          <div class="title-wrapper">
-            <div class="icon-box">
-              <ion-icon name="book-outline"></ion-icon>
-            </div>
-
-            <h3 class="h3">Education</h3>
+        <a class="card c-dark span-6 link download" href="./assets/resume/Ishaan-parmar-resume.pdf" download="Ishaan-Parmar-Resume.pdf">
+          <div>
+            <p class="label">Full details</p>
+            <h3>Download my resume (PDF)</h3>
           </div>
+          <span class="btn">Download ↓</span>
+        </a>
 
-          <ol class="timeline-list">
+      </div>
+    </section>
 
-            <li class="timeline-item">
+    <!-- ============ HOBBIES ============ -->
+    <section id="hobbies" class="section" data-section>
+      <header class="section-head">
+        <h2>Hobbies</h2>
+        <p>What I do when I'm not training models.</p>
+      </header>
 
-              <h4 class="h4 timeline-item-title">Singapore Management University</h4>
+      <div class="bento">
 
-              <span>2024 — 202025</span>
+        <article class="card c-blue span-2 row-2 hobby">
+          <span class="emoji">🏊</span>
+          <h3>Swimming</h3>
+          <p class="muted small">Laps clear my head.</p>
+        </article>
 
-              <p class="timeline-text">
-                Masters of IT in Business - Artificial intelligence & Data Science
-              </p>
+        <article class="card c-yellow span-2 hobby">
+          <span class="emoji">🏆</span>
+          <h3>Kaggle</h3>
+          <p class="muted small">Competing and learning.</p>
+        </article>
 
-            </li>
+        <article class="card c-pink span-2 hobby">
+          <span class="emoji">🛠️</span>
+          <h3>Building</h3>
+          <p class="muted small">Side projects and startups.</p>
+        </article>
 
-            <li class="timeline-item">
+        <article class="card c-mint span-2 hobby">
+          <span class="emoji">🎧</span>
+          <h3>Music</h3>
+          <p class="muted small">Always on while coding.</p>
+        </article>
 
-              <h4 class="h4 timeline-item-title">Northcap University</h4>
+        <article class="card c-lilac span-2 hobby">
+          <span class="emoji">✈️</span>
+          <h3>Travel</h3>
+          <p class="muted small">New places, new ideas.</p>
+        </article>
 
-              <span>2018 — 2022</span>
+      </div>
+    </section>
 
-              <p class="timeline-text">
-                Bachelor's of Technology - Computer Science (Specialization - Cyber Security)
-              </p>
+    <!-- ============ WRITING ============ -->
+    <section id="writing" class="section" data-section>
+      <header class="section-head">
+        <h2>Articles &amp; Blogs</h2>
+        <p>Longer thoughts and write-ups.</p>
+      </header>
 
-            </li>
+      <div class="bento">
 
-
-          </ol>
-
-        </section>
-
-        <section class="timeline">
-
-          <div class="title-wrapper">
-            <div class="icon-box">
-              <ion-icon name="book-outline"></ion-icon>
-            </div>
-
-            <h3 class="h3">Experience</h3>
+        <a class="card article c-pink span-4 row-2 link" href="https://medium.com/@ishu0505/explanatory-analysis-of-gender-disparities-in-digital-financial-access-in-uganda-4f31f877e0e9" target="_blank" rel="noopener noreferrer">
+          <img src="./assets/images/Data-analytcis-project.png" alt="" loading="lazy">
+          <div class="project-body">
+            <p class="label">Explanatory Analysis · Nov 15, 2024</p>
+            <h3>Gender Disparities in Digital Financial Access in Uganda</h3>
+            <p class="muted">A detailed analysis using statistical and machine-learning techniques to explain the gender gap in digital financial access.</p>
           </div>
-
-          <ol class="timeline-list">
-
-            <li class="timeline-item">
-              <h2 class="h4 timeline-item-title">Scane.at – Singapore</h2>
-              <p class="timeline-text">SMU Incubated startup / Funding from South Korean Government</p>
-
-
-              <h4 class="h4 timeline-item-title">ML Engineer (Founding Team)</h4>
-
-              <span>Sept 2024 – Present</span>
-
-              <p class="timeline-text">
-                ● Designed and implemented a hybrid recommendation system combining collaborative and content-based filtering for Korean
-                food and restaurants, resulting in the development of a working prototype that secured SGD 50,000 in funding from the
-                South Korean government and led to the company’s incubation at the SMU startup incubator. (Product - https://scane.at/)
-              </p>
-
-            </li>
-            
-
-            <li class="timeline-item">
-              <h2 class="h4 timeline-item-title">StealthAI - India</h2>
-
-
-              <h4 class="h4 timeline-item-title">Founder/Software Engineer</h4>
-
-              <span>Jan 2023 – July 2024</span>
-
-              <p class="timeline-text">
-                ● Spearheaded the development of AI-driven automation tools for content creation, marketing, and finance management,
-                including a predictive ML model for optimal social media posting times and a web app to track orders/refunds, automating
-                workflows and increasing efficiency by 60% for SMEs. (Live product - refundly.app)
-              </p>
-
-            </li>
-            <li class="timeline-item">
-              <h2 class="h4 timeline-item-title">Decimal Technologies - India</h2>
-
-              <h4 class="h4 timeline-item-title">Associate Software Engineer</h4>
-
-              <span>Jan 2022 - Nov 2022</span>
-
-              <p class="timeline-text">
-            <ol>
-              <li  class="timeline-text">
-                ● Revamped risk management processes by leading the implementation of security test cases and automating a data pipeline
-                with real-time dashboards for vulnerability scans, bug tracking, and test coverage, reducing resolution time by 50% and
-                improving codebase quality.
-
-
-              </li>
-              <li  class="timeline-text">
-                ● Streamlined workflows by automating Confluence documentation, cutting workload by 40%, and developing robust
-                full-stack components using Angular, Node.js, Java, PostgreSQL, and Gin-based Go APIs, enhancing development efficiency.
-
-              </li>
-              <li  class="timeline-text">
-                ● Enhanced team capabilities by conducting training sessions that boosted test coverage from 0% to 90% in two months,
-                culminating in a successful client demo that earned CEO recognition and strengthened client trust.
-
-              </li>
-
-              
-
-            </ol>
-              
-
-
-              </p>
-
-            </li>
-
-            <li class="timeline-item">
-              <h2 class="h4 timeline-item-title">Gurugram Police - India</h2>
-
-
-              <h4 class="h4 timeline-item-title">Cyber Security Intern</h4>
-
-              <span>June 2021 – July 2021</span>
-
-              <p class="timeline-text">
-                ● Conducted penetration testing on the Haryana Police website and secured it against OWASP Top 10 vulnerabilities.              </p>
-
-            </li>
-
-          </ol>
-
-        </section>
-
-        <section class="skill">
-
-          <h3 class="h3 skills-title">My skills</h3>
-
-          <ul class="skills-list content-card">
-
-            <li class="skills-item">
-
-              <div class="title-wrapper">
-                <h5 class="h5">Machine Learning</h5>
-                <data value="80">80%</data>
-              </div>
-
-              <div class="skill-progress-bg">
-                <div class="skill-progress-fill" style="width: 80%;"></div>
-              </div>
-
-            </li>
-
-            <li class="skills-item">
-
-              <div class="title-wrapper">
-                <h5 class="h5">Data Science</h5>
-                <data value="70">70%</data>
-              </div>
-
-              <div class="skill-progress-bg">
-                <div class="skill-progress-fill" style="width: 70%;"></div>
-              </div>
-
-            </li>
-
-            <li class="skills-item">
-
-              <div class="title-wrapper">
-                <h5 class="h5">Data Engineering</h5>
-                <data value="90">70%</data>
-              </div>
-
-              <div class="skill-progress-bg">
-                <div class="skill-progress-fill" style="width: 90%;"></div>
-              </div>
-
-            </li>
-
-            <li class="skills-item">
-
-              <div class="title-wrapper">
-                <h5 class="h5">SAS Viya</h5>
-                <data value="50">60%</data>
-              </div>
-
-              <div class="skill-progress-bg">
-                <div class="skill-progress-fill" style="width: 50%;"></div>
-              </div>
-
-            </li>
-
-          </ul>
-
-        </section>
-
-      </article>
-
-
-
-
-
-      <!--
-        - #PORTFOLIO
-      -->
-
-      <article class="portfolio" data-page="portfolio">
-
-        <header>
-          <h2 class="h2 article-title">Portfolio</h2>
-        </header>
-
-        <section class="projects">
-
-          <ul class="filter-list">
-
-            <li class="filter-item">
-              <button class="active" data-filter-btn>All</button>
-            </li>
-
-            <li class="filter-item">
-              <button data-filter-btn>Machine Learning</button>
-            </li>
-
-            <li class="filter-item">
-              <button data-filter-btn>Data Science/Analytics</button>
-            </li>
-            <li class="filter-item">
-              <button data-filter-btn>Kaggle</button>
-            </li>
-
-            <li class="filter-item">
-              <button data-filter-btn>Others</button>
-            </li>
-
-          </ul>
-
-          <div class="filter-select-box">
-
-            <button class="filter-select" data-select>
-
-              <div class="select-value" data-selecct-value>Select category</div>
-
-              <div class="select-icon">
-                <ion-icon name="chevron-down"></ion-icon>
-              </div>
-
-            </button>
-
-            <ul class="select-list">
-
-              <li class="select-item">
-                <button data-select-item>All</button>
-              </li>
-
-              <li class="select-item">
-                <button data-select-item>Machine Learning</button>
-              </li>
-
-              <li class="select-item">
-                <button data-select-item>Data Science/Analytics</button>
-              </li>
-
-              <li class="select-item">
-                <button data-select-item>Others</button>
-              </li>
-
-            </ul>
-
+        </a>
+
+        <a class="card c-white span-2 link" href="./assets/uganda-report.pdf" target="_blank" rel="noopener noreferrer">
+          <p class="label">Report</p>
+          <h3>Read the full PDF ↗</h3>
+        </a>
+
+        <a class="card c-yellow span-2 link" href="https://medium.com/@ishu0505" target="_blank" rel="noopener noreferrer">
+          <p class="label">Medium</p>
+          <h3>More articles ↗</h3>
+        </a>
+
+      </div>
+    </section>
+
+    <!-- ============ CONTACT ============ -->
+    <section id="contact" class="section" data-section>
+      <div class="bento">
+        <a class="card c-blue span-6 link contact-cta" href="https://docs.google.com/forms/d/e/1FAIpQLSesiQtADdP225MrveX5eyB0oL8Sps3PPH6ktD1nzVnfWIhZsw/viewform" target="_blank" rel="noopener noreferrer">
+          <div>
+            <p class="label">Let's talk</p>
+            <h3>Send me a message ↗</h3>
           </div>
-
-          <ul class="project-list">
-
-            <li class="project-item  active" data-filter-item data-category="machine learning">
-              <a href="https://cancer-predictor-ml-app-st.streamlit.app/" target="_blank" rel="noopener noreferrer">
-
-                <figure class="project-img">
-                  <div class="project-item-icon-box">
-                    <ion-icon name="eye-outline"></ion-icon>
-                  </div>
-
-                  <img src="./assets/images/project-1.jpg" alt="Machine Learning" loading="lazy">
-                </figure>
-
-                <h3 class="project-title">Cancer Predictor</h3>
-
-                <p class="project-category">Machine Learning</p>
-                <p class="project-tech">Logistics Regression, Streamlit, EDA</p>
-
-              </a>
-            </li>
-
-            <li class="project-item  active" data-filter-item data-category="data science/analytics">
-              <a href="https://medium.com/@ishu0505/explanatory-analysis-of-gender-disparities-in-digital-financial-access-in-uganda-4f31f877e0e9" target="_blank" rel="noopener noreferrer">
-
-                <figure class="project-img">
-                  <div class="project-item-icon-box">
-                    <ion-icon name="eye-outline"></ion-icon>
-                  </div>
-
-                  <img src="./assets/images/Data-analytcis-project.png" alt="orizon" loading="lazy">
-                </figure>
-
-                <h3 class="project-title">Explanatory Analytics of Digital Financial Access Uganda</h3>
-
-                <p class="project-category">Data Analytics</p>
-                <p class="project-tech">SAS Viya, Logistics Regression</p>
-
-              </a>
-            </li>
-
-            <li class="project-item  active" data-filter-item data-category="data science/analytics">
-              <a href="https://www.kaggle.com/code/ishu0505/xg-boost-credit-fraud-detection-roc-auc-0-979?scriptVersionId=215376122" target="_blank" rel="noopener noreferrer">
-
-                <figure class="project-img">
-                  <div class="project-item-icon-box">
-                    <ion-icon name="eye-outline"></ion-icon>
-                  </div>
-
-                  <img src="./assets/images/Project-3.jpg" alt="orizon" loading="lazy">
-                </figure>
-
-                <h3 class="project-title">Credit Card Fraud Detection (ROC-AUC = 0.974)</h3>
-
-                <p class="project-category">Data Science Kaggle</p>
-                <p class="project-tech">Kaggle, EDA, XGboost, RandomForrestClassifier, AdaBoostClassifier, CatBoostClassifier</p>
-
-              </a>
-            </li>
-
-           
-
-          </ul>
-
-        </section>
-
-      </article>
-
-
-
-
-
-      <!--
-        - #BLOG
-      -->
-
-      <article class="blog" data-page="blog">
-
-        <header>
-          <h2 class="h2 article-title">Blog</h2>
-        </header>
-
-        <section class="blog-posts">
-
-          <ul class="blog-posts-list">
-
-            <li class="blog-post-item">
-              <a href="https://medium.com/@ishu0505/explanatory-analysis-of-gender-disparities-in-digital-financial-access-in-uganda-4f31f877e0e9" target="_blank" rel="noopener noreferrer">
-
-                <figure class="blog-banner-box">
-                  <img src="./assets/images/Data-analytcis-project.png" alt="Design conferences in 2022" loading="lazy">
-                </figure>
-
-                <div class="blog-content">
-
-                  <div class="blog-meta">
-                    <p class="blog-category">Explanatory Analysis</p>
-
-                    <span class="dot"></span>
-
-                    <time datetime="2022-02-23">Nov 15, 2024</time>
-                  </div>
-
-                  <h3 class="h3 blog-item-title">Gender Disparities in Digital Financial Access in Uganda</h3>
-
-                  <p class="blog-text">
-                    A detailed analysis using advanced statistical and machine learning techniques to explain the disparity between gender for Digital Financial Access in Uganda
-                  </p>
-
-                </div>
-
-              </a>
-            </li>
-
-            
-
-          </ul>
-
-        </section>
-
-      </article>
-
-
-
-
-
-      <!--
-        - #CONTACT
-      -->
-
-      <article class="contact" data-page="contact">
-
-        <header>
-          <h2 class="h2 article-title">Contact</h2>
-        </header>
-
-
-        
-        </section>
-
-        <section class="contact-form">
-          <h3 class="h3 form-title">Contact Form</h3>
-        
-          <div class="google-form-container">
-            <iframe 
-              src="https://docs.google.com/forms/d/e/1FAIpQLSesiQtADdP225MrveX5eyB0oL8Sps3PPH6ktD1nzVnfWIhZsw/viewform?embedded=true"
-              frameborder="0"
-              allowfullscreen>
-            </iframe>
-          </div>
-        </section>
-        
-
-      </article>
-
-    </div>
+          <span class="btn">Contact form</span>
+        </a>
+      </div>
+      <footer class="footer">© <span data-year></span> Ishaan Parmar</footer>
+    </section>
 
   </main>
 
-
-
-
-
-
-  <!--
-    - custom js link
-  -->
-  <script src="./assets/js/script.js"></script>
-
-  <!--
-    - ionicon link
-  -->
-  <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
-  <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
-
+  <script src="./assets/js/bento.js"></script>
 </body>
-
 </html>
