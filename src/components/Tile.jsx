@@ -11,7 +11,7 @@ const SPRING = { type: 'spring', stiffness: 260, damping: 32, mass: 0.9 };
  *   rail — a compact tile while another tile is open
  * `layout` lets Framer Motion animate the size/position change.
  */
-export default function Tile({ section, mode, index, onOpen, onClose }) {
+export default function Tile({ section, mode, index, onOpen, onClose, onHover }) {
   const { id, title, icon, tone, stickers, Preview, Full } = section;
   const interactive = mode !== 'main';
 
@@ -37,8 +37,8 @@ export default function Tile({ section, mode, index, onOpen, onClose }) {
       initial={{ opacity: 0, y: 14 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ layout: SPRING, opacity: { delay: index * 0.05 }, y: { delay: index * 0.05 } }}
-      whileHover={interactive ? { scale: 1.06, rotate: -1.2, zIndex: 20 } : undefined}
-      whileTap={interactive ? { scale: 0.97, rotate: 0 } : undefined}
+      whileTap={interactive ? { scale: 0.98 } : undefined}
+      onPointerEnter={interactive && onHover ? () => onHover(id) : undefined}
       className={`tile tile--${id} tile--${mode} tone-${tone}`}
       {...buttonProps}
     >

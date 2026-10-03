@@ -67,8 +67,8 @@
      profile profile resume   hobbies
      writing contact resume   hobbies                                  */
 .bento--home {
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  grid-template-rows: repeat(3, minmax(0, 1fr));
+  grid-template-columns: var(--cols, repeat(4, minmax(0, 1fr)));
+  grid-template-rows: var(--rows, repeat(3, minmax(0, 1fr)));
   height: max(var(--stage-h), 560px);
   padding: 14px 8px 8px 4px; /* room for hanging stickers + hard shadows */
 }
@@ -83,7 +83,7 @@
    Desktop: big tile on the left, rail of small tiles on the right.   */
 .bento--focus {
   grid-template-columns: minmax(0, 1fr) var(--rail-w);
-  grid-template-rows: repeat(5, minmax(0, 1fr));
+  grid-template-rows: var(--rows, repeat(5, minmax(0, 1fr)));
   height: var(--stage-h);
   padding: 4px 8px 8px 4px;
 }
