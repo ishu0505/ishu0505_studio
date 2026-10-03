@@ -63,6 +63,10 @@ stickers stuck on the tiles. Everything is plain CSS plus small SVGs, so it work
 Pushing to `main` runs `.github/workflows/deploy.yml`, which builds the site and publishes it to GitHub Pages.
 One-time setup: **Settings → Pages → Build and deployment → Source: GitHub Actions**.
 
+Custom domain: `public/CNAME` holds `ishu0505.tech`. In **Settings → Pages → Custom domain** enter the same name, and point DNS
+(Cloudflare) at GitHub Pages: four `A` records for `@` (185.199.108.153, .109.153, .110.153, .111.153) and a `www` CNAME to
+`ishu0505.github.io`, all "DNS only" until GitHub issues the HTTPS certificate.
+
 ## Contact
 
 iparmar0505@gmail.com
