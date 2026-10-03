@@ -1,5 +1,6 @@
 import Card from '../components/ui/Card';
 import { articles, writingLinks } from '../data/writing';
+import { stickers as allStickers } from '../data/stickers';
 
 function Preview() {
   return (
@@ -30,9 +31,6 @@ function Full() {
   );
 }
 
-const stickers = [
-  { icon: 'pencil', size: 58, rot: 14, pos: { top: -22, right: 64 } },
-  { icon: 'king', size: 54, rot: -8, pos: { bottom: -24, right: 10 }, keep: true },
-];
+const stickers = allStickers.writing;
 
 export default { id: 'writing', title: 'Writing', icon: 'pencil', tone: 'pink', stickers, Preview, Full };

@@ -23,9 +23,10 @@ public/assets/        static files served as-is (images, resume PDF, report)
 src/
   main.jsx            entry point, loads the styles
   App.jsx             page shell: header + bento grid + Esc handling
-  data/               ALL the content lives here — edit text without touching components
-    profile.js  projects.js  resume.js  hobbies.js  writing.js
-  sections/           one file per tile: exports { id, title, emoji, tone, Preview, Full }
+  content/            ALL the editable content, as plain JSON (profile, projects, hobbies, resume,
+                      writing, stickers, icons) + schema.js (the rules the build checks)
+  data/               thin adapters that turn content/*.json into what the components use
+  sections/           one file per tile: exports { id, title, icon, tone, stickers, Preview, Full }
     index.js          the list/order of tiles
   components/
     BentoGrid.jsx     lays out the tiles and switches home <-> focus layout
@@ -41,11 +42,16 @@ src/
 
 ### Common edits
 
-- **Update your resume / job info:** `src/data/resume.js` (and replace `public/assets/resume/Ishaan-parmar-resume.pdf`).
-- **Add a project:** add an object to `src/data/projects.js`.
-- **Change hobbies:** `src/data/hobbies.js`.
+- **Update your resume / job info:** `src/content/resume.json` (and replace `public/assets/resume/Ishaan-parmar-resume.pdf`).
+- **Add a project:** add an object to `src/content/projects.json`.
+- **Change hobbies:** `src/content/hobbies.json`.
 - **Add a new tile:** create `src/sections/XSection.jsx`, list it in `src/sections/index.js`, and give it a grid area in `src/styles/bento.css`.
 - **Colours:** `src/styles/tokens.css`.
+
+### Content check
+`npm run build` first runs `npm run validate` (`scripts/validate-content.mjs`). It checks every file in
+`src/content/` (required fields, colours, icon names, that referenced images/PDFs exist in `public/`) and
+stops with a plain-English list of problems, so a typo can never replace the live site.
 
 ## Look & feel
 
@@ -54,8 +60,8 @@ stickers stuck on the tiles. Everything is plain CSS plus small SVGs, so it work
 
 - **Icons** live in `src/components/doodles/icons.jsx`. They are original drawings made for this site
   (no icon packs, no brand logos or copyrighted characters). Use one anywhere with `<Doodle name="coffee" />`.
-- **Stickers** per tile are listed in each file in `src/sections/` (`stickers` array: icon, size, rotation, position).
-- **Favourite things** (the Hobbies tile) are in `src/data/hobbies.js`.
+- **Stickers** per tile are in `src/content/stickers.json` (icon, size, rotation, position).
+- **Favourite things** (the Hobbies tile) are in `src/content/hobbies.json`.
 - **Fonts:** Patrick Hand and Gochi Hand (SIL Open Font License), bundled via `@fontsource`.
 
 ## Deploy

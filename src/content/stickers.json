@@ -1,0 +1,181 @@
+{
+  "profile": [
+    {
+      "icon": "coffee",
+      "size": 64,
+      "rot": -10,
+      "pos": {
+        "top": -26,
+        "right": "24%"
+      }
+    },
+    {
+      "icon": "shoe",
+      "size": 70,
+      "rot": 8,
+      "pos": {
+        "bottom": -26,
+        "right": "8%"
+      },
+      "keep": true
+    },
+    {
+      "icon": "sparkle",
+      "size": 44,
+      "rot": 12,
+      "pos": {
+        "top": "40%",
+        "right": -16
+      }
+    },
+    {
+      "icon": "star",
+      "size": 38,
+      "rot": -14,
+      "pos": {
+        "top": "9%",
+        "left": -14
+      }
+    },
+    {
+      "icon": "bolt",
+      "size": 50,
+      "rot": -8,
+      "pos": {
+        "bottom": -22,
+        "left": "34%"
+      }
+    }
+  ],
+  "projects": [
+    {
+      "icon": "code",
+      "size": 62,
+      "rot": 8,
+      "pos": {
+        "top": -24,
+        "left": "44%"
+      }
+    },
+    {
+      "icon": "branch",
+      "size": 56,
+      "rot": -8,
+      "pos": {
+        "top": "56%",
+        "left": -22
+      }
+    },
+    {
+      "icon": "penguin",
+      "size": 60,
+      "rot": 10,
+      "pos": {
+        "top": "34%",
+        "right": -20
+      }
+    }
+  ],
+  "resume": [
+    {
+      "icon": "medal",
+      "size": 62,
+      "rot": -10,
+      "pos": {
+        "top": -24,
+        "left": "10%"
+      }
+    },
+    {
+      "icon": "fedora",
+      "size": 62,
+      "rot": 12,
+      "pos": {
+        "bottom": -24,
+        "right": -14
+      },
+      "keep": true
+    },
+    {
+      "icon": "star",
+      "size": 36,
+      "rot": 8,
+      "pos": {
+        "top": "45%",
+        "left": -14
+      }
+    }
+  ],
+  "hobbies": [
+    {
+      "icon": "gamepad",
+      "size": 58,
+      "rot": -12,
+      "pos": {
+        "top": -22,
+        "right": "26%"
+      }
+    },
+    {
+      "icon": "cat",
+      "size": 56,
+      "rot": 10,
+      "pos": {
+        "bottom": -24,
+        "left": -14
+      },
+      "keep": true
+    },
+    {
+      "icon": "dumbbell",
+      "size": 52,
+      "rot": -6,
+      "pos": {
+        "top": "46%",
+        "right": -18
+      }
+    }
+  ],
+  "writing": [
+    {
+      "icon": "pencil",
+      "size": 58,
+      "rot": 14,
+      "pos": {
+        "top": -22,
+        "right": 64
+      }
+    },
+    {
+      "icon": "king",
+      "size": 54,
+      "rot": -8,
+      "pos": {
+        "bottom": -24,
+        "right": 10
+      },
+      "keep": true
+    }
+  ],
+  "contact": [
+    {
+      "icon": "speech",
+      "size": 58,
+      "rot": -8,
+      "pos": {
+        "top": -22,
+        "left": "16%"
+      }
+    },
+    {
+      "icon": "heart",
+      "size": 44,
+      "rot": 12,
+      "pos": {
+        "bottom": -22,
+        "right": -10
+      },
+      "keep": true
+    }
+  ]
+}

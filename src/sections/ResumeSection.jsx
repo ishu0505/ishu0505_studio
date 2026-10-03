@@ -3,6 +3,7 @@ import Tags from '../components/ui/Tags';
 import ResumeDownload from '../components/ui/ResumeDownload';
 import { experience, education, certifications, skills } from '../data/resume';
 import { profile } from '../data/profile';
+import { stickers as allStickers } from '../data/stickers';
 
 function Preview() {
   return (
@@ -65,10 +66,6 @@ function Full() {
   );
 }
 
-const stickers = [
-  { icon: 'medal', size: 62, rot: -10, pos: { top: -24, left: '10%' } },
-  { icon: 'fedora', size: 62, rot: 12, pos: { bottom: -24, right: -14 }, keep: true },
-  { icon: 'star', size: 36, rot: 8, pos: { top: '45%', left: -14 } },
-];
+const stickers = allStickers.resume;
 
 export default { id: 'resume', title: 'Resume', icon: 'medal', tone: 'peach', stickers, Preview, Full };

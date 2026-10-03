@@ -1,5 +1,6 @@
 import Card from '../components/ui/Card';
 import { profile } from '../data/profile';
+import { stickers as allStickers } from '../data/stickers';
 
 function Preview() {
   return (
@@ -24,9 +25,6 @@ function Full() {
   );
 }
 
-const stickers = [
-  { icon: 'speech', size: 58, rot: -8, pos: { top: -22, left: '16%' } },
-  { icon: 'heart', size: 44, rot: 12, pos: { bottom: -22, right: -10 }, keep: true },
-];
+const stickers = allStickers.contact;
 
 export default { id: 'contact', title: 'Contact', icon: 'speech', tone: 'lilac', stickers, Preview, Full };
