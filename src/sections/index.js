@@ -1,6 +1,6 @@
 // The order here is the order of tiles on the front page.
 // To add a section: create a file that default-exports
-// { id, title, emoji, tone, Preview, Full } and list it below
+// { id, title, icon, tone, stickers, Preview, Full }  (stickers marked keep:true stay visible when the tile is open) and list it below
 // (plus a grid area for it in styles/bento.css).
 import profile from './ProfileSection';
 import projects from './ProjectsSection';

@@ -4,91 +4,140 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 12px;
 }
 .topbar__brand {
   display: flex;
   align-items: center;
   gap: 10px;
-  font-weight: 600;
-  letter-spacing: -.01em;
+  font-family: var(--font-head);
+  font-size: 1.5rem;
+  white-space: nowrap;
 }
-.topbar__brand img { border-radius: 50%; object-fit: cover; }
+.topbar__brand img { border-radius: 50%; object-fit: cover; border: 3px solid var(--ink); }
+.topbar__scribbles { display: flex; align-items: center; gap: 12px; flex: 1; justify-content: center; }
+@media (max-width: 560px) { .topbar__scribbles { display: none; } }
 
 /* ===== buttons ===== */
 .btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-height: 40px;
-  padding: 9px 18px;
-  border-radius: 999px;
-  font-weight: 600;
-  font-size: .9rem;
+  min-height: 44px;
+  padding: 8px 20px;
+  border: 3px solid var(--ink);
+  border-radius: var(--wobble-b);
+  font-family: var(--font-head);
+  font-size: 1.15rem;
   white-space: nowrap;
-  transition: transform .2s, background .2s;
+  box-shadow: 4px 4px 0 var(--ink);
+  transition: transform .15s, box-shadow .15s;
 }
-.btn:active { transform: scale(.97); }
-.btn--dark { background: var(--ink); color: #fff; }
-.btn--dark:hover { background: #3a3a3c; }
-.btn--light { background: rgba(255, 255, 255, .85); }
-.btn--light:hover { background: #fff; }
+.btn:hover { transform: translate(-1px, -2px) rotate(-1deg); box-shadow: 6px 6px 0 var(--ink); }
+.btn:active { transform: translate(3px, 3px); box-shadow: 1px 1px 0 var(--ink); }
+.btn--dark { background: #ff8fb8; color: var(--ink); }
+.btn--light { background: #fffdf7; }
 
-.actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 12px; }
+.actions { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 14px; }
 
 /* ===== inner cards (inside an expanded tile) ===== */
-.stack { display: grid; gap: 16px; }
+.stack { display: grid; gap: 20px; }
 
 .card-grid {
   display: grid;
-  gap: 12px;
+  gap: 16px;
   grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
 }
-.card-grid--wide { grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); }
+.card-grid--wide { grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); }
 
 .card {
+  --tone: var(--white);
+  position: relative;
   display: flex;
   flex-direction: column;
   gap: 6px;
   padding: 20px;
-  border-radius: 22px;
-  background: rgba(255, 255, 255, .72);
-  transition: box-shadow .2s, background .2s;
+  border: 3px solid var(--ink);
+  border-radius: var(--wobble-b);
+  background: var(--grain), var(--tone);
+  box-shadow: 4px 5px 0 var(--ink);
+  transition: transform .2s, box-shadow .2s;
 }
-.card.tone-white { background: #fff; }
+.card:nth-child(odd)  { transform: rotate(-.5deg); }
+.card:nth-child(even) { transform: rotate(.6deg); }
 .card--wide { grid-column: 1 / -1; }
-.card--link:hover { box-shadow: 0 10px 28px rgba(30, 30, 60, .12); }
-.card__title { font-size: 1.1rem; line-height: 1.25; letter-spacing: -.02em; }
+.card--link:hover { transform: rotate(0) translateY(-3px); box-shadow: 7px 9px 0 var(--ink); }
+.card__title { font-size: 1.5rem; line-height: 1.1; }
 .card--media { padding: 0 0 20px; overflow: hidden; }
 .card--media > :not(.card__img) { margin: 0 20px; }
-.card__img { width: 100%; height: 150px; object-fit: cover; margin-bottom: 8px; }
+.card__img { width: 100%; height: 150px; object-fit: cover; margin-bottom: 8px; border-bottom: 3px solid var(--ink); }
+
+.card__icons { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 2px; }
+.card__icons .doodle-svg:nth-child(odd)  { transform: rotate(-6deg); }
+.card__icons .doodle-svg:nth-child(even) { transform: rotate(7deg); }
 
 .label {
-  font-size: .72rem;
-  font-weight: 600;
+  font-size: .95rem;
   text-transform: uppercase;
-  letter-spacing: .08em;
-  color: rgba(29, 29, 31, .55);
+  letter-spacing: .12em;
+  color: rgba(42, 42, 53, .7);
 }
-.muted { color: var(--muted); font-size: .95rem; }
-.small { font-size: .85rem; }
-.meta { font-size: .85rem; font-weight: 500; color: rgba(29, 29, 31, .7); }
+.muted { color: var(--muted); font-size: 1.05rem; }
+.small { font-size: .98rem; }
+.meta { font-size: 1rem; color: rgba(42, 42, 53, .85); }
 
-.bullets { display: grid; gap: 6px; font-size: .92rem; color: var(--muted); margin-top: 4px; }
-.bullets li { position: relative; padding-left: 16px; }
+.bullets { display: grid; gap: 6px; font-size: 1.05rem; color: var(--muted); margin-top: 4px; }
+.bullets li { position: relative; padding-left: 20px; }
 .bullets li::before {
-  content: "";
+  content: "✦";
   position: absolute;
   left: 0;
-  top: .6em;
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: rgba(29, 29, 31, .35);
+  top: 0;
+  font-size: .85rem;
+  color: #ff6fa5;
 }
 
 .tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 4px; }
-.tags li { background: rgba(255, 255, 255, .8); border-radius: 999px; padding: 6px 12px; font-size: .85rem; font-weight: 500; }
+.tags li {
+  background: #fffdf7;
+  border: 2.5px solid var(--ink);
+  border-radius: 999px;
+  padding: 2px 12px;
+  font-size: 1rem;
+}
+.tags li:nth-child(3n)   { transform: rotate(-2deg); }
+.tags li:nth-child(3n+1) { transform: rotate(1.5deg); }
 
-.pill-links { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 4px; }
-.pill-links a { background: var(--bg); border-radius: 999px; padding: 8px 16px; font-weight: 600; font-size: .9rem; }
+.pill-links { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 4px; }
+.pill-links a {
+  background: #fffdf7;
+  border: 2.5px solid var(--ink);
+  border-radius: 999px;
+  padding: 3px 16px;
+  font-family: var(--font-head);
+  font-size: 1.15rem;
+  box-shadow: 3px 3px 0 var(--ink);
+}
 .pill-links a:hover { background: var(--yellow); }
+
+/* ===== stickers: doodles stuck on the corners of tiles ===== */
+.stickers { position: absolute; inset: 0; z-index: 5; pointer-events: none; }
+.sticker {
+  position: absolute;
+  width: calc(var(--s) * var(--k));
+  height: calc(var(--s) * var(--k));
+  transform: rotate(var(--r));
+}
+.sticker .doodle-svg {
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(3px 4px 0 rgba(42, 42, 53, .22));
+  animation: bob 4.5s ease-in-out var(--d) infinite;
+}
+/* a tile that is open keeps only a few stickers hanging off its bottom edge */
+@media (max-width: 899px) { .tile--main .stickers { display: none; } }
+
+@keyframes bob {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-6px) rotate(4deg); }
+}

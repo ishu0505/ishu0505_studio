@@ -30,4 +30,9 @@ function Full() {
   );
 }
 
-export default { id: 'writing', title: 'Writing', emoji: '✍️', tone: 'pink', Preview, Full };
+const stickers = [
+  { icon: 'pencil', size: 58, rot: 14, pos: { top: -22, right: 64 } },
+  { icon: 'king', size: 54, rot: -8, pos: { bottom: -24, right: 10 }, keep: true },
+];
+
+export default { id: 'writing', title: 'Writing', icon: 'pencil', tone: 'pink', stickers, Preview, Full };

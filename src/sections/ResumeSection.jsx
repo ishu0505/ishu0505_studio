@@ -25,6 +25,7 @@ function Full() {
             wide={job.wide}
             label={`Experience${job.wide ? ' · Current' : ''}`}
             title={job.role}
+            icons={job.wide ? ['medal'] : undefined}
           >
             <p className="meta">
               {job.company} · {job.place} · {job.period}
@@ -64,4 +65,10 @@ function Full() {
   );
 }
 
-export default { id: 'resume', title: 'Resume', emoji: '📄', tone: 'peach', Preview, Full };
+const stickers = [
+  { icon: 'medal', size: 62, rot: -10, pos: { top: -24, left: '10%' } },
+  { icon: 'fedora', size: 62, rot: 12, pos: { bottom: -24, right: -14 }, keep: true },
+  { icon: 'star', size: 36, rot: 8, pos: { top: '45%', left: -14 } },
+];
+
+export default { id: 'resume', title: 'Resume', icon: 'medal', tone: 'peach', stickers, Preview, Full };

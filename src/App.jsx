@@ -1,6 +1,7 @@
 import { useEffect, useMemo } from 'react';
 import { MotionConfig } from 'framer-motion';
 import Header from './components/Header';
+import CrayonFilters from './components/doodles/CrayonFilters';
 import BentoGrid from './components/BentoGrid';
 import useActiveSection from './hooks/useActiveSection';
 import { sections } from './sections';
@@ -20,6 +21,7 @@ export default function App() {
   return (
     <MotionConfig reducedMotion="user">
       <div className={`app ${active ? 'app--focus' : ''}`}>
+        <CrayonFilters />
         <Header onHome={close} />
         <BentoGrid sections={sections} active={active} onOpen={open} onClose={close} />
       </div>

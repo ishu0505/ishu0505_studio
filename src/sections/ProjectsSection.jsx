@@ -32,4 +32,10 @@ function Full() {
   );
 }
 
-export default { id: 'projects', title: 'Projects', emoji: '🚀', tone: 'blue', Preview, Full };
+const stickers = [
+  { icon: 'code', size: 62, rot: 8, pos: { top: -24, left: '44%' } },
+  { icon: 'branch', size: 56, rot: -8, pos: { top: '56%', left: -22 } },
+  { icon: 'penguin', size: 60, rot: 10, pos: { top: '34%', right: -20 } },
+];
+
+export default { id: 'projects', title: 'Projects', icon: 'code', tone: 'blue', stickers, Preview, Full };

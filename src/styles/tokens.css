@@ -1,31 +1,43 @@
 :root {
-  --bg: #fbfaf7;
-  --ink: #1d1d1f;
-  --muted: #6e6e73;
+  --paper: #fff8e8;
+  --bg: var(--paper);
+  --ink: #2a2a35;
+  --muted: #55555f;
 
-  /* pastel palette */
-  --blue: #dbeafe;
-  --yellow: #fff3bf;
-  --pink: #fde2ee;
-  --mint: #d8f5e6;
-  --lilac: #e8e0fb;
-  --peach: #ffe6d5;
-  --white: #ffffff;
+  /* crayon palette: pastel, but with a bit more colour than before */
+  --blue: #bfe0ff;
+  --yellow: #ffe98a;
+  --pink: #ffc6dd;
+  --mint: #b9efd3;
+  --lilac: #d9c9fb;
+  --peach: #ffd2b3;
+  --white: #fffdf7;
 
-  --radius: 28px;
-  --gap: 14px;
-  --pad: 16px;
-  --header-h: 64px;
-  --stage-h: calc(100dvh - var(--header-h) - var(--pad));
+  --radius: 30px;
+  --gap: 18px;
+  --pad: 18px;
+  --header-h: 68px;
+  --stage-h: calc(100dvh - var(--header-h) - var(--pad) - 8px);
   --rail-w: 210px;
+  --k: 1; /* sticker size multiplier (smaller on phones) */
 
-  --shadow: 0 1px 2px rgba(0, 0, 0, .04), 0 8px 24px rgba(30, 30, 60, .06);
-  --font: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Inter", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  /* paper-grain speckles drawn into the crayon fills */
+  --grain: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' seed='7'/><feColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 -2.4 1.28'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+
+  --wobble-a: 30px 36px 28px 38px / 36px 28px 38px 30px;
+  --wobble-b: 18px 24px 16px 26px / 24px 16px 26px 18px;
+
+  --font-body: "Patrick Hand", "Comic Sans MS", "Chalkboard SE", cursive, sans-serif;
+  --font-head: "Gochi Hand", "Patrick Hand", "Comic Sans MS", cursive, sans-serif;
 }
 
 @media (min-width: 900px) {
   :root {
-    --pad: 20px;
-    --gap: 16px;
+    --pad: 22px;
+    --gap: 20px;
   }
+}
+
+@media (max-width: 899px) {
+  :root { --k: .72; }
 }

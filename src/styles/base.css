@@ -3,31 +3,36 @@
 html { -webkit-text-size-adjust: 100%; }
 
 body {
-  font-family: var(--font);
-  background: var(--bg);
+  font-family: var(--font-body);
+  font-size: 18px;
+  background-color: var(--paper);
   color: var(--ink);
-  line-height: 1.5;
+  line-height: 1.4;
   -webkit-font-smoothing: antialiased;
 }
 
-/* soft colour wash behind everything */
+/* paper: faint grain + a few crayon scribbles of colour */
 body::before {
   content: "";
   position: fixed;
   inset: 0;
   z-index: -1;
   background:
-    radial-gradient(600px 400px at 8% 0%, #fde2ee80, transparent 70%),
-    radial-gradient(700px 500px at 100% 10%, #dbeafe90, transparent 70%),
-    radial-gradient(600px 500px at 50% 100%, #fff3bf80, transparent 70%);
+    var(--grain),
+    radial-gradient(520px 360px at 6% 0%, #ffc6dd90, transparent 70%),
+    radial-gradient(640px 460px at 100% 8%, #bfe0ff90, transparent 70%),
+    radial-gradient(560px 460px at 50% 100%, #ffe98a90, transparent 70%);
+  opacity: .9;
 }
+
+h1, h2, h3 { font-family: var(--font-head); font-weight: 400; }
 
 a { color: inherit; text-decoration: none; }
 ul { list-style: none; }
 img { display: block; max-width: 100%; }
 button { font: inherit; color: inherit; border: 0; background: none; cursor: pointer; }
 
-:focus-visible { outline: 3px solid #0a84ff; outline-offset: 2px; }
+:focus-visible { outline: 3px dashed #1f6fe5; outline-offset: 3px; }
 
 .app {
   max-width: 1320px;
@@ -39,4 +44,8 @@ button { font: inherit; color: inherit; border: 0; background: none; cursor: poi
 .app--focus {
   height: 100dvh;
   overflow: hidden;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
 }

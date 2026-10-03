@@ -31,6 +31,7 @@ src/
     BentoGrid.jsx     lays out the tiles and switches home <-> focus layout
     Tile.jsx          one tile; animates between home / main / rail modes
     Header.jsx
+    doodles/          hand-drawn icons, stickers and the crayon SVG filter
     ui/               small reusable pieces (Card, Tags, Button, ResumeDownload)
   hooks/
     useActiveSection.js   keeps the open tile in the URL hash (#resume)
@@ -46,10 +47,25 @@ src/
 - **Add a new tile:** create `src/sections/XSection.jsx`, list it in `src/sections/index.js`, and give it a grid area in `src/styles/bento.css`.
 - **Colours:** `src/styles/tokens.css`.
 
+## Look & feel
+
+A hand-drawn "crayon" style: thick wobbly outlines, hard offset shadows, paper-grain fills, and doodle
+stickers stuck on the tiles. Everything is plain CSS plus small SVGs, so it works on phones too.
+
+- **Icons** live in `src/components/doodles/icons.jsx`. They are original drawings made for this site
+  (no icon packs, no brand logos or copyrighted characters). Use one anywhere with `<Doodle name="coffee" />`.
+- **Stickers** per tile are listed in each file in `src/sections/` (`stickers` array: icon, size, rotation, position).
+- **Favourite things** (the Hobbies tile) are in `src/data/hobbies.js`.
+- **Fonts:** Patrick Hand and Gochi Hand (SIL Open Font License), bundled via `@fontsource`.
+
 ## Deploy
 
 Pushing to `main` runs `.github/workflows/deploy.yml`, which builds the site and publishes it to GitHub Pages.
 One-time setup: **Settings → Pages → Build and deployment → Source: GitHub Actions**.
+
+Custom domain: `public/CNAME` holds `ishu0505.tech`. In **Settings → Pages → Custom domain** enter the same name, and point DNS
+(Cloudflare) at GitHub Pages: four `A` records for `@` (185.199.108.153, .109.153, .110.153, .111.153) and a `www` CNAME to
+`ishu0505.github.io`, all "DNS only" until GitHub issues the HTTPS certificate.
 
 ## Contact
 

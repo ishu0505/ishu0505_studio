@@ -4,26 +4,62 @@
   gap: var(--gap);
 }
 
-/* ===== tile base ===== */
+/* ===== tile base =====
+   The crayon look is painted by two pseudo-elements so the content on top
+   stays crisp:  ::before = coloured, grainy fill + thick outline + hard shadow
+                 ::after  = thin offset "second pass" outline, like a sketch     */
 .tile {
+  --tone: var(--blue);
   position: relative;
   min-width: 0;
   min-height: 0;
-  overflow: hidden;
-  box-shadow: var(--shadow);
+}
+.tile::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border: 3.5px solid var(--ink);
+  border-radius: var(--wobble-a);
+  background: var(--grain), var(--tone);
+  box-shadow: 6px 7px 0 var(--ink);
+  transition: box-shadow .2s;
+}
+.tile::after {
+  content: "";
+  position: absolute;
+  inset: 5px;
+  z-index: 1;
+  border: 2px solid rgba(42, 42, 53, .28);
+  border-radius: var(--wobble-b);
+  transform: rotate(-.3deg);
+  pointer-events: none;
 }
 
 .tile--home,
 .tile--rail { cursor: pointer; }
+.tile--home:hover::before,
+.tile--rail:hover::before { box-shadow: 9px 10px 0 var(--ink); }
 
-.tone-blue   { background: var(--blue); }
-.tone-yellow { background: var(--yellow); }
-.tone-pink   { background: var(--pink); }
-.tone-mint   { background: var(--mint); }
-.tone-lilac  { background: var(--lilac); }
-.tone-peach  { background: var(--peach); }
-.tone-white  { background: var(--white); }
-.tone-cream  { background: linear-gradient(145deg, #fff 0%, #fff7d6 45%, #fde2ee 100%); }
+.tone-blue   { --tone: var(--blue); }
+.tone-yellow { --tone: var(--yellow); }
+.tone-pink   { --tone: var(--pink); }
+.tone-mint   { --tone: var(--mint); }
+.tone-lilac  { --tone: var(--lilac); }
+.tone-peach  { --tone: var(--peach); }
+.tone-white  { --tone: var(--white); }
+.tone-cream  { --tone: linear-gradient(145deg, #fffdf7 0%, #fff0b8 50%, #ffc6dd 100%); }
+
+/* content sits above the painted background */
+.tile__preview,
+.tile__rail,
+.tile__main {
+  position: relative;
+  z-index: 2;
+  height: 100%;
+  border-radius: 28px;
+  overflow: hidden;
+}
 
 /* ===== FRONT PAGE: all tiles visible =====
    Desktop: 4 x 3 grid that fits the viewport.
@@ -34,6 +70,7 @@
   grid-template-columns: repeat(4, minmax(0, 1fr));
   grid-template-rows: repeat(3, minmax(0, 1fr));
   height: max(var(--stage-h), 560px);
+  padding: 14px 8px 8px 4px; /* room for hanging stickers + hard shadows */
 }
 .bento--home .tile--profile  { grid-area: 1 / 1 / 3 / 3; }
 .bento--home .tile--projects { grid-area: 1 / 3 / 2 / 5; }
@@ -48,14 +85,14 @@
   grid-template-columns: minmax(0, 1fr) var(--rail-w);
   grid-template-rows: repeat(5, minmax(0, 1fr));
   height: var(--stage-h);
+  padding: 4px 8px 8px 4px;
 }
 .bento--focus .tile { grid-column: 2; grid-row: auto; }
 .bento--focus .tile--main { grid-column: 1; grid-row: 1 / -1; }
 
 /* ===== tile contents by mode ===== */
 .tile__preview {
-  height: 100%;
-  padding: 24px;
+  padding: 26px;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
@@ -64,50 +101,58 @@
   position: absolute;
   top: 16px;
   right: 18px;
-  font-size: 1.1rem;
-  width: 34px;
-  height: 34px;
+  width: 38px;
+  height: 38px;
   display: grid;
   place-items: center;
+  border: 2.5px solid var(--ink);
   border-radius: 50%;
-  background: rgba(255, 255, 255, .7);
+  background: #fff;
+  font-size: 1.2rem;
 }
 
 .tile__rail {
-  height: 100%;
-  padding: 0 18px;
+  padding: 0 16px;
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
 }
-.tile__emoji { font-size: 1.6rem; line-height: 1; }
-.tile__rail-title { font-weight: 600; font-size: .95rem; }
+.tile__rail-title { font-family: var(--font-head); font-size: 1.25rem; }
 
-.tile__main { height: 100%; display: flex; flex-direction: column; }
+.tile__main { display: flex; flex-direction: column; }
 .tile__header {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  padding: 20px 24px 12px;
+  padding: 20px 26px 10px;
 }
-.tile__header h2 { font-size: clamp(1.5rem, 3vw, 2.1rem); letter-spacing: -.03em; line-height: 1.1; }
+.tile__header h2 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: clamp(1.9rem, 3.6vw, 2.8rem);
+  line-height: 1.05;
+}
 .tile__close {
-  width: 40px;
-  height: 40px;
+  width: 44px;
+  height: 44px;
   flex-shrink: 0;
+  border: 3px solid var(--ink);
   border-radius: 50%;
-  background: rgba(255, 255, 255, .75);
-  font-size: 1rem;
-  transition: background .2s;
+  background: #fff;
+  font-size: 1.1rem;
+  box-shadow: 3px 3px 0 var(--ink);
+  transition: transform .15s, box-shadow .15s;
 }
-.tile__close:hover { background: #fff; }
+.tile__close:hover { transform: rotate(8deg) scale(1.05); }
+.tile__close:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0 var(--ink); }
 .tile__body {
   flex: 1;
   min-height: 0;
   overflow-y: auto;
   overscroll-behavior: contain;
-  padding: 4px 24px 24px;
+  padding: 6px 26px 28px;
   -webkit-overflow-scrolling: touch;
 }
 
@@ -119,17 +164,18 @@
     grid-template-rows: none;
     grid-auto-rows: minmax(150px, auto);
     height: auto;
+    padding: 18px 8px 12px 4px;
   }
   .bento--home .tile { grid-area: auto; }
   .bento--home .tile--profile,
   .bento--home .tile--contact { grid-column: span 2; }
-  .bento--home .tile--profile { min-height: 300px; }
+  .bento--home .tile--profile { min-height: 320px; }
 
   /* focus: big tile on top, rail of five small tiles along the bottom */
   .bento--focus {
     grid-template-columns: repeat(5, minmax(0, 1fr));
-    grid-template-rows: minmax(0, 1fr) 80px;
-    gap: 10px;
+    grid-template-rows: minmax(0, 1fr) 84px;
+    gap: 12px;
   }
   .bento--focus .tile { grid-column: auto; grid-row: 2; }
   .bento--focus .tile--main { grid-column: 1 / -1; grid-row: 1; }
@@ -137,15 +183,15 @@
   .tile__rail {
     flex-direction: column;
     justify-content: center;
-    gap: 2px;
-    padding: 0 4px;
+    gap: 0;
+    padding: 0 2px;
     text-align: center;
   }
-  .tile__rail-title { font-size: .66rem; }
-  .tile__emoji { font-size: 1.35rem; }
+  .tile__rail-title { font-size: .82rem; line-height: 1.1; }
+  .tile__rail .doodle-svg { width: 30px; height: 30px; }
 
-  .tile__preview { padding: 18px; }
   .tile__arrow { display: none; }
+  .tile__preview { padding: 18px; }
   .tile__header { padding: 16px 18px 8px; }
-  .tile__body { padding: 4px 16px 20px; }
+  .tile__body { padding: 4px 16px 22px; }
 }

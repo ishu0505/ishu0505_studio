@@ -1,9 +1,18 @@
 // A small pastel card used inside an expanded tile.
 // Renders an <a> when `href` is given, otherwise a <div>.
-export default function Card({ tone = 'white', label, title, wide = false, href, children, className = '' }) {
+import Doodle from '../doodles/Doodle';
+
+export default function Card({ tone = 'white', label, title, wide = false, href, icons, children, className = '' }) {
   const classes = `card tone-${tone} ${wide ? 'card--wide' : ''} ${href ? 'card--link' : ''} ${className}`;
   const body = (
     <>
+      {icons && (
+        <div className="card__icons">
+          {icons.map((name) => (
+            <Doodle key={name} name={name} size={46} />
+          ))}
+        </div>
+      )}
       {label && <p className="label">{label}</p>}
       {title && <h3 className="card__title">{title}</h3>}
       {children}
