@@ -1,0 +1,55 @@
+import { asset } from '../utils/asset';
+
+export const projects = [
+  {
+    id: 'cancer-predictor',
+    title: 'Cancer Predictor',
+    category: 'Machine Learning',
+    tech: 'Logistic Regression · Streamlit · EDA',
+    image: asset('assets/images/project-1.jpg'),
+    href: 'https://cancer-predictor-ml-app-st.streamlit.app/',
+    tone: 'blue',
+  },
+  {
+    id: 'fraud-detection',
+    title: 'Credit Card Fraud Detection',
+    category: 'Kaggle',
+    tech: 'ROC-AUC 0.974 · XGBoost · CatBoost · AdaBoost',
+    image: asset('assets/images/Project-3.jpg'),
+    href: 'https://www.kaggle.com/code/ishu0505/xg-boost-credit-fraud-detection-roc-auc-0-979?scriptVersionId=215376122',
+    tone: 'yellow',
+  },
+  {
+    id: 'uganda',
+    title: 'Digital Financial Access in Uganda',
+    category: 'Data Analytics',
+    tech: 'SAS Viya · Logistic Regression',
+    image: asset('assets/images/Data-analytcis-project.png'),
+    href: 'https://medium.com/@ishu0505/explanatory-analysis-of-gender-disparities-in-digital-financial-access-in-uganda-4f31f877e0e9',
+    tone: 'pink',
+  },
+  {
+    id: 'scane',
+    title: 'Scane.at',
+    category: 'Product',
+    tech: 'Korean food recommender',
+    href: 'https://scane.at/',
+    tone: 'mint',
+  },
+  {
+    id: 'refundly',
+    title: 'Refundly',
+    category: 'Product',
+    tech: 'Track orders & refunds for SMEs',
+    href: 'https://refundly.app',
+    tone: 'lilac',
+  },
+  {
+    id: 'github',
+    title: 'All code on GitHub',
+    category: 'More',
+    tech: 'github.com/ishu0505',
+    href: 'https://github.com/ishu0505',
+    tone: 'white',
+  },
+];

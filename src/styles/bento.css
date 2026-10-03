@@ -1,0 +1,151 @@
+/* ===== grid container ===== */
+.bento {
+  display: grid;
+  gap: var(--gap);
+}
+
+/* ===== tile base ===== */
+.tile {
+  position: relative;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
+
+.tile--home,
+.tile--rail { cursor: pointer; }
+
+.tone-blue   { background: var(--blue); }
+.tone-yellow { background: var(--yellow); }
+.tone-pink   { background: var(--pink); }
+.tone-mint   { background: var(--mint); }
+.tone-lilac  { background: var(--lilac); }
+.tone-peach  { background: var(--peach); }
+.tone-white  { background: var(--white); }
+.tone-cream  { background: linear-gradient(145deg, #fff 0%, #fff7d6 45%, #fde2ee 100%); }
+
+/* ===== FRONT PAGE: all tiles visible =====
+   Desktop: 4 x 3 grid that fits the viewport.
+     profile profile projects projects
+     profile profile resume   hobbies
+     writing contact resume   hobbies                                  */
+.bento--home {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-rows: repeat(3, minmax(0, 1fr));
+  height: max(var(--stage-h), 560px);
+}
+.bento--home .tile--profile  { grid-area: 1 / 1 / 3 / 3; }
+.bento--home .tile--projects { grid-area: 1 / 3 / 2 / 5; }
+.bento--home .tile--resume   { grid-area: 2 / 3 / 4 / 4; }
+.bento--home .tile--hobbies  { grid-area: 2 / 4 / 4 / 5; }
+.bento--home .tile--writing  { grid-area: 3 / 1 / 4 / 2; }
+.bento--home .tile--contact  { grid-area: 3 / 2 / 4 / 3; }
+
+/* ===== FOCUS: one tile big, the rest shrink into a rail =====
+   Desktop: big tile on the left, rail of small tiles on the right.   */
+.bento--focus {
+  grid-template-columns: minmax(0, 1fr) var(--rail-w);
+  grid-template-rows: repeat(5, minmax(0, 1fr));
+  height: var(--stage-h);
+}
+.bento--focus .tile { grid-column: 2; grid-row: auto; }
+.bento--focus .tile--main { grid-column: 1; grid-row: 1 / -1; }
+
+/* ===== tile contents by mode ===== */
+.tile__preview {
+  height: 100%;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+.tile__arrow {
+  position: absolute;
+  top: 16px;
+  right: 18px;
+  font-size: 1.1rem;
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, .7);
+}
+
+.tile__rail {
+  height: 100%;
+  padding: 0 18px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.tile__emoji { font-size: 1.6rem; line-height: 1; }
+.tile__rail-title { font-weight: 600; font-size: .95rem; }
+
+.tile__main { height: 100%; display: flex; flex-direction: column; }
+.tile__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 20px 24px 12px;
+}
+.tile__header h2 { font-size: clamp(1.5rem, 3vw, 2.1rem); letter-spacing: -.03em; line-height: 1.1; }
+.tile__close {
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, .75);
+  font-size: 1rem;
+  transition: background .2s;
+}
+.tile__close:hover { background: #fff; }
+.tile__body {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 4px 24px 24px;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* ===== tablet + mobile ===== */
+@media (max-width: 899px) {
+  /* front page: 2 columns, the page scrolls */
+  .bento--home {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: none;
+    grid-auto-rows: minmax(150px, auto);
+    height: auto;
+  }
+  .bento--home .tile { grid-area: auto; }
+  .bento--home .tile--profile,
+  .bento--home .tile--contact { grid-column: span 2; }
+  .bento--home .tile--profile { min-height: 300px; }
+
+  /* focus: big tile on top, rail of five small tiles along the bottom */
+  .bento--focus {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    grid-template-rows: minmax(0, 1fr) 80px;
+    gap: 10px;
+  }
+  .bento--focus .tile { grid-column: auto; grid-row: 2; }
+  .bento--focus .tile--main { grid-column: 1 / -1; grid-row: 1; }
+
+  .tile__rail {
+    flex-direction: column;
+    justify-content: center;
+    gap: 2px;
+    padding: 0 4px;
+    text-align: center;
+  }
+  .tile__rail-title { font-size: .66rem; }
+  .tile__emoji { font-size: 1.35rem; }
+
+  .tile__preview { padding: 18px; }
+  .tile__arrow { display: none; }
+  .tile__header { padding: 16px 18px 8px; }
+  .tile__body { padding: 4px 16px 20px; }
+}
