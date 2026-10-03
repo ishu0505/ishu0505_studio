@@ -21,7 +21,7 @@ function Full() {
   return (
     <div className="card-grid">
       {hobbies.map((h) => (
-        <Card key={h.id} tone={h.tone} icons={h.icons}>
+        <Card key={h.id} tone={h.tone} icons={h.icons} iconSize={58}>
           <h3 className="card__title">{h.title}</h3>
           <p className="muted small">{h.text}</p>
         </Card>
