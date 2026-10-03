@@ -1,4 +1,11 @@
+/**
+ * FILE: src/sections/ProjectsSection.jsx
+ * WHAT IT DOES
+ *   The Projects tile. Normal projects are link cards; projects with kind 'demo' become DemoCards.
+ *   Content: src/content/projects.json.
+ */
 import Card from '../components/ui/Card';
+import DemoCard from '../components/DemoCard';
 import { projects } from '../data/projects';
 import { stickers as allStickers } from '../data/stickers';
 
@@ -18,16 +25,24 @@ function Preview() {
   );
 }
 
+/** One project card: a normal link card, or a live-demo card (kind "demo"). */
+function ProjectCard({ project }) {
+  if (project.kind === 'demo') return <DemoCard project={project} />;
+  return (
+    <Card tone={project.tone} href={project.href} className={project.image ? 'card--media' : ''}>
+      {project.image && <img className="card__img" src={project.image} alt="" loading="lazy" />}
+      <p className="label">{project.category}</p>
+      <h3 className="card__title">{project.title} ↗</h3>
+      <p className="muted small">{project.tech}</p>
+    </Card>
+  );
+}
+
 function Full() {
   return (
     <div className="card-grid card-grid--wide">
-      {projects.map((p) => (
-        <Card key={p.id} tone={p.tone} href={p.href} className={p.image ? 'card--media' : ''}>
-          {p.image && <img className="card__img" src={p.image} alt="" loading="lazy" />}
-          <p className="label">{p.category}</p>
-          <h3 className="card__title">{p.title} ↗</h3>
-          <p className="muted small">{p.tech}</p>
-        </Card>
+      {projects.map((project) => (
+        <ProjectCard key={project.id} project={project} />
       ))}
     </div>
   );

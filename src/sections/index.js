@@ -1,7 +1,9 @@
-// The order here is the order of tiles on the front page.
-// To add a section: create a file that default-exports
-// { id, title, icon, tone, stickers, Preview, Full }  (stickers marked keep:true stay visible when the tile is open) and list it below
-// (plus a grid area for it in styles/bento.css).
+/**
+ * FILE: src/sections/index.js
+ * WHAT IT DOES
+ *   The list of tiles, in front-page order. To add a tile: create a *Section.jsx file that exports
+ *   { id, title, icon, tone, stickers, Preview, Full }, import it here, and give it a grid area in styles/bento.css.
+ */
 import profile from './ProfileSection';
 import projects from './ProjectsSection';
 import resume from './ResumeSection';

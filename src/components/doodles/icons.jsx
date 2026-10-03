@@ -1,7 +1,10 @@
-// Original hand-drawn doodle icons (drawn for this site, no third-party assets).
-// Each icon is drawn in a 64x64 box. Stroke/line styling is applied by <Doodle>.
-// Deliberately generic: no brand logos or copyrighted characters.
-
+/**
+ * FILE: src/components/doodles/icons.jsx
+ * WHAT IT DOES
+ *   All the built-in doodle icons, drawn by hand as SVG in a 64x64 box (no icon packs, no logos).
+ *   To add one: add a new  name: (<>...</>),  entry below. It then appears in the admin pickers.
+ *   ICON_NAMES (bottom) is the list of names; scripts/validate-content.mjs reads this file too.
+ */
 const INK = '#2a2a35';
 
 // Build a path from a list of grid points (used for the pixel heart).

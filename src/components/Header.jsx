@@ -1,3 +1,8 @@
+/**
+ * FILE: src/components/Header.jsx
+ * WHAT IT DOES
+ *   The top bar: your name/photo (click = back to all tiles), little doodles, and the Resume button.
+ */
 import { profile } from '../data/profile';
 import Doodle from './doodles/Doodle';
 import ResumeDownload from './ui/ResumeDownload';

@@ -1,5 +1,8 @@
-// A small pastel card used inside an expanded tile.
-// Renders an <a> when `href` is given, otherwise a <div>.
+/**
+ * FILE: src/components/ui/Card.jsx
+ * WHAT IT DOES
+ *   The small coloured card used inside opened tiles. Optional: label, title, icons, link (href).
+ */
 import Doodle from '../doodles/Doodle';
 
 export default function Card({ tone = 'white', label, title, wide = false, href, icons, iconSize = 46, children, className = '' }) {

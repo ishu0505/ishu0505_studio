@@ -1,4 +1,8 @@
-/* ===== top bar ===== */
+/**
+ * FILE: src/styles/ui.css
+ * Shared look: buttons, inner cards, tags, top bar, and the stickers stuck on tiles.
+ */
+
 .topbar {
   height: var(--header-h);
   display: flex;
@@ -142,3 +146,4 @@
   0%, 100% { transform: translateY(0) rotate(0deg); }
   50% { transform: translateY(-6px) rotate(4deg); }
 }
+.doodle-img { object-fit: contain; }

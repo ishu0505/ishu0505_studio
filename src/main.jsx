@@ -1,3 +1,8 @@
+/**
+ * FILE: src/main.jsx
+ * WHAT IT DOES
+ *   The starting point. Loads the fonts and all the CSS, then draws <App /> into index.html.
+ */
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import '@fontsource/patrick-hand/latin-400.css';

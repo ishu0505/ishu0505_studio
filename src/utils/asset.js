@@ -1,5 +1,10 @@
-// Resolve a file in /public against the configured Vite base,
-// so links keep working on github.io/<repo>/ and on a custom domain.
+/**
+ * FILE: src/utils/asset.js
+ * WHAT IT DOES
+ *   Turns a file path into a working URL:
+ *     asset('assets/x.jpg')        -> a file in /public (works on github.io/<repo>/ and custom domains)
+ *     resolveAsset(value)         -> same, but leaves full links (https:, mailto:) untouched
+ */
 export const asset = (path) => `${import.meta.env.BASE_URL}${path}`;
 
 // Content files store local files as paths ("assets/images/x.jpg") and

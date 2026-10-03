@@ -1,13 +1,24 @@
-// Content rules, shared by the build-time check (scripts/validate-content.mjs)
-// and, later, the admin editors. Plain JS with no imports so it runs anywhere.
-//
-//   validateContent(content, { iconNames, assetExists }) -> string[]   (empty = valid)
-//
-// `content` is { profile, projects, hobbies, resume, writing, stickers, icons }.
-// `iconNames`   Set of built-in icon names (components/doodles/icons.jsx).
-// `assetExists` (path) => boolean, checks a file under /public (optional).
-
+/**
+ * FILE: src/content/schema.js
+ * WHAT IT DOES
+ *   The RULES for content files (what fields are required, allowed colours, icon names, sticker limits...).
+ *   Used by the build check (scripts/validate-content.mjs) and by the admin, so both agree.
+ *     validateContent(content, { iconNames, assetExists })  ->  list of problems (empty = all good)
+ *   Plain JS with no imports so it runs in the browser and in Node.
+ */
 export const TONES = ['blue', 'yellow', 'pink', 'mint', 'lilac', 'peach', 'white', 'cream'];
+// Where a live demo can be running. `label` is what visitors see on the badge.
+export const DEMO_HOSTS = [
+  { value: 'streamlit', label: 'Streamlit' },
+  { value: 'huggingface', label: 'Hugging Face' },
+  { value: 'aws', label: 'AWS' },
+  { value: 'digitalocean', label: 'DigitalOcean' },
+  { value: 'vercel', label: 'Vercel' },
+  { value: 'netlify', label: 'Netlify' },
+  { value: 'render', label: 'Render' },
+  { value: 'github', label: 'GitHub Pages' },
+  { value: 'other', label: 'Other' },
+];
 export const SECTION_IDS = ['profile', 'projects', 'resume', 'hobbies', 'writing', 'contact'];
 const POS_KEYS = ['top', 'bottom', 'left', 'right'];
 const EXTERNAL = /^(?:[a-z][a-z0-9+.-]*:|#|\/\/)/i;
@@ -119,6 +130,17 @@ export function validateContent(content, ctx = {}) {
       tone(x, w);
       file(x?.href, w, 'href');
       if (x?.image !== undefined) file(x.image, w, 'image');
+
+      // Optional: a project can be a live demo hosted somewhere else.
+      if (x?.kind !== undefined && !['project', 'demo'].includes(x.kind)) err(w, '"kind" must be "project" or "demo"');
+      if (x?.kind === 'demo') {
+        if (!isObj(x.demo)) return err(w, 'a demo needs a "demo" section');
+        url(x.demo, 'url', `${w}.demo`);
+        if (x.demo.repoUrl !== undefined) url(x.demo, 'repoUrl', `${w}.demo`);
+        if (!DEMO_HOSTS.some((h) => h.value === x.demo.host)) err(`${w}.demo`, `"host" must be one of: ${DEMO_HOSTS.map((h) => h.value).join(', ')}`);
+        if (x.demo.embed !== undefined && typeof x.demo.embed !== 'boolean') err(`${w}.demo`, '"embed" must be true or false');
+        strOpt(x.demo, 'note', `${w}.demo`);
+      }
     });
   }
 

@@ -1,3 +1,8 @@
+/**
+ * FILE: src/sections/HobbiesSection.jsx
+ * WHAT IT DOES
+ *   The Hobbies tile: a front-page preview (Preview) and the opened view (Full). Content: src/content/hobbies.json.
+ */
 import Card from '../components/ui/Card';
 import Doodle from '../components/doodles/Doodle';
 import { hobbies } from '../data/hobbies';

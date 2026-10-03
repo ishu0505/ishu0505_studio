@@ -1,3 +1,8 @@
+/**
+ * FILE: src/styles/tokens.css
+ * The design settings in one place: colours, spacing, fonts, the paper-grain image. Change a colour here and it changes everywhere.
+ */
+
 :root {
   --paper: #fff8e8;
   --bg: var(--paper);

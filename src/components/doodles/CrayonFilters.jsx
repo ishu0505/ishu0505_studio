@@ -1,5 +1,8 @@
-// Shared SVG filter used by every doodle: a gentle wobble on the lines so they
-// look drawn by hand. Rendered once at the top of the app.
+/**
+ * FILE: src/components/doodles/CrayonFilters.jsx
+ * WHAT IT DOES
+ *   A tiny hidden SVG that defines the 'wobble' filter every doodle uses (the hand-drawn look). Drawn once, near the top of the page.
+ */
 export default function CrayonFilters() {
   return (
     <svg width="0" height="0" style={{ position: 'absolute' }} aria-hidden="true" focusable="false">

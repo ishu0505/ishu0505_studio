@@ -1,3 +1,8 @@
+/**
+ * FILE: src/data/profile.js
+ * WHAT IT DOES
+ *   Adapter: src/content/profile.json + turns file paths into real URLs. Edit the JSON (or use the admin), not this file.
+ */
 import data from '../content/profile.json';
 import { resolveAsset } from '../utils/asset';
 
