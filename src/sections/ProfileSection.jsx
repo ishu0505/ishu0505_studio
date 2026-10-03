@@ -12,9 +12,9 @@ function Preview() {
       <h1>{profile.name}</h1>
       <p className="lead">{profile.role}</p>
       <div className="chips">
-        <span className="chip">📍 {profile.location}</span>
-        <span className="chip">🎓 {profile.school}</span>
-        <span className="chip">🧪 {profile.status}</span>
+        <span className="chip">{profile.location}</span>
+        <span className="chip">{profile.school}</span>
+        <span className="chip">{profile.status}</span>
       </div>
     </div>
   );
@@ -36,10 +36,10 @@ function Full() {
       </div>
 
       <div className="card-grid">
-        <Card tone="blue" label="Currently" title={profile.current.title}>
+        <Card tone="blue" label="Currently" title={profile.current.title} icons={['code']}>
           <p className="muted">{profile.current.text}</p>
         </Card>
-        <Card tone="peach" label="Founder story" title={profile.startup.title}>
+        <Card tone="peach" label="Founder story" title={profile.startup.title} icons={['bolt']}>
           <p className="muted">{profile.startup.text}</p>
         </Card>
         <Card tone="mint" label="What I do">
@@ -63,4 +63,12 @@ function Full() {
   );
 }
 
-export default { id: 'profile', title: 'About', emoji: '👋', tone: 'cream', Preview, Full };
+const stickers = [
+  { icon: 'coffee', size: 64, rot: -10, pos: { top: -26, right: '24%' } },
+  { icon: 'shoe', size: 70, rot: 8, pos: { bottom: -26, right: '8%' }, keep: true },
+  { icon: 'sparkle', size: 44, rot: 12, pos: { top: '40%', right: -16 } },
+  { icon: 'star', size: 38, rot: -14, pos: { top: '9%', left: -14 } },
+  { icon: 'bolt', size: 50, rot: -8, pos: { bottom: -22, left: '34%' } },
+];
+
+export default { id: 'profile', title: 'About', icon: 'coffee', tone: 'cream', stickers, Preview, Full };

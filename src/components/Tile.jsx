@@ -1,4 +1,6 @@
 import { motion } from 'framer-motion';
+import Doodle from './doodles/Doodle';
+import Stickers from './doodles/Stickers';
 
 const SPRING = { type: 'spring', stiffness: 260, damping: 32, mass: 0.9 };
 
@@ -10,7 +12,7 @@ const SPRING = { type: 'spring', stiffness: 260, damping: 32, mass: 0.9 };
  * `layout` lets Framer Motion animate the size/position change.
  */
 export default function Tile({ section, mode, index, onOpen, onClose }) {
-  const { id, title, emoji, tone, Preview, Full } = section;
+  const { id, title, icon, tone, stickers, Preview, Full } = section;
   const interactive = mode !== 'main';
 
   const buttonProps = interactive
@@ -47,9 +49,11 @@ export default function Tile({ section, mode, index, onOpen, onClose }) {
         </div>
       )}
 
+      {mode !== 'rail' && stickers && <Stickers items={mode === 'main' ? stickers.filter((s) => s.keep) : stickers} />}
+
       {mode === 'rail' && (
         <div className="tile__rail">
-          <span className="tile__emoji" aria-hidden="true">{emoji}</span>
+          <Doodle name={icon} size={34} className="tile__icon" />
           <span className="tile__rail-title">{title}</span>
         </div>
       )}
@@ -63,7 +67,7 @@ export default function Tile({ section, mode, index, onOpen, onClose }) {
         >
           <header className="tile__header">
             <h2>
-              <span aria-hidden="true">{emoji}</span> {title}
+              <Doodle name={icon} size={40} className="tile__icon" /> {title}
             </h2>
             <button type="button" className="tile__close" onClick={onClose} aria-label="Close and go back to all tiles">
               ✕

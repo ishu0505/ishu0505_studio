@@ -1,8 +1,66 @@
-// Placeholder hobbies — edit freely.
+// My favourite things. `icons` are doodle names from components/doodles/icons.jsx.
 export const hobbies = [
-  { id: 'swimming', emoji: '🏊', title: 'Swimming', text: 'Laps clear my head.', tone: 'blue' },
-  { id: 'kaggle', emoji: '🏆', title: 'Kaggle', text: 'Competing and learning.', tone: 'yellow' },
-  { id: 'building', emoji: '🛠️', title: 'Building', text: 'Side projects and startups.', tone: 'pink' },
-  { id: 'music', emoji: '🎧', title: 'Music', text: 'Always on while coding.', tone: 'mint' },
-  { id: 'travel', emoji: '✈️', title: 'Travel', text: 'New places, new ideas.', tone: 'lilac' },
+  {
+    id: 'running',
+    title: 'Running',
+    text: 'Half marathons and marathons. Hoka shoes all day.',
+    icons: ['shoe', 'medal'],
+    tone: 'blue',
+  },
+  {
+    id: 'anime',
+    title: 'Anime',
+    text: 'Code Geass, Shin-chan, and anime cats.',
+    icons: ['cat', 'king'],
+    tone: 'pink',
+  },
+  {
+    id: 'gaming',
+    title: 'Video games',
+    text: 'Uncharted, 007 First Light and The Last of Us.',
+    icons: ['gamepad', 'compass', 'sunglasses', 'mushroom'],
+    tone: 'lilac',
+  },
+  {
+    id: 'calisthenics',
+    title: 'Calisthenics',
+    text: 'Bodyweight strength training.',
+    icons: ['dumbbell'],
+    tone: 'mint',
+  },
+  {
+    id: 'coffee',
+    title: 'Coffee',
+    text: 'Always. Especially before a long run.',
+    icons: ['coffee'],
+    tone: 'peach',
+  },
+  {
+    id: 'coding',
+    title: 'Coding',
+    text: 'Building things, for work and for fun.',
+    icons: ['code'],
+    tone: 'yellow',
+  },
+  {
+    id: 'gamedev',
+    title: 'Game dev',
+    text: 'Making little worlds of my own.',
+    icons: ['heart', 'gamepad'],
+    tone: 'pink',
+  },
+  {
+    id: 'opensource',
+    title: 'Open source',
+    text: 'Reading, using and contributing to community code.',
+    icons: ['branch'],
+    tone: 'mint',
+  },
+  {
+    id: 'linux',
+    title: 'Linux',
+    text: 'Fedora is my favourite distro.',
+    icons: ['penguin', 'fedora'],
+    tone: 'blue',
+  },
 ];
