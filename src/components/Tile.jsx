@@ -1,3 +1,11 @@
+/**
+ * FILE: src/components/Tile.jsx
+ * WHAT IT DOES
+ *   One tile. The same tile morphs between three modes:
+ *     home  a preview on the front page      main  opened, fills most of the page
+ *     rail  a small tile while another is open
+ *   Framer Motion's `layout` prop animates the size change.
+ */
 import { motion } from 'framer-motion';
 import Doodle from './doodles/Doodle';
 import Stickers from './doodles/Stickers';

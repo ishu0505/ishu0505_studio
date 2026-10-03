@@ -1,4 +1,9 @@
-/* ===== grid container ===== */
+/**
+ * FILE: src/styles/bento.css
+ * The tile grid: front-page layout, 'focus' layout (one big tile + rail), the crayon tile look, mobile rules.
+ * Tile positions on the front page are the grid-area lines near the top.
+ */
+
 .bento {
   display: grid;
   gap: var(--gap);

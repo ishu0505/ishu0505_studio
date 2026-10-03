@@ -19,6 +19,7 @@
     "validate": "node scripts/validate-content.mjs",
     "prebuild": "npm run validate",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test:e2e": "node tests/admin-e2e.cjs"
   }
 }

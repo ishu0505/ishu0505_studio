@@ -1,3 +1,8 @@
+/**
+ * FILE: src/sections/ProfileSection.jsx
+ * WHAT IT DOES
+ *   The About tile: a front-page preview (Preview) and the opened view (Full). Content: src/content/profile.json.
+ */
 import Card from '../components/ui/Card';
 import Tags from '../components/ui/Tags';
 import Button from '../components/ui/Button';

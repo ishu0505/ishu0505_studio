@@ -1,3 +1,8 @@
+/**
+ * FILE: src/sections/ContactSection.jsx
+ * WHAT IT DOES
+ *   The Contact tile: a front-page preview (Preview) and the opened view (Full).
+ */
 import Card from '../components/ui/Card';
 import { profile } from '../data/profile';
 import { stickers as allStickers } from '../data/stickers';

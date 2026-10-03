@@ -1,3 +1,11 @@
+/**
+ * FILE: src/components/BentoGrid.jsx
+ * WHAT IT DOES
+ *   Lays out all the tiles. It switches between two layouts with CSS:
+ *     front page  -> every tile visible (see styles/bento.css)
+ *     focus       -> one big tile + a rail of small ones
+ *   Also re-flows the grid on hover (see hoverLayout.js) so the hovered tile grows and the others make room.
+ */
 import { useEffect, useState } from 'react';
 import Tile from './Tile';
 import useHoverCapable from '../hooks/useHoverCapable';

@@ -1,3 +1,8 @@
+/**
+ * FILE: src/hooks/useActiveSection.js
+ * WHAT IT DOES
+ *   Remembers which tile is open in the web address (#resume), so the Back button and shared links work.
+ */
 import { useCallback, useEffect, useState } from 'react';
 
 const readHash = (ids) => {

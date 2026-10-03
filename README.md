@@ -5,7 +5,7 @@ The front page is a grid of tiles (About, Projects, Resume, Hobbies, Writing, Co
 Click a tile and it expands to fill most of the page while the others shrink into a rail
 (a bottom bar on mobile). `Esc`, the ✕ button, or the browser Back button returns to the grid.
 
-[visit ishaanparmar.online](https://ishaanparmar.online/)
+[visit ishu0505.tech](https://ishu0505.tech/)
 
 ## Run it
 
@@ -16,29 +16,16 @@ npm run build     # production build into dist/
 npm run preview   # serve the production build locally
 ```
 
-## Project structure
+## Documentation
 
-```
-public/assets/        static files served as-is (images, resume PDF, report)
-src/
-  main.jsx            entry point, loads the styles
-  App.jsx             page shell: header + bento grid + Esc handling
-  content/            ALL the editable content, as plain JSON (profile, projects, hobbies, resume,
-                      writing, stickers, icons) + schema.js (the rules the build checks)
-  data/               thin adapters that turn content/*.json into what the components use
-  sections/           one file per tile: exports { id, title, icon, tone, stickers, Preview, Full }
-    index.js          the list/order of tiles
-  components/
-    BentoGrid.jsx     lays out the tiles and switches home <-> focus layout
-    Tile.jsx          one tile; animates between home / main / rail modes
-    Header.jsx
-    doodles/          hand-drawn icons, stickers and the crayon SVG filter
-    ui/               small reusable pieces (Card, Tags, Button, ResumeDownload)
-  hooks/
-    useActiveSection.js   keeps the open tile in the URL hash (#resume)
-  styles/             tokens (colours/spacing), base, bento (layout), ui, sections
-  utils/asset.js      builds correct URLs for files in public/
-```
+- [docs/CODE_MAP.md](docs/CODE_MAP.md): **what is where**, folder by folder (start here)
+- [docs/ADMIN.md](docs/ADMIN.md): how to use the admin page and create the token
+- [docs/DEMOS.md](docs/DEMOS.md): adding live demos (Streamlit, Hugging Face, AWS...)
+
+## Admin
+
+Open `/#/admin` on the live site to edit everything (content, icons, stickers, resume PDF, images)
+without touching code. Changes are saved to this repo and the site republishes automatically.
 
 ### Common edits
 
@@ -47,6 +34,10 @@ src/
 - **Change hobbies:** `src/content/hobbies.json`.
 - **Add a new tile:** create `src/sections/XSection.jsx`, list it in `src/sections/index.js`, and give it a grid area in `src/styles/bento.css`.
 - **Colours:** `src/styles/tokens.css`.
+
+### Tests
+`npm run test:e2e` drives the admin against a pretend GitHub (needs `npm i -D playwright` once, and the site
+served with `npm run build && npx vite preview --port 4173`).
 
 ### Content check
 `npm run build` first runs `npm run validate` (`scripts/validate-content.mjs`). It checks every file in

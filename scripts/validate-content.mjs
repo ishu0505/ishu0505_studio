@@ -1,5 +1,11 @@
-// Checks src/content/*.json before every build (`npm run build` runs it as "prebuild").
-// A bad edit fails here, so it never replaces the live site.
+/**
+ * FILE: scripts/validate-content.mjs
+ * WHAT IT DOES
+ *   Checks every file in src/content/ BEFORE each build (npm run build runs it first).
+ *   A typo (missing field, unknown icon, image that does not exist...) stops the build with a
+ *   plain-English list of problems, so a mistake never replaces the live site.
+ *   Run it by hand:  npm run validate     Rules live in: src/content/schema.js
+ */
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';

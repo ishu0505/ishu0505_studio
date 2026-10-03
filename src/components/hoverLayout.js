@@ -1,9 +1,10 @@
-// Hover re-flow: instead of scaling a tile over its neighbours, the grid
-// itself re-allocates space. The hovered tile's rows/columns get a bigger
-// share and every other track shrinks to make room, so nothing overlaps.
-//
-// Weights are CSS `fr` units for each grid track.
-
+/**
+ * FILE: src/components/hoverLayout.js
+ * WHAT IT DOES
+ *   Hover re-flow numbers. Instead of scaling a tile over its neighbours, the grid gives the hovered
+ *   tile's rows/columns a bigger share and shrinks the others. Weights are CSS `fr` units per track.
+ *   Front page grid = 4 columns x 3 rows (tile areas are in styles/bento.css).
+ */
 // Front page grid is 4 columns x 3 rows (see styles/bento.css for tile areas).
 const HOME = {
   profile:  { cols: [1.25, 1.25, 0.8, 0.8], rows: [1.15, 1.15, 0.8] },

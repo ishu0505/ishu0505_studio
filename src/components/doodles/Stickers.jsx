@@ -1,3 +1,8 @@
+/**
+ * FILE: src/components/doodles/Stickers.jsx
+ * WHAT IT DOES
+ *   Draws the doodles 'stuck' on a tile's corners. The list comes from src/content/stickers.json.
+ */
 import Doodle from './Doodle';
 
 /**

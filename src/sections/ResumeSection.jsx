@@ -1,3 +1,8 @@
+/**
+ * FILE: src/sections/ResumeSection.jsx
+ * WHAT IT DOES
+ *   The Resume tile (jobs, education, skills, download button). Content: src/content/resume.json.
+ */
 import Card from '../components/ui/Card';
 import Tags from '../components/ui/Tags';
 import ResumeDownload from '../components/ui/ResumeDownload';

@@ -1,3 +1,8 @@
+/**
+ * FILE: src/sections/WritingSection.jsx
+ * WHAT IT DOES
+ *   The Writing tile (articles and links). Content: src/content/writing.json.
+ */
 import Card from '../components/ui/Card';
 import { articles, writingLinks } from '../data/writing';
 import { stickers as allStickers } from '../data/stickers';

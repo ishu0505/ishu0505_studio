@@ -1,3 +1,8 @@
+/**
+ * FILE: src/hooks/useHoverCapable.js
+ * WHAT IT DOES
+ *   True on desktop-sized screens with a real mouse. Phones/tablets skip the hover re-flow.
+ */
 import { useEffect, useState } from 'react';
 
 const QUERY = '(min-width: 900px) and (hover: hover) and (pointer: fine)';
