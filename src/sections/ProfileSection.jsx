@@ -3,6 +3,7 @@ import Tags from '../components/ui/Tags';
 import Button from '../components/ui/Button';
 import ResumeDownload from '../components/ui/ResumeDownload';
 import { profile } from '../data/profile';
+import { stickers as allStickers } from '../data/stickers';
 
 function Preview() {
   return (
@@ -63,12 +64,6 @@ function Full() {
   );
 }
 
-const stickers = [
-  { icon: 'coffee', size: 64, rot: -10, pos: { top: -26, right: '24%' } },
-  { icon: 'shoe', size: 70, rot: 8, pos: { bottom: -26, right: '8%' }, keep: true },
-  { icon: 'sparkle', size: 44, rot: 12, pos: { top: '40%', right: -16 } },
-  { icon: 'star', size: 38, rot: -14, pos: { top: '9%', left: -14 } },
-  { icon: 'bolt', size: 50, rot: -8, pos: { bottom: -22, left: '34%' } },
-];
+const stickers = allStickers.profile;
 
 export default { id: 'profile', title: 'About', icon: 'coffee', tone: 'cream', stickers, Preview, Full };

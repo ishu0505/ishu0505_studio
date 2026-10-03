@@ -1,6 +1,7 @@
 import Card from '../components/ui/Card';
 import Doodle from '../components/doodles/Doodle';
 import { hobbies } from '../data/hobbies';
+import { stickers as allStickers } from '../data/stickers';
 
 function Preview() {
   const row = ['shoe', 'cat', 'gamepad', 'coffee', 'penguin'];
@@ -30,10 +31,6 @@ function Full() {
   );
 }
 
-const stickers = [
-  { icon: 'gamepad', size: 58, rot: -12, pos: { top: -22, right: '26%' } },
-  { icon: 'cat', size: 56, rot: 10, pos: { bottom: -24, left: -14 }, keep: true },
-  { icon: 'dumbbell', size: 52, rot: -6, pos: { top: '46%', right: -18 } },
-];
+const stickers = allStickers.hobbies;
 
 export default { id: 'hobbies', title: 'Hobbies', icon: 'gamepad', tone: 'mint', stickers, Preview, Full };
