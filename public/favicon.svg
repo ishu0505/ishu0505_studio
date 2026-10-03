@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none" stroke="#2a2a35" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+  <!-- ears -->
+  <path d="M9 24 L7 6 L25 14 Z" fill="#a9aec2"/>
+  <path d="M55 24 L57 6 L39 14 Z" fill="#a9aec2"/>
+  <path d="M12 19 L11 11 L19 14.5 Z" fill="#ffb3cf" stroke="none"/>
+  <path d="M52 19 L53 11 L45 14.5 Z" fill="#ffb3cf" stroke="none"/>
+  <!-- head -->
+  <ellipse cx="32" cy="36" rx="25" ry="21" fill="#a9aec2"/>
+  <!-- forehead stripe -->
+  <path d="M32 16 Q27 22 28.5 27 H35.5 Q37 22 32 16 Z" fill="#3b3b4d" stroke="none"/>
+  <!-- eye mask -->
+  <path d="M8 35 Q12 26 23 28 Q32 31 41 28 Q52 26 56 35 Q51 45 40 41 Q32 38.5 24 41 Q13 45 8 35 Z" fill="#3b3b4d" stroke="none"/>
+  <!-- eyes -->
+  <ellipse cx="22" cy="34.5" rx="5" ry="5.5" fill="#fff" stroke="none"/>
+  <ellipse cx="42" cy="34.5" rx="5" ry="5.5" fill="#fff" stroke="none"/>
+  <circle cx="23" cy="35.5" r="2.7" fill="#2a2a35" stroke="none"/>
+  <circle cx="41" cy="35.5" r="2.7" fill="#2a2a35" stroke="none"/>
+  <circle cx="24" cy="34.3" r="1" fill="#fff" stroke="none"/>
+  <circle cx="42" cy="34.3" r="1" fill="#fff" stroke="none"/>
+  <!-- muzzle -->
+  <ellipse cx="32" cy="47" rx="11.5" ry="8.5" fill="#fff8e8" stroke-width="2.4"/>
+  <ellipse cx="32" cy="43.2" rx="3.8" ry="2.7" fill="#2a2a35" stroke="none"/>
+  <path d="M32 46 V49.5 M32 49.5 Q28.5 52.5 25.5 49.5 M32 49.5 Q35.5 52.5 38.5 49.5" stroke-width="2"/>
+  <!-- blush -->
+  <ellipse cx="13.5" cy="46" rx="3.2" ry="2.2" fill="#ff9ec7" stroke="none"/>
+  <ellipse cx="50.5" cy="46" rx="3.2" ry="2.2" fill="#ff9ec7" stroke="none"/>
+</svg>
