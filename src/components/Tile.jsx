@@ -37,8 +37,8 @@ export default function Tile({ section, mode, index, onOpen, onClose }) {
       initial={{ opacity: 0, y: 14 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ layout: SPRING, opacity: { delay: index * 0.05 }, y: { delay: index * 0.05 } }}
-      whileHover={interactive ? { scale: 1.015 } : undefined}
-      whileTap={interactive ? { scale: 0.98 } : undefined}
+      whileHover={interactive ? { scale: 1.06, rotate: -1.2, zIndex: 20 } : undefined}
+      whileTap={interactive ? { scale: 0.97, rotate: 0 } : undefined}
       className={`tile tile--${id} tile--${mode} tone-${tone}`}
       {...buttonProps}
     >

@@ -33,7 +33,7 @@
   box-shadow: 4px 4px 0 var(--ink);
   transition: transform .15s, box-shadow .15s;
 }
-.btn:hover { transform: translate(-1px, -2px) rotate(-1deg); box-shadow: 6px 6px 0 var(--ink); }
+.btn:hover { transform: translate(-2px, -3px) rotate(-2deg) scale(1.08); box-shadow: 8px 8px 0 var(--ink); }
 .btn:active { transform: translate(3px, 3px); box-shadow: 1px 1px 0 var(--ink); }
 .btn--dark { background: #ff8fb8; color: var(--ink); }
 .btn--light { background: #fffdf7; }
@@ -66,7 +66,7 @@
 .card:nth-child(odd)  { transform: rotate(-.5deg); }
 .card:nth-child(even) { transform: rotate(.6deg); }
 .card--wide { grid-column: 1 / -1; }
-.card--link:hover { transform: rotate(0) translateY(-3px); box-shadow: 7px 9px 0 var(--ink); }
+.card:hover { transform: rotate(-1deg) translateY(-5px) scale(1.05); box-shadow: 9px 12px 0 var(--ink); z-index: 3; }
 .card__title { font-size: 1.5rem; line-height: 1.1; }
 .card--media { padding: 0 0 20px; overflow: hidden; }
 .card--media > :not(.card__img) { margin: 0 20px; }
@@ -118,7 +118,8 @@
   font-size: 1.15rem;
   box-shadow: 3px 3px 0 var(--ink);
 }
-.pill-links a:hover { background: var(--yellow); }
+.pill-links a { transition: transform .15s; }
+.pill-links a:hover { background: var(--yellow); transform: scale(1.1) rotate(-2deg); }
 
 /* ===== stickers: doodles stuck on the corners of tiles ===== */
 .stickers { position: absolute; inset: 0; z-index: 5; pointer-events: none; }

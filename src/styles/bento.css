@@ -39,7 +39,7 @@
 .tile--home,
 .tile--rail { cursor: pointer; }
 .tile--home:hover::before,
-.tile--rail:hover::before { box-shadow: 9px 10px 0 var(--ink); }
+.tile--rail:hover::before { box-shadow: 12px 14px 0 var(--ink); }
 
 .tone-blue   { --tone: var(--blue); }
 .tone-yellow { --tone: var(--yellow); }
