@@ -6,18 +6,39 @@ Open **`https://ishu0505.tech/#/admin`** (works on your phone too).
 
 A *token* is a long password that lets the admin save changes to your GitHub repository.
 It is **never stored in the website's code**: you paste it into the admin on your own device.
+Do this on a computer if you can (it is easier than on a phone).
 
-1. Go to <https://github.com/settings/personal-access-tokens/new>.
-2. **Token name:** `site admin`. **Expiration:** 90 days is a good choice (maximum 1 year).
-3. **Repository access:** *Only select repositories* → `ishu0505/ishu0505_studio`.
-4. **Permissions → Repository permissions:**
-   - **Contents: Read and write** (needed to save)
-   - **Actions: Read-only** (optional: lets the admin show when the site is live)
-5. **Generate token**, copy it (starts with `github_pat_`), and paste it into the admin login.
-6. Optional: type the expiry date in the login box and the admin will remind you a week before.
+1. Log in to GitHub, click your **profile picture** (top right) → **Settings**.
+2. Scroll the left menu to the very bottom → **Developer settings**.
+3. Left menu → **Personal access tokens** → **Fine-grained tokens**.
+   (Shortcut: <https://github.com/settings/personal-access-tokens/new>.)
+4. Click **Generate new token**. GitHub may ask for your password or a 2-factor code.
+5. Fill in the form:
+   - **Token name:** `site admin`
+   - **Expiration:** choose **90 days** (you can pick up to 1 year; shorter is safer).
+   - **Description:** optional, e.g. "Edit my portfolio from /#/admin".
+   - **Resource owner:** `ishu0505` (your account).
+   - **Repository access:** choose **Only select repositories**, then pick **`ishu0505/ishu0505_studio`** from the list.
+6. Scroll to **Permissions** → click **Add permissions** → under **Repository permissions** set:
+   - **Contents → Read and write** (needed to save your changes)
+   - **Actions → Read-only** (optional: lets the admin show "Live" when the site has rebuilt)
+   - *Metadata: Read-only* is added automatically. Leave everything else as "No access".
+7. Click **Generate token**, check the summary, then confirm.
+8. **Copy the token now** (it starts with `github_pat_`). GitHub shows it only once.
+   Save it in a password manager.
+9. Open <https://ishu0505.tech/#/admin>, paste it in the login box, optionally type the expiry date
+   (so you get a reminder a week before), tick *Remember me on this device* if it is your own device,
+   then **Log in**.
 
-Tips: keep the token in a password manager. Never paste it in chat, email or the repo.
-If you lose or leak it: delete it at <https://github.com/settings/personal-access-tokens> and make a new one.
+GitHub's pages are redesigned from time to time, so a button may be named slightly differently.
+What matters is the end result: a **fine-grained** token, **one repository**, **Contents: Read and write**.
+
+Tips: never paste the token in chat, email or the repo. If you lose or leak it, delete it at
+<https://github.com/settings/personal-access-tokens> and make a new one (this takes a minute).
+
+### When the token expires
+The admin shows "Token expires in N days". To renew: Settings → Developer settings → Fine-grained tokens →
+click `site admin` → **Regenerate token**, then log out of the admin and log in with the new one.
 
 ## Day to day
 

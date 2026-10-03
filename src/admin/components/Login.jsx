@@ -47,11 +47,11 @@ export default function Login() {
         <details className="adm-help">
           <summary>How do I get a token?</summary>
           <ol>
-            <li>Open <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener noreferrer">GitHub → Settings → Fine-grained tokens → New</a>.</li>
-            <li>Name it "site admin" and set an expiry (90 days is a good choice).</li>
+            <li>On GitHub: your profile picture → <strong>Settings</strong> → <strong>Developer settings</strong> → <strong>Personal access tokens</strong> → <strong>Fine-grained tokens</strong> → <strong>Generate new token</strong>. (Shortcut: <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener noreferrer">open the form</a>.)</li>
+            <li>Name: <code>site admin</code>. Expiration: <strong>90 days</strong>. Resource owner: <code>{OWNER}</code>.</li>
             <li>Repository access: <strong>Only select repositories</strong> → <code>{OWNER}/{REPO}</code>.</li>
-            <li>Permissions: <strong>Contents → Read and write</strong>, and <strong>Actions → Read-only</strong> (so I can show when the site is live).</li>
-            <li>Generate the token, copy it, paste it above. It is never saved in the website's code.</li>
+            <li>Permissions → Add permissions: <strong>Contents → Read and write</strong>, and <strong>Actions → Read-only</strong>.</li>
+            <li><strong>Generate token</strong>, copy it right away (GitHub shows it once) and paste it above. It is never saved in the website's code.</li>
           </ol>
         </details>
         <p className="adm-hint"><a href="#">← Back to the website</a></p>
