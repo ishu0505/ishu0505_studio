@@ -28,9 +28,10 @@ saves the changes to GitHub. GitHub then rebuilds and publishes the site.
 | `vite.config.js` | Build settings (and the security policy added to the built page). |
 | `package.json` | The project's list of tools and the `npm run ...` commands. |
 | `.github/workflows/deploy.yml` | The robot that builds and publishes the site when `main` changes. |
-| `public/` | Files copied as-is to the site: images, resume PDF, icons, `CNAME`, tab icons. |
+| `public/` | Files copied as-is to the site: images, resume PDF, icons, `CNAME`, tab icons, and the curl easter egg files (`secret.txt`, `roll`, `jingle.wav`). |
+| `cloudflare/curl-easter-egg/` | The small Cloudflare Worker + setup guide for the `curl` easter egg. |
 | `scripts/validate-content.mjs` | Checks `src/content/` before every build. |
-| `tests/` | The admin test with a pretend GitHub (`npm run test:e2e`). |
+| `tests/` | The admin test with a pretend GitHub (`npm run test:e2e`) and the easter egg test (`npm run test:easter-egg`). |
 | `docs/` | These guides. |
 
 ### `src/content/` — the editable content (JSON)
