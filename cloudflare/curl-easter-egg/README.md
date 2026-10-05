@@ -20,48 +20,69 @@ in Cloudflare** (about 5 minutes, free).
 A browser and `curl` ask for the home page the same way, and GitHub Pages cannot tell them apart.
 The Worker looks at the *User-Agent* header (curl says `curl/8.x`) and answers differently.
 
-## Set it up (Cloudflare dashboard)
-Button names move around a little over time; the idea stays the same.
+## Set it up (Cloudflare dashboard, free plan)
 
-**You do not add any new DNS records. You only change the ones you already have from grey to orange.**
+Everything below is on Cloudflare's **free** plan: no card needed. The Worker allows 100,000 requests a day.
+Button names move around a little over time; the "what you should see" lines tell you if you are in the right place.
 
-1. **Switch the existing records to "Proxied" (orange cloud).** Workers only run on proxied traffic.
-   Cloudflare → `ishu0505.tech` → **DNS → Records**, then click the grey cloud so it turns orange on:
-   - the four `A` records named `@` (185.199.108.153, .109.153, .110.153, .111.153)
-   - the `www` `CNAME` (pointing at `ishu0505.github.io`), if you have one
-   - any `AAAA` records for `@` (the IPv6 versions of the GitHub addresses), if you added them
-   Leave everything else alone (`MX`, `TXT`, etc. cannot and should not be proxied). Click **Save** on each.
-2. **SSL/TLS → Overview →** set the mode to **Full (strict)** (avoids redirect loops with GitHub Pages).
-3. **Workers & Pages → Create → Create Worker.** Name it `curl-easter-egg` → **Deploy**.
-4. Click **Edit code**, delete the sample, paste everything from `worker.js`, then **Deploy**.
-5. Open the Worker → **Settings → Domains & Routes → Add → Route.**
-   Route: `ishu0505.tech/*`   Zone: `ishu0505.tech`   → **Add route**.
-   (Optional second route: `www.ishu0505.tech/*`.)
+**You add no new DNS records. You only change the five you already have from grey to orange.**
+(The "Email cannot reach @ishu0505.tech addresses" banner is only about email on your domain. Ignore it unless
+you want addresses like `me@ishu0505.tech`; it has nothing to do with this.)
 
-The free plan allows 100,000 requests a day, far more than a portfolio needs.
+### Before you start (2 minutes)
+- Open `https://ishu0505.tech` in a browser: the site loads over **https** (padlock).
+- Merge the pull request that adds the easter egg files, then check
+  `curl -sI https://ishu0505.tech/secret.txt | head -1` says `200`.
 
-**Order that works best:** merge the pull request first (so `secret.txt`, `roll` and `jingle.wav` are live),
-then do the Cloudflare steps. Check the files exist:
-`curl -sI https://ishu0505.tech/secret.txt | head -1` should say `200`.
+### Step 1: Turn the five records orange
+1. Go to <https://dash.cloudflare.com> and log in.
+2. On the home page click your domain **ishu0505.tech**.
+3. In the **left menu** click **DNS** → **Records**. *You should see your 5 records, all "DNS only".*
+4. For each of the five rows (4 × `A` for `ishu0505.tech`, and the `CNAME` for `www`):
+   click **Edit** on the right of the row, switch **Proxy status** to **Proxied** (the cloud turns orange),
+   click **Save**. (Clicking the grey "DNS only" cloud in the row works too.)
+5. *Check:* all five now say **Proxied** with an orange cloud. Open the site in a browser: it should still load.
 
-**After proxying:** `curl -sI https://ishu0505.tech | grep -i '^server'` should now say `cloudflare`.
-GitHub's Pages settings page may show a warning about DNS, because it now sees Cloudflare's addresses
-instead of GitHub's. If the site loads, that is expected. If you ever see a certificate problem, set the
-records back to grey (DNS only) for a few minutes, let GitHub renew its certificate, then switch back.
+### Step 2: Set the encryption mode
+1. Left menu → **SSL/TLS** → **Overview**.
+2. Click **Configure** (or the mode shown) and choose **Full (strict)**, then save.
+   *This stops "too many redirects" errors with GitHub Pages.*
 
-## Test it
+### Step 3: Create the Worker
+1. On the account home (click the Cloudflare logo, top left) open **Workers & Pages** in the left menu
+   (it may be under **Compute** or **Build**).
+2. Click **Create** → **Create Worker** (or "Start with Hello World").
+3. Name it `curl-easter-egg` and click **Deploy**.
+4. Click **Edit code**. Delete all the sample code, paste the whole of `cloudflare/curl-easter-egg/worker.js`,
+   click **Deploy** (top right) and confirm.
+
+### Step 4: Connect the Worker to your domain (a **Route**)
+1. Open the Worker → **Settings** → **Domains & Routes**.
+2. Click **Add** → **Route** (**not** "Custom domain": that would replace your GitHub Pages site).
+3. Route: `ishu0505.tech/*`  Zone: `ishu0505.tech`. Click **Add route**.
+4. Optional: add a second route `www.ishu0505.tech/*`.
+
+### Step 5: Test
 ```bash
 curl https://ishu0505.tech                       # the banner
 curl -sL https://ishu0505.tech/roll | bash       # the reward (turn the volume up a little)
 curl -sL https://ishu0505.tech/roll              # read the script first
+curl -sI https://ishu0505.tech | grep -i '^server'   # should say: cloudflare
 ```
-Open the site in a browser: it should look exactly as before.
+Open the site in a browser: it should look exactly as before. (Give it a minute after the last step.)
 
-The banner also has a short, visible note asking AI assistants to pass a joke message to their human.
-It is plain text in `public/secret.txt`; edit or delete it any time.
+### If something goes wrong
+| What you see | Fix |
+|---|---|
+| "Too many redirects" in the browser | Step 2: the mode must be **Full (strict)** |
+| Error **525** or **526** | GitHub's certificate is not ready. Turn the records back to grey, wait a few minutes (GitHub → Settings → Pages → "Enforce HTTPS"), then try again |
+| `curl` still shows HTML, not the banner | The five records are not all orange, the route is missing/mistyped, or the Worker was not deployed. Check Steps 1, 3 and 4 |
+| GitHub Pages settings show a DNS warning | Expected once proxied (GitHub sees Cloudflare's addresses). Fine if the site loads |
 
-On your own computer, before publishing, you can run the checks:
-`npm run test:easter-egg` (tests the Worker's decisions and the script, with no Cloudflare needed).
+To undo everything: delete the route (Step 4); to go back to normal, turn the records grey again.
+
+## Test it on your computer (no Cloudflare needed)
+`npm run test:easter-egg` tests the Worker's decisions and the terminal script.
 
 ## Turn it off
 Cloudflare → the Worker → Settings → Domains & Routes → delete the route. The site is unaffected.
