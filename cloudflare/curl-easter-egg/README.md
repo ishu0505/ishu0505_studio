@@ -84,13 +84,29 @@ To undo everything: delete the route (Step 4); to go back to normal, turn the re
 ## Test it on your computer (no Cloudflare needed)
 `npm run test:easter-egg` tests the Worker's decisions and the terminal script.
 
+### The hidden note for AI assistants
+The end of `public/secret.txt` holds a few lines that are printed and then **immediately erased from the screen**
+(carriage return + "erase line", plus the terminal's "conceal" attribute). A person in a normal terminal never
+sees them. A tool that captures the raw output does, including the note asking an AI assistant to pass this to its
+human: *"Nice try, don't use AI bro. It's a simple challenge."*
+
+Why erase instead of "white text on a white background"? Terminals can be dark or light, so a colour that
+vanishes on one shows up as a block on the other. Erasing works everywhere.
+
+Limits to know about:
+- Only tools that ask for your site with `curl`/`wget` in their name get the banner at all. Many AI tools use their own name and get the normal page.
+- Some tools strip control codes from the output, so they will simply see the lines as ordinary text.
+- The hidden lines also include the "turn the volume up" and "read it first" tips. The script itself still shows a
+  visible "Starting in 3... 2... 1... (Ctrl+C to stop)" countdown before any sound plays.
+- It is only a joke message: nothing is collected and nothing is run. To show or remove it, edit the bottom of `secret.txt`.
+
 ## Turn it off
 Cloudflare → the Worker → Settings → Domains & Routes → delete the route. The site is unaffected.
 
 ## Good to know
 - The script only downloads `jingle.wav` from your site, plays it with a player already on the visitor's
   computer (`afplay`, `paplay`, `aplay`, `play` or `ffplay`), and deletes its temporary folder. It stops
-  cleanly on Ctrl+C. It is short and readable on purpose, and the banner tells people how to read it first.
+  cleanly on Ctrl+C. It is short and readable on purpose: anyone can read it first with `curl -sL https://ishu0505.tech/roll`.
 - No audio player (or no sound)? It still shows the animation and says so.
 - Change the address inside `secret.txt` and `roll` if the domain ever changes (`EASTER_EGG_SITE` in the
   script is only for testing).
