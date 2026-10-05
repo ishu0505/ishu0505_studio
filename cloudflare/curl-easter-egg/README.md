@@ -23,9 +23,14 @@ The Worker looks at the *User-Agent* header (curl says `curl/8.x`) and answers d
 ## Set it up (Cloudflare dashboard)
 Button names move around a little over time; the idea stays the same.
 
-1. **Turn the orange cloud on** (Workers only run on proxied traffic).
-   Cloudflare → `ishu0505.tech` → **DNS → Records**. For the four `A` records and the `www` record,
-   click the grey cloud so it turns **orange (Proxied)**, then **Save**.
+**You do not add any new DNS records. You only change the ones you already have from grey to orange.**
+
+1. **Switch the existing records to "Proxied" (orange cloud).** Workers only run on proxied traffic.
+   Cloudflare → `ishu0505.tech` → **DNS → Records**, then click the grey cloud so it turns orange on:
+   - the four `A` records named `@` (185.199.108.153, .109.153, .110.153, .111.153)
+   - the `www` `CNAME` (pointing at `ishu0505.github.io`), if you have one
+   - any `AAAA` records for `@` (the IPv6 versions of the GitHub addresses), if you added them
+   Leave everything else alone (`MX`, `TXT`, etc. cannot and should not be proxied). Click **Save** on each.
 2. **SSL/TLS → Overview →** set the mode to **Full (strict)** (avoids redirect loops with GitHub Pages).
 3. **Workers & Pages → Create → Create Worker.** Name it `curl-easter-egg` → **Deploy**.
 4. Click **Edit code**, delete the sample, paste everything from `worker.js`, then **Deploy**.
@@ -35,6 +40,15 @@ Button names move around a little over time; the idea stays the same.
 
 The free plan allows 100,000 requests a day, far more than a portfolio needs.
 
+**Order that works best:** merge the pull request first (so `secret.txt`, `roll` and `jingle.wav` are live),
+then do the Cloudflare steps. Check the files exist:
+`curl -sI https://ishu0505.tech/secret.txt | head -1` should say `200`.
+
+**After proxying:** `curl -sI https://ishu0505.tech | grep -i '^server'` should now say `cloudflare`.
+GitHub's Pages settings page may show a warning about DNS, because it now sees Cloudflare's addresses
+instead of GitHub's. If the site loads, that is expected. If you ever see a certificate problem, set the
+records back to grey (DNS only) for a few minutes, let GitHub renew its certificate, then switch back.
+
 ## Test it
 ```bash
 curl https://ishu0505.tech                       # the banner
@@ -42,6 +56,9 @@ curl -sL https://ishu0505.tech/roll | bash       # the reward (turn the volume u
 curl -sL https://ishu0505.tech/roll              # read the script first
 ```
 Open the site in a browser: it should look exactly as before.
+
+The banner also has a short, visible note asking AI assistants to pass a joke message to their human.
+It is plain text in `public/secret.txt`; edit or delete it any time.
 
 On your own computer, before publishing, you can run the checks:
 `npm run test:easter-egg` (tests the Worker's decisions and the script, with no Cloudflare needed).
