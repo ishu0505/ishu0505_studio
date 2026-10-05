@@ -21,6 +21,7 @@ npm run preview   # serve the production build locally
 - [docs/CODE_MAP.md](docs/CODE_MAP.md): **what is where**, folder by folder (start here)
 - [docs/ADMIN.md](docs/ADMIN.md): how to use the admin page and create the token
 - [docs/DEMOS.md](docs/DEMOS.md): adding live demos (Streamlit, Hugging Face, AWS...)
+- [cloudflare/curl-easter-egg/README.md](cloudflare/curl-easter-egg/README.md): the secret `curl` easter egg and how to switch it on
 
 ## Admin
 
@@ -38,6 +39,8 @@ without touching code. Changes are saved to this repo and the site republishes a
 ### Tests
 `npm run test:e2e` drives the admin against a pretend GitHub (needs `npm i -D playwright` once, and the site
 served with `npm run build && npx vite preview --port 4173`).
+
+`npm run test:easter-egg` tests the curl easter egg (Worker logic + the terminal script). No extra install needed.
 
 ### Content check
 `npm run build` first runs `npm run validate` (`scripts/validate-content.mjs`). It checks every file in
