@@ -20,8 +20,8 @@ function Full() {
   return (
     <div className="card-grid card-grid--wide">
       {articles.map((a) => (
-        <Card key={a.id} tone={a.tone} href={a.href} wide className="card--media">
-          <img className="card__img" src={a.image} alt="" loading="lazy" />
+        <Card key={a.id} tone={a.tone} href={a.href} wide className={a.image ? 'card--media' : ''}>
+          {a.image && <img className="card__img" src={a.image} alt="" loading="lazy" />}
           <p className="label">
             {a.category} · {a.date}
           </p>

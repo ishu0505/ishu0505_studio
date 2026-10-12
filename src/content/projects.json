@@ -1,5 +1,28 @@
 [
   {
+    "id": "adaptive-fraud-detection",
+    "title": "Adaptive Fraud Detection",
+    "category": "Private project",
+    "tech": "Self-improving ML fraud detection · read the write-up on Medium",
+    "href": "https://medium.com/mitb-for-all/adaptive-fraud-detection-building-a-self-improving-ml-powered-fraud-detection-system-196922686d45",
+    "tone": "peach"
+  },
+  {
+    "id": "tokenjuggler",
+    "title": "tokenjuggler",
+    "category": "Open source · on PyPI",
+    "tech": "Python · Redis · GPT, Gemini & Claude",
+    "href": "https://github.com/ishu0505/token_juggler",
+    "hrefLabel": "GitHub",
+    "links": [
+      {
+        "label": "PyPI",
+        "href": "https://pypi.org/project/tokenjuggler/"
+      }
+    ],
+    "tone": "mint"
+  },
+  {
     "id": "cancer-predictor",
     "title": "Cancer Predictor",
     "category": "Machine Learning",

@@ -28,7 +28,6 @@ export default function WritingEditor() {
             category: 'Category',
             date: 'Jan 1, 2026',
             summary: 'One or two sentences about it.',
-            image: writing.articles[0]?.image ?? 'assets/images/project-1.jpg',
             href: 'https://',
             tone: 'pink',
           })}
@@ -41,7 +40,7 @@ export default function WritingEditor() {
               </div>
               <TextArea label="Summary" value={article.summary} onChange={(summary) => update({ summary })} />
               <TextInput label="Link" value={article.href} onChange={(href) => update({ href })} />
-              <ImagePicker label="Picture" value={article.image} onChange={(image) => update({ image })} />
+              <ImagePicker label="Picture (optional)" value={article.image} optional onChange={(image) => update({ image })} />
               <ToneSelect value={article.tone} onChange={(tone) => update({ tone })} />
             </>
           )}

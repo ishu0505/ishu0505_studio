@@ -20,6 +20,7 @@ npm run preview   # serve the production build locally
 
 - [docs/CODE_MAP.md](docs/CODE_MAP.md): **what is where**, folder by folder (start here)
 - [docs/ADMIN.md](docs/ADMIN.md): how to use the admin page and create the token
+- [docs/CONTENT.md](docs/CONTENT.md): adding projects, articles and buttons by hand (JSON examples)
 - [docs/DEMOS.md](docs/DEMOS.md): adding live demos (Streamlit, Hugging Face, AWS...)
 - [cloudflare/curl-easter-egg/README.md](cloudflare/curl-easter-egg/README.md): the secret `curl` easter egg and how to switch it on
 

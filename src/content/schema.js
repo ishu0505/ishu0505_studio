@@ -25,6 +25,8 @@ const EXTERNAL = /^(?:[a-z][a-z0-9+.-]*:|#|\/\/)/i;
 
 const isObj = (v) => v !== null && typeof v === 'object' && !Array.isArray(v);
 const isStr = (v) => typeof v === 'string' && v.trim().length > 0;
+// "https://", "http:" or "//" with nothing after them: a placeholder someone forgot to fill in.
+const isIncompleteLink = (v) => /^(https?:)?\/*$/i.test(v.trim());
 const isNum = (v) => typeof v === 'number' && Number.isFinite(v);
 
 export function validateContent(content, ctx = {}) {
@@ -51,11 +53,12 @@ export function validateContent(content, ctx = {}) {
     if (!TONES.includes(obj?.tone)) err(where, `"tone" must be one of: ${TONES.join(', ')}`);
   };
   const url = (obj, key, where) => {
-    if (!isStr(obj?.[key]) || !/^(https?:\/\/|mailto:)/i.test(obj[key])) err(where, `"${key}" must start with http(s):// or mailto:`);
+    if (!isStr(obj?.[key]) || !/^(https?:\/\/|mailto:)/i.test(obj[key]) || isIncompleteLink(obj[key])) err(where, `"${key}" must be a full link starting with http(s):// or mailto:`);
   };
   // a local file path ("assets/…") or an external link
   const file = (value, where, label) => {
     if (!isStr(value)) return err(where, `"${label}" must be a non-empty string`);
+    if (isIncompleteLink(value)) return err(where, `"${label}" is an unfinished link ("${value}"). Add the full address`);
     if (!EXTERNAL.test(value) && assetExists && !assetExists(value)) err(where, `file not found in /public: ${value}`);
   };
   const uniqueIds = (arr, where) => {
@@ -131,6 +134,17 @@ export function validateContent(content, ctx = {}) {
       file(x?.href, w, 'href');
       if (x?.image !== undefined) file(x.image, w, 'image');
 
+      // Optional extra buttons, e.g. a PyPI page next to the GitHub link.
+      strOpt(x, 'hrefLabel', w);
+      if (x?.links !== undefined) {
+        if (!Array.isArray(x.links)) err(w, '"links" must be a list');
+        else
+          x.links.forEach((l, j) => {
+            str(l, 'label', `${w}.links[${j}]`);
+            file(l?.href, `${w}.links[${j}]`, 'href');
+          });
+      }
+
       // Optional: a project can be a live demo hosted somewhere else.
       if (x?.kind !== undefined && !['project', 'demo'].includes(x.kind)) err(w, '"kind" must be "project" or "demo"');
       if (x?.kind === 'demo') {
@@ -193,7 +207,7 @@ export function validateContent(content, ctx = {}) {
         const w = `writing.json articles[${i}]`;
         ['title', 'category', 'date', 'summary'].forEach((k) => str(a, k, w));
         tone(a, w);
-        file(a?.image, w, 'image');
+        if (a?.image !== undefined) file(a.image, w, 'image'); // the picture is optional
         file(a?.href, w, 'href');
       });
     }

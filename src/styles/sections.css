@@ -60,12 +60,12 @@
   .doodle-row .doodle-svg { width: 36px; height: 36px; }
 }
 
-/* ===== live demos (src/components/DemoCard.jsx, DemoPreview.jsx) ===== */
+/* ===== project buttons + live demos (ExtraLinks.jsx, DemoCard.jsx, DemoPreview.jsx) ===== */
 .host-badge { background: #fff; border: 2px solid var(--ink); border-radius: 999px; padding: 0 8px; letter-spacing: 0; text-transform: none; }
-.demo-actions { margin: 8px 0 0; }
-.demo-actions .btn { min-height: 38px; padding: 4px 14px; font-size: 1.05rem; }
+.card-actions { margin: 8px 0 0; }
+.card-actions .btn { min-height: 38px; padding: 4px 14px; font-size: 1.05rem; }
 .demo-note { font-style: italic; }
-.card--media .demo-actions { margin: 8px 20px 0; }
+.card--media .card-actions { margin: 8px 20px 0; }
 
 .demo-modal { position: fixed; inset: 0; z-index: 100; background: rgba(42, 42, 53, .55); display: grid; place-items: center; padding: 14px; }
 .demo-modal__box { width: min(1100px, 100%); height: min(760px, 92dvh); background: var(--white); border: 3px solid var(--ink); border-radius: var(--wobble-a); padding: 12px; display: grid; grid-template-rows: auto 1fr auto; gap: 8px; }

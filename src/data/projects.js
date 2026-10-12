@@ -10,4 +10,5 @@ export const projects = data.map((p) => ({
   ...p,
   image: p.image ? resolveAsset(p.image) : undefined,
   href: resolveAsset(p.href),
+  links: p.links?.map((l) => ({ ...l, href: resolveAsset(l.href) })),
 }));
