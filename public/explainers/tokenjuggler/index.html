@@ -1,0 +1,727 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>How tokenjuggler Works</title>
+<meta name="description" content="An interactive, explain-it-to-a-five-year-old tour of how the tokenjuggler Python package works.">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gochi+Hand&family=Patrick+Hand&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+/* Layout concept: one long scroll of chunky "crayon" cards, one toy per card, matching ishu0505.tech.
+   Palette: paper + ink with six crayon tones. Type: Gochi Hand (headings), Patrick Hand (reading), JetBrains Mono (code). */
+:root {
+  --paper: #fff8e8;
+  --card: #fffdf7;
+  --ink: #2a2a35;
+  --muted: #55555f;
+  --line: #2a2a35;
+  --shadow: #2a2a35;
+  --blue: #bfe0ff;
+  --yellow: #ffe98a;
+  --pink: #ffc6dd;
+  --mint: #b9efd3;
+  --lilac: #d9c9fb;
+  --peach: #ffd2b3;
+  --hot: #ff7aa8;
+  --good: #1f8a5b;
+  --bad: #c81e4a;
+  --font-head: "Gochi Hand", "Comic Sans MS", "Chalkboard SE", cursive;
+  --font-body: "Patrick Hand", "Comic Sans MS", "Chalkboard SE", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #1c1b26; --card: #262533; --ink: #f4efe6; --muted: #bdb9c8; --line: #e9e4f2; --shadow: #000;
+    --blue: #2b4966; --yellow: #675b1d; --pink: #693450; --mint: #235846; --lilac: #433769; --peach: #694732;
+    --hot: #ff8fb8; --good: #5fd9a0; --bad: #ff7b9c; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #1c1b26; --card: #262533; --ink: #f4efe6; --muted: #bdb9c8; --line: #e9e4f2; --shadow: #000;
+  --blue: #2b4966; --yellow: #675b1d; --pink: #693450; --mint: #235846; --lilac: #433769; --peach: #694732;
+  --hot: #ff8fb8; --good: #5fd9a0; --bad: #ff7b9c; color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+body { background: var(--paper); color: var(--ink); font-family: var(--font-body); font-size: 19px; line-height: 1.45; padding-inline: 16px; padding-block: 24px 64px; }
+.wrap { max-width: 920px; margin-inline: auto; display: grid; gap: 28px; }
+h1, h2, h3 { font-family: var(--font-head); font-weight: 400; line-height: 1.08; text-wrap: balance; margin: 0; }
+h1 { font-size: clamp(2.5rem, 7vw, 4.2rem); }
+h2 { font-size: clamp(1.8rem, 4.5vw, 2.6rem); }
+h3 { font-size: 1.4rem; }
+p { margin: 0; max-width: 62ch; }
+a { color: inherit; text-underline-offset: 3px; }
+code, .mono { font-family: var(--font-mono); font-size: .82em; }
+:focus-visible { outline: 3px dashed var(--hot); outline-offset: 3px; }
+
+/* ---- cards ---- */
+.card { border: 3px solid var(--line); border-radius: 30px 36px 28px 38px / 36px 28px 38px 30px; background: var(--card); box-shadow: 6px 7px 0 var(--shadow); padding: 22px; display: grid; gap: 16px; min-width: 0; }
+.card.blue { background: var(--blue); } .card.yellow { background: var(--yellow); } .card.pink { background: var(--pink); }
+.card.mint { background: var(--mint); } .card.lilac { background: var(--lilac); } .card.peach { background: var(--peach); }
+.kicker { font-family: var(--font-mono); font-size: .72rem; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+.panel { border: 2.5px solid var(--line); border-radius: 18px 24px 16px 26px / 24px 16px 26px 18px; background: var(--card); padding: 14px; min-width: 0; }
+.row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+
+/* ---- buttons ---- */
+.btn { font: inherit; font-family: var(--font-head); font-size: 1.1rem; color: var(--ink); background: var(--card); border: 3px solid var(--line); border-radius: 18px 24px 16px 26px / 24px 16px 26px 18px; padding: 6px 16px; min-height: 42px; box-shadow: 3px 3px 0 var(--shadow); cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; transition: transform .12s, box-shadow .12s; }
+.btn:hover { transform: translate(-1px, -2px); box-shadow: 5px 5px 0 var(--shadow); }
+.btn:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0 var(--shadow); }
+.btn.hot { background: var(--hot); color: #2a2a35; }
+.btn.small { min-height: 36px; font-size: 1rem; padding: 3px 12px; }
+.btn[aria-pressed="true"] { background: var(--yellow); }
+.pill { border: 2px solid var(--line); border-radius: 999px; padding: 0 10px; font-size: .9rem; background: var(--card); }
+
+/* ---- hero ---- */
+.hero { gap: 14px; background: var(--yellow); }
+.lead { font-size: 1.25rem; }
+
+/* ---- the three-step picture ---- */
+.three { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 14px; }
+.three .panel { display: grid; gap: 8px; justify-items: start; }
+.three svg { width: 64px; height: 64px; }
+.num { font-family: var(--font-head); font-size: 1.5rem; }
+
+/* ---- simulator ---- */
+.sim { display: grid; grid-template-columns: minmax(150px, 1fr) minmax(0, 2.2fr); gap: 18px; position: relative; align-items: center; }
+.stage { position: relative; }
+.ball { position: absolute; left: 0; top: 0; width: 20px; height: 20px; margin: -10px 0 0 -10px; border-radius: 50%; background: var(--hot); border: 3px solid var(--line); z-index: 5; pointer-events: none; }
+.juggler { display: grid; gap: 6px; justify-items: center; text-align: center; }
+.juggler svg { width: 110px; height: 110px; }
+.shops { display: grid; gap: 12px; }
+.shop { display: grid; gap: 6px; }
+.shop-head { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 6px; align-items: baseline; }
+.shop-head strong { font-family: var(--font-head); font-size: 1.25rem; font-weight: 400; }
+.bar { height: 22px; border: 2.5px solid var(--line); border-radius: 999px; background: var(--card); overflow: hidden; }
+.fill { height: 100%; width: 100%; background: var(--mint); border-right: 2.5px solid var(--line); transition: width .1s linear; }
+.shop.resting .fill { background: var(--pink); }
+.shop-foot { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 6px; font-size: .95rem; color: var(--muted); }
+.shop-foot label { display: inline-flex; gap: 6px; align-items: center; cursor: pointer; color: var(--ink); }
+.shop-foot input { width: 18px; height: 18px; accent-color: var(--hot); }
+.status { font-family: var(--font-mono); font-size: .75rem; min-height: 1.2em; }
+.log { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; max-height: 210px; overflow: auto; font-size: .98rem; }
+.log li { padding-left: 22px; position: relative; }
+.log li::before { content: "●"; position: absolute; left: 4px; color: var(--muted); }
+.log li.ok::before { color: var(--good); } .log li.bad::before { color: var(--bad); } .log li.wait::before { color: var(--hot); }
+.table-wrap { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-size: .95rem; }
+th, td { text-align: left; padding: 5px 10px; border-bottom: 2px dashed color-mix(in srgb, var(--line) 35%, transparent); white-space: nowrap; font-variant-numeric: tabular-nums; }
+th { font-family: var(--font-mono); font-size: .72rem; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+
+/* ---- cups ---- */
+.cups { display: flex; flex-wrap: wrap; gap: 18px; align-items: flex-end; }
+.cups svg { width: min(100%, 320px); height: auto; }
+input[type="range"] { width: 100%; accent-color: var(--hot); }
+.field { display: grid; gap: 4px; }
+.field label { font-family: var(--font-mono); font-size: .75rem; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+.big { font-family: var(--font-head); font-size: 1.5rem; }
+
+/* ---- diagrams (inline SVG) ---- */
+figure { margin: 0; display: grid; gap: 8px; min-width: 0; }
+figcaption { font-size: .98rem; color: var(--muted); max-width: 70ch; }
+.diagram { overflow-x: auto; }
+.diagram svg { width: 100%; min-width: 560px; height: auto; display: block; color: var(--ink); }
+.node rect { fill: var(--card); stroke: var(--line); stroke-width: 2.5; }
+.node text, .tag { fill: currentColor; font-family: var(--font-body); font-size: 15px; }
+.node .t { font-family: var(--font-head); font-size: 19px; }
+.node { opacity: .45; transition: opacity .2s; }
+.node.on { opacity: 1; }
+.node.on rect { stroke-width: 4; fill: var(--yellow); }
+.arrow { opacity: .35; transition: opacity .2s; }
+.arrow.on { opacity: 1; }
+.arrow path { fill: none; stroke: currentColor; stroke-width: 2.5; }
+.badge { font-family: var(--font-head); font-size: 20px; fill: var(--bad); }
+.badge.good { fill: var(--good); }
+.stepbox { min-height: 4.4em; }
+.stepbox p { font-size: 1.12rem; }
+
+/* ---- chart ---- */
+.chart svg { width: 100%; height: auto; display: block; color: var(--ink); }
+.chart text { fill: currentColor; font-family: var(--font-mono); font-size: 11px; }
+.legend { display: flex; flex-wrap: wrap; gap: 14px; font-size: .98rem; }
+.legend i { display: inline-block; width: 26px; height: 5px; border-radius: 3px; vertical-align: middle; margin-right: 6px; }
+
+/* ---- pizza ---- */
+.slices { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 6px; max-width: 420px; }
+.slice { aspect-ratio: 1.3; border: 2.5px solid var(--line); border-radius: 10px; display: grid; place-items: center; font-family: var(--font-mono); font-size: .8rem; background: var(--card); }
+.slice.free { border-style: dashed; color: var(--muted); }
+.projects { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 12px; }
+.project { display: grid; gap: 6px; }
+.dot { display: inline-block; width: 14px; height: 14px; border-radius: 4px; border: 2px solid var(--line); vertical-align: -1px; margin-right: 6px; }
+
+/* ---- glossary + install ---- */
+dl { margin: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; }
+dl > div { display: grid; gap: 2px; }
+dt { font-family: var(--font-head); font-size: 1.25rem; }
+dd { margin: 0; color: var(--muted); }
+pre { margin: 0; padding: 12px 14px; border: 2.5px solid var(--line); border-radius: 14px; background: var(--card); overflow-x: auto; font-family: var(--font-mono); font-size: .8rem; line-height: 1.55; }
+.copyrow { display: grid; gap: 8px; }
+.note { font-size: .98rem; color: var(--muted); }
+
+@media (max-width: 700px) {
+  .sim { grid-template-columns: minmax(0, 1fr); }
+  .juggler svg { width: 84px; height: 84px; }
+  body { font-size: 18px; }
+  .card { padding: 16px; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+
+<main class="wrap">
+  <p><a class="btn small" href="../../">← Back to ishu0505.tech</a></p>
+
+  <!-- ===================== HERO ===================== -->
+  <header class="card hero">
+    <p class="kicker">tokenjuggler · version 0.1.0 · Python</p>
+    <h1>How tokenjuggler works</h1>
+    <p class="lead">Explained so a five-year-old could get it. Push the buttons, watch what happens. Grown-ups: the real details are in the README, linked at the bottom.</p>
+    <div class="row">
+      <a class="btn hot" href="https://github.com/ishu0505/token_juggler" target="_blank" rel="noopener noreferrer">GitHub ↗</a>
+      <a class="btn" href="https://pypi.org/project/tokenjuggler/" target="_blank" rel="noopener noreferrer">PyPI ↗</a>
+    </div>
+  </header>
+
+  <!-- ===================== 1. BIG IDEA ===================== -->
+  <section class="card" aria-labelledby="idea">
+    <p class="kicker">The big idea</p>
+    <h2 id="idea">A helper who always finds a shop with room</h2>
+    <p>Your app wants to ask a very smart robot a question. The robot is GPT, Gemini or Claude. Lots of different shops sell time with that robot, but every shop only lets you ask so many questions a minute. If you knock on a full shop, it says "No".</p>
+    <div class="three">
+      <div class="panel">
+        <svg viewBox="0 0 64 64" role="img" aria-label="A question bubble"><path d="M8 10h48a4 4 0 0 1 4 4v26a4 4 0 0 1-4 4H30L18 56V44H8a4 4 0 0 1-4-4V14a4 4 0 0 1 4-4z" fill="var(--blue)" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/><path d="M32 18v14M32 37v1" stroke="currentColor" stroke-width="4" stroke-linecap="round"/></svg>
+        <h3>You ask</h3><p>"Please summarise this."</p>
+      </div>
+      <div class="panel">
+        <svg viewBox="0 0 64 64" role="img" aria-label="Three shops"><path d="M6 24h52l-4-14H10z" fill="var(--pink)" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/><rect x="10" y="24" width="44" height="30" fill="var(--yellow)" stroke="currentColor" stroke-width="3"/><rect x="26" y="36" width="12" height="18" fill="var(--card)" stroke="currentColor" stroke-width="3"/></svg>
+        <h3>Many shops</h3><p>Each one has its own limit and its own price.</p>
+      </div>
+      <div class="panel">
+        <svg viewBox="0 0 64 64" role="img" aria-label="Three juggling balls"><circle cx="16" cy="20" r="9" fill="var(--hot)" stroke="currentColor" stroke-width="3"/><circle cx="48" cy="20" r="9" fill="var(--mint)" stroke="currentColor" stroke-width="3"/><circle cx="32" cy="9" r="8" fill="var(--yellow)" stroke="currentColor" stroke-width="3"/><path d="M20 58V44a12 12 0 0 1 24 0v14" fill="var(--lilac)" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/></svg>
+        <h3>The juggler</h3><p>Picks a shop that has room, and tries another if one says "No".</p>
+      </div>
+    </div>
+    <p class="note">The real names: a <b>model</b> is what you ask for (like <span class="mono">gpt-5.6-sol</span>). A <b>deployment</b> is one shop's door to it, with its own limit and price (like <span class="mono">gpt-5.6-sol@bedrock</span>).</p>
+  </section>
+
+  <!-- ===================== 2. SIMULATOR ===================== -->
+  <section class="card mint" aria-labelledby="simh">
+    <p class="kicker">Toy 1 · try it</p>
+    <h2 id="simh">Send some calls</h2>
+    <p>Each bar is how many "seats" a shop has left. Seats slowly come back, like a bucket filling with water. The juggler tries the shops in order: A, then B, then C. Send a few calls. Then make Shop A grumpy and send more.</p>
+
+    <div class="row" role="group" aria-label="Send calls">
+      <button class="btn hot" type="button" data-send="10">Small call (10)</button>
+      <button class="btn hot" type="button" data-send="25">Medium call (25)</button>
+      <button class="btn hot" type="button" data-send="45">Big call (45)</button>
+      <button class="btn" type="button" data-burst="5">5 medium calls at once</button>
+      <button class="btn small" type="button" id="reset">Reset</button>
+    </div>
+
+    <div class="panel">
+      <div class="sim">
+        <div class="juggler" id="juggler">
+          <svg viewBox="0 0 110 110" role="img" aria-label="The juggler"><circle cx="30" cy="26" r="11" fill="var(--hot)" stroke="currentColor" stroke-width="3"/><circle cx="80" cy="26" r="11" fill="var(--blue)" stroke="currentColor" stroke-width="3"/><circle cx="55" cy="12" r="9" fill="var(--yellow)" stroke="currentColor" stroke-width="3"/><circle cx="55" cy="58" r="15" fill="var(--peach)" stroke="currentColor" stroke-width="3"/><path d="M36 106V82a19 19 0 0 1 38 0v24z" fill="var(--lilac)" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/><circle cx="50" cy="56" r="2" fill="currentColor"/><circle cx="60" cy="56" r="2" fill="currentColor"/><path d="M49 63q6 5 12 0" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>
+          <strong class="big">tokenjuggler</strong>
+          <span class="note">"Who has room?"</span>
+        </div>
+        <div class="stage" id="stage">
+          <div class="shops" id="shops"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h3>What the juggler is thinking</h3>
+      <ul class="log" id="log" aria-live="polite"></ul>
+    </div>
+
+    <details class="panel">
+      <summary class="big">The notebook (it writes down every try)</summary>
+      <p class="note">The real tool records tokens, cost, speed and what happened for every try, per project and per shop. The prices here are pretend.</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Call</th><th>Shop</th><th>Seats</th><th>What happened</th><th>Pretend cost</th></tr></thead>
+          <tbody id="book"><tr><td colspan="5" class="note">Nothing yet. Send a call!</td></tr></tbody>
+        </table>
+      </div>
+    </details>
+    <p class="note">Things to notice: five calls at once never grab the same seat, because choosing a shop and saving the seat happen in one go (the real tool does this in one Redis script). If every shop is just full, a call waits for the first seat to come back (the real setting is <span class="mono">max_wait_seconds</span>; here it is a pretend 8 seconds).</p>
+  </section>
+
+  <!-- ===================== 3. SAVED SEAT ===================== -->
+  <section class="card yellow" aria-labelledby="seath">
+    <p class="kicker">Toy 2 · slide it</p>
+    <h2 id="seath">Save a seat before you sit</h2>
+    <p>Before every call, the juggler saves a seat big enough for the longest answer you allow (that is <span class="mono">max_output_tokens</span>). That way the answer can never be bigger than the seat, so the shop's limit is never broken by surprise.</p>
+    <div class="row" style="align-items:flex-start">
+      <div class="field" style="flex:1 1 240px">
+        <label for="maxOut">Longest answer I allow</label>
+        <input id="maxOut" type="range" min="500" max="4000" step="100" value="2000">
+        <span class="big" id="maxOutV"></span>
+      </div>
+      <div class="field" style="flex:1 1 240px">
+        <label for="usedOut">Answer the robot wants to write</label>
+        <input id="usedOut" type="range" min="100" max="4000" step="100" value="700">
+        <span class="big" id="usedOutV"></span>
+      </div>
+    </div>
+    <div class="cups">
+      <figure class="panel">
+        <svg viewBox="0 0 300 190" role="img" aria-label="Two cups: the saved seat and the answer actually written" id="cups"></svg>
+        <figcaption id="cupText"></figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- ===================== 4. FOLLOW ONE CALL ===================== -->
+  <section class="card blue" aria-labelledby="flowh">
+    <p class="kicker">Toy 3 · click through</p>
+    <h2 id="flowh">Follow one call</h2>
+    <p>Here is a call that runs into trouble. Press Next to see each step.</p>
+    <figure class="panel diagram">
+      <svg viewBox="0 0 760 310" role="img" aria-label="A call goes from your app to tokenjuggler, then to shop A, which refuses, then to shop B, which answers" id="flowsvg">
+        <defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="currentColor"/></marker></defs>
+        <g class="arrow" id="a1"><path d="M135 150H255" marker-end="url(#ah)"/><text class="tag" x="145" y="140">asks</text></g>
+        <g class="arrow" id="a2"><path d="M405 120L575 55" marker-end="url(#ah)"/><text class="tag" x="450" y="78">tries A first</text></g>
+        <g class="arrow" id="a3"><path d="M405 155H575" marker-end="url(#ah)"/><text class="tag" x="470" y="148">then B</text></g>
+        <g class="arrow" id="a4"><path d="M405 190L575 255" marker-end="url(#ah)"/><text class="tag" x="450" y="236">then C</text></g>
+        <g class="arrow" id="a5"><path d="M330 205V262" marker-end="url(#ah)"/><text class="tag" x="340" y="238">writes it down</text></g>
+        <g class="node" id="n-app"><rect x="12" y="115" width="125" height="70" rx="14"/><text class="t" x="74" y="146" text-anchor="middle">Your app</text><text x="74" y="168" text-anchor="middle">"answer this"</text></g>
+        <g class="node" id="n-jug"><rect x="255" y="95" width="150" height="110" rx="14"/><text class="t" x="330" y="135" text-anchor="middle">tokenjuggler</text><text x="330" y="160" text-anchor="middle">saves a seat,</text><text x="330" y="180" text-anchor="middle">picks a shop</text></g>
+        <g class="node" id="n-A"><rect x="575" y="20" width="170" height="70" rx="14"/><text class="t" x="660" y="50" text-anchor="middle">Shop A</text><text x="660" y="72" text-anchor="middle">first choice</text></g>
+        <g class="node" id="n-B"><rect x="575" y="120" width="170" height="70" rx="14"/><text class="t" x="660" y="150" text-anchor="middle">Shop B</text><text x="660" y="172" text-anchor="middle">next choice</text></g>
+        <g class="node" id="n-C"><rect x="575" y="220" width="170" height="70" rx="14"/><text class="t" x="660" y="250" text-anchor="middle">Shop C</text><text x="660" y="272" text-anchor="middle">last choice</text></g>
+        <g class="node" id="n-book"><rect x="255" y="262" width="150" height="40" rx="12"/><text class="t" x="330" y="289" text-anchor="middle">Notebook</text></g>
+        <text class="badge" id="b-A" x="660" y="14" text-anchor="middle"></text>
+        <text class="badge good" id="b-B" x="660" y="114" text-anchor="middle"></text>
+      </svg>
+      <figcaption>One call, step by step. Shop A refuses, so the juggler moves on to Shop B.</figcaption>
+    </figure>
+    <div class="panel stepbox" aria-live="polite"><p id="stepText"></p></div>
+    <div class="row">
+      <button class="btn small" type="button" id="prev">← Back</button>
+      <button class="btn hot" type="button" id="next">Next →</button>
+      <span class="pill mono" id="stepCount"></span>
+    </div>
+    <p class="note">If every shop for a model fails, the juggler can move on to the model's <span class="mono">fallbacks</span>, which is a different model you listed. It does not retry the same shop unless you turn retrying on.</p>
+  </section>
+
+  <!-- ===================== 5. BUCKET VS WINDOW ===================== -->
+  <section class="card pink" aria-labelledby="bucketh">
+    <p class="kicker">Toy 4 · slide it</p>
+    <h2 id="bucketh">Bucket or window?</h2>
+    <p>A shop says "100 per 10 seconds". There are two ways to count that. A <b>token bucket</b> fills up slowly and lets you pour a whole bucket at once. A <b>sliding window</b> looks at any 10 seconds and never lets you go over. Drag the burst slider and look at the lines.</p>
+    <div class="field">
+      <label for="burst">Size of the first big burst</label>
+      <input id="burst" type="range" min="0" max="100" step="5" value="100">
+      <span class="big" id="burstV"></span>
+    </div>
+    <figure class="panel chart">
+      <svg viewBox="0 0 660 250" role="img" aria-label="Rolling ten-second total for a token bucket and a sliding window, compared with the limit" id="chart"></svg>
+      <div class="legend">
+        <span><i style="background:var(--hot)"></i>token bucket</span>
+        <span><i style="background:var(--good)"></i>sliding window</span>
+        <span><i style="background:var(--ink)"></i>the limit</span>
+      </div>
+      <figcaption id="chartText"></figcaption>
+    </figure>
+    <p class="note">The default is the token bucket, which is how OpenAI and Anthropic describe their limits. The sliding window is the strict one, for providers that count that way. Either way the tool keeps a safety margin under the limit (<span class="mono">headroom</span>, 0.95 by default). The numbers in this toy are made up to show the idea.</p>
+  </section>
+
+  <!-- ===================== 6. PIZZA ===================== -->
+  <section class="card lilac" aria-labelledby="pizzah">
+    <p class="kicker">Toy 5 · click the projects</p>
+    <h2 id="pizzah">Sharing one pizza</h2>
+    <p>Many apps ("projects") can share the same shop accounts. Each project can get a <b>cap</b>, the most it may ever eat, and a <b>reserve</b>, a slice that is kept just for it. An idle project can lend its reserved slice to a busy one. Click a project to make it busy or idle.</p>
+    <div class="projects" id="projects"></div>
+    <label class="row" style="cursor:pointer"><input id="lend" type="checkbox" checked style="width:20px;height:20px;accent-color:var(--hot)"> <span>Idle projects lend their reserved slices</span></label>
+    <div class="panel">
+      <div class="slices" id="slices" aria-live="polite"></div>
+      <p class="note" id="sliceText" style="margin-top:10px"></p>
+    </div>
+    <p class="note">This is a simplified picture of the idea. The real rules are in the admin guide in the repository.</p>
+  </section>
+
+  <!-- ===================== GLOSSARY ===================== -->
+  <section class="card" aria-labelledby="gloss">
+    <p class="kicker">Big words, small words</p>
+    <h2 id="gloss">Cheat sheet</h2>
+    <dl>
+      <div><dt>Quota</dt><dd>How much a shop lets you use in a minute.</dd></div>
+      <div><dt>429</dt><dd>The shop shouting "too busy, come back later!"</dd></div>
+      <div><dt>Failover</dt><dd>Trying the next shop when one says no or breaks.</dd></div>
+      <div><dt>Retry-After</dt><dd>How long a shop says it needs to rest. The juggler leaves it alone that long.</dd></div>
+      <div><dt>Redis</dt><dd>A shared notebook that many copies of your app can read, so they all count together.</dd></div>
+      <div><dt>Atomic</dt><dd>Done all in one go, so nobody can cut in line halfway.</dd></div>
+    </dl>
+  </section>
+
+  <!-- ===================== INSTALL ===================== -->
+  <section class="card peach" aria-labelledby="tryh">
+    <p class="kicker">Your turn</p>
+    <h2 id="tryh">Try it on your computer</h2>
+    <div class="copyrow">
+      <pre id="c1">uv add "tokenjuggler[openai,gemini,anthropic]"</pre>
+      <button class="btn small" type="button" data-copy="c1">Copy</button>
+    </div>
+    <div class="copyrow">
+      <pre id="c2">uv run tokenjuggler init -t minimal
+uv run tokenjuggler check</pre>
+      <button class="btn small" type="button" data-copy="c2">Copy</button>
+    </div>
+    <div class="copyrow">
+      <pre id="c3">import tokenjuggler as juggle
+
+tj = juggle.from_config("tokenjuggler.yaml", project="search-svc")
+r = await tj.generate("gpt-5.6-sol", "Summarise this", max_output_tokens=2000)
+print(r.text, r.deployment, r.cost_usd)</pre>
+      <button class="btn small" type="button" data-copy="c3">Copy</button>
+    </div>
+    <p class="note">Needs Python 3.12 or newer. Everything here is based on the project's README (version 0.1.0 on PyPI). This page is a simplified, playful picture; the README is the source of truth.</p>
+    <div class="row">
+      <a class="btn hot" href="https://github.com/ishu0505/token_juggler" target="_blank" rel="noopener noreferrer">Read the README ↗</a>
+      <a class="btn" href="https://pypi.org/project/tokenjuggler/" target="_blank" rel="noopener noreferrer">tokenjuggler on PyPI ↗</a>
+    </div>
+  </section>
+</main>
+
+<script>
+(function () {
+  'use strict';
+  var $ = function (s, r) { return (r || document).querySelector(s); };
+  var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
+  var sleep = function (ms) { return new Promise(function (r) { setTimeout(r, ms); }); };
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var NS = 'http://www.w3.org/2000/svg';
+  function el(tag, attrs, text) {
+    var e = document.createElementNS(NS, tag);
+    Object.keys(attrs || {}).forEach(function (k) { e.setAttribute(k, attrs[k]); });
+    if (text != null) e.textContent = text;
+    return e;
+  }
+
+  /* ============================== TOY 1: the simulator ============================== */
+  var SHOPS = [
+    { id: 'A', name: 'Shop A', who: 'OpenAI', cap: 100, rate: 8, price: 3 },
+    { id: 'B', name: 'Shop B', who: 'Databricks', cap: 70, rate: 6, price: 2 },
+    { id: 'C', name: 'Shop C', who: 'Bedrock', cap: 50, rate: 5, price: 1 }
+  ];
+  var BENCH_SECONDS = 6, MAX_WAIT = 8;
+  var shops = [], callNo = 0, tickTimer = null;
+  var clock = function () { return performance.now() / 1000; };
+
+  function initShops() {
+    shops = SHOPS.map(function (s) { return Object.assign({ level: s.cap, benchedUntil: 0, grumpy: false }, s); });
+    var box = $('#shops');
+    box.innerHTML = '';
+    shops.forEach(function (s) {
+      var d = document.createElement('div');
+      d.className = 'shop'; d.id = 'shop-' + s.id;
+      d.innerHTML =
+        '<div class="shop-head"><strong>' + s.name + '</strong><span class="note">' + s.who + ' · pretend price ' + s.price + ' per seat</span></div>' +
+        '<div class="bar" role="progressbar" aria-label="' + s.name + ' seats left" aria-valuemin="0" aria-valuemax="' + s.cap + '"><div class="fill"></div></div>' +
+        '<div class="shop-foot"><span class="seats mono"></span>' +
+        '<label><input type="checkbox" data-grumpy="' + s.id + '"> Make ' + s.name + ' grumpy ("too busy!")</label></div>' +
+        '<div class="status"></div>';
+      box.appendChild(d);
+    });
+    render();
+  }
+
+  function render() {
+    var t = clock();
+    shops.forEach(function (s) {
+      var d = $('#shop-' + s.id); if (!d) return;
+      var pct = Math.max(0, Math.min(100, (s.level / s.cap) * 100));
+      $('.fill', d).style.width = pct + '%';
+      $('.bar', d).setAttribute('aria-valuenow', Math.round(s.level));
+      $('.seats', d).textContent = Math.floor(s.level) + ' of ' + s.cap + ' seats left';
+      var resting = s.benchedUntil > t;
+      d.classList.toggle('resting', resting);
+      $('.status', d).textContent = resting ? 'resting for ' + (s.benchedUntil - t).toFixed(1) + 's (said "too busy")' : '';
+    });
+  }
+
+  function tick() {
+    shops.forEach(function (s) { s.level = Math.min(s.cap, s.level + s.rate * 0.1); });
+    render();
+  }
+
+  function say(text, kind) {
+    var li = document.createElement('li');
+    if (kind) li.className = kind;
+    li.textContent = text;
+    var log = $('#log');
+    log.insertBefore(li, log.firstChild);
+    while (log.children.length > 40) log.removeChild(log.lastChild);
+  }
+
+  function note(id, shop, size, what, cost) {
+    var body = $('#book');
+    if (body.querySelector('td[colspan]')) body.innerHTML = '';
+    var tr = document.createElement('tr');
+    [ '#' + id, shop, size, what, cost == null ? '-' : cost ].forEach(function (v) {
+      var td = document.createElement('td'); td.textContent = v; tr.appendChild(td);
+    });
+    body.insertBefore(tr, body.firstChild);
+    while (body.children.length > 30) body.removeChild(body.lastChild);
+  }
+
+  function fly(shopId) {
+    var stage = $('#stage'), jug = $('#juggler'), target = $('#shop-' + shopId);
+    if (reduce || !stage || !stage.animate) return sleep(250);
+    var dot = document.createElement('span'); dot.className = 'ball'; stage.appendChild(dot);
+    var sr = stage.getBoundingClientRect(), jr = jug.getBoundingClientRect(), tr = target.getBoundingClientRect();
+    var from = { x: jr.left + jr.width / 2 - sr.left, y: jr.top + jr.height / 2 - sr.top };
+    var to = { x: tr.left + 24 - sr.left, y: tr.top + tr.height / 2 - sr.top };
+    var anim = dot.animate(
+      [{ transform: 'translate(' + from.x + 'px,' + from.y + 'px)' }, { transform: 'translate(' + to.x + 'px,' + to.y + 'px)' }],
+      { duration: 650, easing: 'ease-in-out', fill: 'forwards' });
+    return anim.finished.then(function () { dot.remove(); }, function () { dot.remove(); });
+  }
+
+  async function sendCall(size) {
+    var id = ++callNo;
+    say('Call #' + id + ' asks for ' + size + ' seats.', '');
+    for (var guard = 0; guard < 14; guard++) {
+      var t = clock();
+      var open = shops.filter(function (s) { return s.benchedUntil <= t; });
+      if (!open.length) {
+        say('Call #' + id + ': every shop is resting. The call gives up.', 'bad');
+        note(id, '-', size, 'gave up (all resting)');
+        return;
+      }
+      var pick = open.find(function (s) { return s.level >= size; });
+      if (pick) {
+        pick.level -= size; render();             // choose + save the seat in one go: nobody can cut in
+        say('Call #' + id + ': ' + pick.name + ' has room. Seat saved.', 'ok');
+        await fly(pick.id);
+        if (pick.grumpy) {
+          pick.benchedUntil = clock() + BENCH_SECONDS;
+          pick.level = Math.min(pick.cap, pick.level + size);
+          render();
+          say(pick.name + ' says "Too busy!" (429). It rests for ' + BENCH_SECONDS + 's. Trying the next shop...', 'bad');
+          note(id, pick.name, size, '429 too busy');
+          continue;
+        }
+        say('Call #' + id + ': ' + pick.name + ' answered!', 'ok');
+        note(id, pick.name, size, 'answered', pick.price * size);
+        return;
+      }
+      var wait = Math.min.apply(null, open.map(function (s) { return (size - s.level) / s.rate; }));
+      if (wait > MAX_WAIT) {
+        say('Call #' + id + ': everyone is full for too long (' + wait.toFixed(1) + 's). The call gives up.', 'bad');
+        note(id, '-', size, 'gave up (waited too long)');
+        return;
+      }
+      say('Call #' + id + ': every shop is full. Waiting ' + wait.toFixed(1) + 's for the first free seat...', 'wait');
+      await sleep(wait * 1000 + 80);
+    }
+  }
+
+  function startSim() {
+    clearInterval(tickTimer);
+    callNo = 0;
+    initShops();
+    $('#log').innerHTML = '';
+    $('#book').innerHTML = '<tr><td colspan="5" class="note">Nothing yet. Send a call!</td></tr>';
+    say('Ready. Press a button to send a call.', '');
+    tickTimer = setInterval(tick, 100);
+  }
+
+  document.addEventListener('click', function (e) {
+    var b = e.target.closest('[data-send]');
+    if (b) { sendCall(Number(b.getAttribute('data-send'))); return; }
+    b = e.target.closest('[data-burst]');
+    if (b) { for (var i = 0; i < Number(b.getAttribute('data-burst')); i++) setTimeout(function () { sendCall(25); }, i * 140); return; }
+    if (e.target.closest('#reset')) startSim();
+  });
+  document.addEventListener('change', function (e) {
+    var g = e.target.getAttribute && e.target.getAttribute('data-grumpy');
+    if (g) { shops.find(function (s) { return s.id === g; }).grumpy = e.target.checked; }
+  });
+
+  /* ============================== TOY 2: saved seat ============================== */
+  function drawCups() {
+    var maxOut = Number($('#maxOut').value), want = Number($('#usedOut').value);
+    var used = Math.min(want, maxOut), top = 4000, H = 150, base = 175;
+    $('#maxOutV').textContent = maxOut + ' tokens';
+    $('#usedOutV').textContent = want + ' tokens';
+    var svg = $('#cups'); svg.innerHTML = '';
+    function cup(x, label, value, fill) {
+      var h = (value / top) * H;
+      svg.appendChild(el('rect', { x: x, y: base - H, width: 100, height: H, rx: 10, fill: 'none', stroke: 'currentColor', 'stroke-width': 3, 'stroke-dasharray': '6 5', opacity: .45 }));
+      svg.appendChild(el('rect', { x: x, y: base - h, width: 100, height: h, rx: 10, fill: fill, stroke: 'currentColor', 'stroke-width': 3 }));
+      var t = el('text', { x: x + 50, y: 188, 'text-anchor': 'middle', fill: 'currentColor', 'font-size': 14, 'font-family': 'inherit' }, label);
+      svg.appendChild(t);
+      svg.appendChild(el('text', { x: x + 50, y: base - h - 7, 'text-anchor': 'middle', fill: 'currentColor', 'font-size': 13, 'font-family': 'monospace' }, String(value)));
+    }
+    cup(30, 'seat saved', maxOut, 'var(--blue)');
+    cup(170, 'answer written', used, 'var(--mint)');
+    svg.style.color = 'var(--ink)';
+    var extra = want > maxOut ? ' The robot wanted ' + want + ', but it has to stop at ' + maxOut + ', so it still fits.' : '';
+    $('#cupText').textContent = 'Seat saved: ' + maxOut + '. Answer written: ' + used + '. Empty part of the seat: ' + (maxOut - used) + '.' + extra;
+  }
+  $('#maxOut').addEventListener('input', drawCups);
+  $('#usedOut').addEventListener('input', drawCups);
+
+  /* ============================== TOY 3: follow one call ============================== */
+  var STEPS = [
+    { nodes: ['app', 'jug'], arrows: ['a1'], badges: {}, text: 'Your app asks: "Please answer this." The question goes to tokenjuggler.' },
+    { nodes: ['jug', 'A', 'B', 'C'], arrows: ['a2', 'a3', 'a4'], badges: {}, text: 'The juggler looks at the shops in order and asks each: "Do you have room for this call?"' },
+    { nodes: ['jug', 'A'], arrows: ['a2'], badges: { A: ['seat saved', false] }, text: 'Shop A has room. The juggler saves the seat first, in one go, so nobody can cut in line. Then it sends the question to Shop A.' },
+    { nodes: ['A'], arrows: ['a2'], badges: { A: ['429 too busy!', false] }, text: 'Uh-oh. Shop A shouts "Too busy!" (a 429). The juggler does not argue and does not knock again.' },
+    { nodes: ['jug', 'A', 'B'], arrows: ['a3'], badges: { A: ['resting (zzz)', false] }, text: 'Shop A gets a rest for as long as it asked for (Retry-After). The juggler moves the call to Shop B.' },
+    { nodes: ['B', 'jug', 'app'], arrows: ['a3', 'a1'], badges: { A: ['resting (zzz)', false], B: ['answered!', true] }, text: 'Shop B answers. The answer goes straight back to your app. Your app never noticed the trouble.' },
+    { nodes: ['jug', 'book'], arrows: ['a5'], badges: { A: ['resting (zzz)', false], B: ['answered!', true] }, text: 'The juggler writes in the notebook: which shop, how many tokens, how much it cost, how long it took, and what happened.' }
+  ];
+  var stepIndex = 0;
+  function showStep(i) {
+    stepIndex = Math.max(0, Math.min(STEPS.length - 1, i));
+    var s = STEPS[stepIndex];
+    ['app', 'jug', 'A', 'B', 'C', 'book'].forEach(function (id) { $('#n-' + id).classList.toggle('on', s.nodes.indexOf(id) > -1); });
+    ['a1', 'a2', 'a3', 'a4', 'a5'].forEach(function (id) { $('#' + id).classList.toggle('on', s.arrows.indexOf(id) > -1); });
+    ['A', 'B'].forEach(function (id) {
+      var b = s.badges[id], node = $('#b-' + id);
+      node.textContent = b ? b[0] : '';
+    });
+    $('#stepText').textContent = s.text;
+    $('#stepCount').textContent = 'step ' + (stepIndex + 1) + ' of ' + STEPS.length;
+    $('#prev').disabled = stepIndex === 0;
+    $('#next').textContent = stepIndex === STEPS.length - 1 ? 'Start again ↺' : 'Next →';
+  }
+  $('#next').addEventListener('click', function () { showStep(stepIndex === STEPS.length - 1 ? 0 : stepIndex + 1); });
+  $('#prev').addEventListener('click', function () { showStep(stepIndex - 1); });
+
+  /* ============================== TOY 4: bucket vs window ============================== */
+  var LIMIT = 100, WINDOW = 10, SECONDS = 30, STEADY = 10;
+  /** Returns the rolling-window total, second by second, for both counting styles. */
+  function simulateWindows(burst) {
+    var bucket = LIMIT, tb = [], sw = [], tbRolling = [], swRolling = [];
+    for (var t = 0; t <= SECONDS; t++) {
+      bucket = Math.min(LIMIT, bucket + LIMIT / WINDOW);
+      if (t === 0) bucket = LIMIT;
+      var demand = (t === 0 ? burst : 0) + (t >= 0 ? STEADY : 0);
+      // token bucket: let each piece through while the bucket has enough
+      var acceptedTB = 0;
+      if (t === 0 && burst > 0 && bucket >= burst) { bucket -= burst; acceptedTB += burst; }
+      if (bucket >= STEADY) { bucket -= STEADY; acceptedTB += STEADY; }
+      tb.push(acceptedTB);
+      // sliding window: never more than LIMIT in the last WINDOW seconds
+      var recent = 0; for (var k = Math.max(0, t - WINDOW + 1); k < t; k++) recent += sw[k];
+      var acceptedSW = 0;
+      if (t === 0 && burst > 0 && recent + burst <= LIMIT) { acceptedSW += burst; recent += burst; }
+      if (recent + STEADY <= LIMIT) acceptedSW += STEADY;
+      sw.push(acceptedSW);
+      void demand;
+    }
+    function roll(a) { return a.map(function (_, t) { var s = 0; for (var k = Math.max(0, t - WINDOW + 1); k <= t; k++) s += a[k]; return s; }); }
+    tbRolling = roll(tb); swRolling = roll(sw);
+    return { tb: tb, sw: sw, tbRolling: tbRolling, swRolling: swRolling };
+  }
+  function drawChart() {
+    var burst = Number($('#burst').value);
+    $('#burstV').textContent = burst + ' tokens at second 0';
+    var r = simulateWindows(burst);
+    var W = 660, H = 250, L = 46, R = 14, T = 14, B = 34, top = 2 * LIMIT;
+    var x = function (t) { return L + (t / SECONDS) * (W - L - R); };
+    var y = function (v) { return H - B - (v / top) * (H - T - B); };
+    var svg = $('#chart'); svg.innerHTML = '';
+    [0, 50, 100, 150, 200].forEach(function (v) {
+      svg.appendChild(el('line', { x1: L, x2: W - R, y1: y(v), y2: y(v), stroke: 'currentColor', 'stroke-opacity': v === 0 ? .6 : .15, 'stroke-width': 1 }));
+      svg.appendChild(el('text', { x: L - 6, y: y(v) + 4, 'text-anchor': 'end' }, String(v)));
+    });
+    [0, 5, 10, 15, 20, 25, 30].forEach(function (t) { svg.appendChild(el('text', { x: x(t), y: H - 14, 'text-anchor': 'middle' }, t + 's')); });
+    svg.appendChild(el('text', { x: 4, y: 11 }, 'last 10 seconds, total'));
+    svg.appendChild(el('line', { x1: L, x2: W - R, y1: y(LIMIT), y2: y(LIMIT), stroke: 'currentColor', 'stroke-width': 2.5, 'stroke-dasharray': '7 5' }));
+    svg.appendChild(el('text', { x: W - R, y: y(LIMIT) - 6, 'text-anchor': 'end' }, 'the limit (100)'));
+    function line(data, color) {
+      var d = data.map(function (v, t) { return (t ? 'L' : 'M') + x(t).toFixed(1) + ' ' + y(v).toFixed(1); }).join(' ');
+      svg.appendChild(el('path', { d: d, fill: 'none', stroke: color, 'stroke-width': 4, 'stroke-linejoin': 'round', 'stroke-linecap': 'round' }));
+    }
+    line(r.swRolling, 'var(--good)');
+    line(r.tbRolling, 'var(--hot)');
+    var peakTB = Math.max.apply(null, r.tbRolling), peakSW = Math.max.apply(null, r.swRolling);
+    var doneTB = r.tb.reduce(function (a, b) { return a + b; }, 0), doneSW = r.sw.reduce(function (a, b) { return a + b; }, 0);
+    $('#chartText').textContent =
+      'Highest total in any 10 seconds: token bucket ' + peakTB + ' (' + (peakTB / LIMIT).toFixed(1) + ' times the limit), sliding window ' + peakSW + ' (' + (peakSW / LIMIT).toFixed(1) + ' times). ' +
+      'Work let through in 30 seconds: token bucket ' + doneTB + ', sliding window ' + doneSW + '.';
+  }
+  $('#burst').addEventListener('input', drawChart);
+
+  /* ============================== TOY 5: pizza ============================== */
+  var POOL = 12;
+  var PROJECTS = [
+    { id: 'search', name: 'Search', reserve: 3, cap: 7, color: 'var(--blue)', busy: true },
+    { id: 'chat', name: 'Chat', reserve: 3, cap: 6, color: 'var(--yellow)', busy: true },
+    { id: 'reports', name: 'Reports', reserve: 2, cap: 5, color: 'var(--mint)', busy: false }
+  ];
+  function allocate(lend) {
+    var got = {}; PROJECTS.forEach(function (p) { got[p.id] = 0; });
+    var busy = PROJECTS.filter(function (p) { return p.busy; });
+    busy.forEach(function (p) { got[p.id] = Math.min(p.reserve, p.cap); });
+    var held = busy.reduce(function (a, p) { return a + got[p.id]; }, 0);
+    var idleReserve = PROJECTS.filter(function (p) { return !p.busy; }).reduce(function (a, p) { return a + p.reserve; }, 0);
+    var free = POOL - held - (lend ? 0 : idleReserve);
+    var progress = true;
+    while (free > 0 && progress) {
+      progress = false;
+      busy.forEach(function (p) { if (free > 0 && got[p.id] < p.cap) { got[p.id]++; free--; progress = true; } });
+    }
+    return { got: got, free: free, savedIdle: lend ? 0 : idleReserve };
+  }
+  function drawPizza() {
+    var lend = $('#lend').checked, a = allocate(lend);
+    var box = $('#slices'); box.innerHTML = '';
+    PROJECTS.forEach(function (p) {
+      for (var i = 0; i < a.got[p.id]; i++) {
+        var s = document.createElement('div'); s.className = 'slice'; s.style.background = p.color;
+        s.textContent = p.name.slice(0, 1); s.title = p.name; box.appendChild(s);
+      }
+    });
+    var saved = a.savedIdle;
+    for (var i = 0; i < saved; i++) { var k = document.createElement('div'); k.className = 'slice free'; k.textContent = 'kept'; box.appendChild(k); }
+    for (var j = 0; j < a.free; j++) { var f = document.createElement('div'); f.className = 'slice free'; f.textContent = 'free'; box.appendChild(f); }
+    var parts = PROJECTS.map(function (p) {
+      var extra = p.busy && a.got[p.id] > p.reserve ? ' (' + (a.got[p.id] - p.reserve) + ' borrowed)' : '';
+      return p.name + ' ' + (p.busy ? 'is busy and has ' + a.got[p.id] + ' of ' + POOL + extra : 'is idle');
+    });
+    $('#sliceText').textContent = parts.join('. ') + '.';
+    $$('.project').forEach(function (n) {
+      var p = PROJECTS.find(function (q) { return q.id === n.getAttribute('data-id'); });
+      n.querySelector('button').setAttribute('aria-pressed', p.busy ? 'true' : 'false');
+      n.querySelector('button').textContent = p.busy ? 'Busy · click to make idle' : 'Idle · click to make busy';
+    });
+  }
+  (function buildProjects() {
+    var box = $('#projects');
+    PROJECTS.forEach(function (p) {
+      var d = document.createElement('div'); d.className = 'panel project'; d.setAttribute('data-id', p.id);
+      d.innerHTML = '<h3><span class="dot" style="background:' + p.color + '"></span>' + p.name + '</h3>' +
+        '<span class="note">reserve ' + p.reserve + ' · cap ' + p.cap + '</span><button class="btn small" type="button"></button>';
+      d.querySelector('button').addEventListener('click', function () { p.busy = !p.busy; drawPizza(); });
+      box.appendChild(d);
+    });
+  })();
+  $('#lend').addEventListener('change', drawPizza);
+
+  /* ============================== copy buttons ============================== */
+  document.addEventListener('click', function (e) {
+    var b = e.target.closest('[data-copy]'); if (!b) return;
+    var pre = $('#' + b.getAttribute('data-copy'));
+    function fallback() {
+      var range = document.createRange(); range.selectNodeContents(pre);
+      var sel = window.getSelection(); sel.removeAllRanges(); sel.addRange(range);
+      b.textContent = 'Selected: press copy';
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(pre.textContent).then(function () { b.textContent = 'Copied!'; setTimeout(function () { b.textContent = 'Copy'; }, 1500); }, fallback);
+    } else fallback();
+  });
+
+  /* ============================== start everything ============================== */
+  startSim(); drawCups(); showStep(0); drawChart(); drawPizza();
+  window.__tj = { simulateWindows: simulateWindows, allocate: allocate }; // handy for quick checks
+})();
+</script>
+
+</html>
