@@ -81,3 +81,10 @@ Add `"image": "assets/images/cover.jpg"` for a cover picture.
 | `profile.json` | About & contact |
 | `stickers.json` | Stickers |
 | `icons.json` | Icons |
+
+## Hosting your own interactive page
+
+Any folder in `public/` is published as-is. The tokenjuggler explainer lives in
+`public/explainers/tokenjuggler/index.html` and is linked from JSON with the plain path
+`explainers/tokenjuggler/` (as a project button or an article `href`). To add another one,
+copy that folder, edit the HTML, and add a card that points at the new folder.

@@ -18,6 +18,10 @@
       {
         "label": "PyPI",
         "href": "https://pypi.org/project/tokenjuggler/"
+      },
+      {
+        "label": "Explained simply",
+        "href": "explainers/tokenjuggler/"
       }
     ],
     "tone": "mint"
