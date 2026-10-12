@@ -8,7 +8,7 @@ import { resolveAsset } from '../utils/asset';
 
 export const articles = data.articles.map((a) => ({
   ...a,
-  image: resolveAsset(a.image),
+  image: a.image ? resolveAsset(a.image) : undefined,
   href: resolveAsset(a.href),
 }));
 

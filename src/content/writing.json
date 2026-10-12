@@ -1,6 +1,15 @@
 {
   "articles": [
     {
+      "id": "adaptive-fraud-detection",
+      "title": "Adaptive Fraud Detection: Building a Self-Improving ML-Powered Fraud Detection System",
+      "category": "Fraud detection · ML",
+      "date": "Medium · MITB For All",
+      "summary": "A write-up on building a self-improving, ML-powered fraud detection system, published by MITB For All on Medium.",
+      "href": "https://medium.com/mitb-for-all/adaptive-fraud-detection-building-a-self-improving-ml-powered-fraud-detection-system-196922686d45",
+      "tone": "mint"
+    },
+    {
       "id": "uganda-gender-gap",
       "title": "Gender Disparities in Digital Financial Access in Uganda",
       "category": "Explanatory Analysis",

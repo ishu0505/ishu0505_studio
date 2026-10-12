@@ -126,6 +126,33 @@ const publishButton = (page) => page.locator('.adm-publish button.adm-btn--prima
     await page.context().close();
   }
 
+  // ----------------- project extra buttons + unfinished links + optional article picture
+  {
+    const mock = createMockGithub();
+    const page = await newAdminPage(browser, mock);
+    await login(page, mock);
+    check('the current site content passes the admin checks', (await page.locator('.adm-problems').count()) === 0);
+
+    await goTo(page, 'Writing');
+    await page.click('.adm-item__title:has-text("Adaptive Fraud Detection")');
+    check('an article can have no picture', (await page.locator('.adm-image__empty').count()) === 1);
+
+    await goTo(page, 'Projects');
+    await page.click('.adm-item__title:has-text("tokenjuggler")');
+    await page.click('button:has-text("+ Add button")');
+    check('a new button with an unfinished link is reported', (await page.locator('.adm-problems').textContent()).includes('unfinished link'));
+    check('Publish stays off until the link is finished', await publishButton(page).isDisabled());
+    await page.getByLabel('Button name', { exact: true }).fill('Docs');
+    await page.getByLabel('Link', { exact: true }).fill('https://github.com/ishu0505/token_juggler/tree/main/src/tokenjuggler/docs');
+    check('finishing the link clears the problem', (await page.locator('.adm-problems').count()) === 0);
+    await publishButton(page).click();
+    await page.waitForSelector('.adm-ok', { timeout: 30000 });
+    const saved = JSON.parse(mock.fileText('src/content/projects.json')).find((x) => x.id === 'tokenjuggler');
+    check('extra buttons are saved in projects.json', saved.links.length === 2 && saved.links[1].label === 'Docs' && saved.links[0].label === 'PyPI', JSON.stringify(saved.links));
+    check('only projects.json changed', JSON.stringify(mock.changedIn(mock.state.commits[0])) === JSON.stringify(['src/content/projects.json']));
+    await page.context().close();
+  }
+
   // ----------------------------- validation blocks publishing
   {
     const mock = createMockGithub();

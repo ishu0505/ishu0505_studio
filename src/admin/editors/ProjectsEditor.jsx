@@ -33,6 +33,23 @@ function ProjectForm({ project, update }) {
         <TextInput label="Tech used" value={project.tech} onChange={(tech) => update({ tech })} />
       </div>
       <TextInput label="Main link" value={project.href} onChange={(href) => update({ href })} hint="Where clicking the card goes (repo, article, product page...)." />
+      <TextInput label="Main button name (optional)" value={project.hrefLabel ?? ''} onChange={(hrefLabel) => update({ hrefLabel: hrefLabel || undefined })} hint='Only used when the card has extra buttons below, for example "GitHub".' />
+      <Group title="Extra buttons (optional)">
+        <ListEditor
+          items={project.links ?? []}
+          onChange={(links) => update({ links: links.length ? links : undefined })}
+          itemLabel="button"
+          addLabel="Add button"
+          getTitle={(l) => l.label}
+          makeItem={() => ({ label: 'PyPI', href: 'https://' })}
+          renderItem={(link, updateLink) => (
+            <>
+              <TextInput label="Button name" value={link.label} onChange={(label) => updateLink({ label })} />
+              <TextInput label="Link" value={link.href} onChange={(href) => updateLink({ href })} />
+            </>
+          )}
+        />
+      </Group>
       <ImagePicker label="Picture (optional)" value={project.image} optional onChange={(image) => update({ image })} />
       <ToneSelect value={project.tone} onChange={(tone) => update({ tone })} />
 

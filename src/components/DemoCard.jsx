@@ -11,6 +11,7 @@
 import { useState } from 'react';
 import Card from './ui/Card';
 import DemoPreview from './DemoPreview';
+import ExtraLinks from './ExtraLinks';
 import { DEMO_HOSTS } from '../content/schema';
 
 const hostLabel = (host) => DEMO_HOSTS.find((h) => h.value === host)?.label ?? 'Other';
@@ -28,9 +29,10 @@ export default function DemoCard({ project }) {
       <h3 className="card__title">{project.title}</h3>
       <p className="muted small">{project.tech}</p>
       {demo.note && <p className="muted small demo-note">{demo.note}</p>}
-      <div className="actions demo-actions">
+      <div className="actions card-actions">
         <a className="btn btn--dark" href={demo.url} target="_blank" rel="noopener noreferrer">▶ Live demo</a>
         {demo.repoUrl && <a className="btn btn--light" href={demo.repoUrl} target="_blank" rel="noopener noreferrer">Code ↗</a>}
+        <ExtraLinks links={project.links} />
         {demo.embed && <button type="button" className="btn btn--light" onClick={() => setPreviewOpen(true)}>Preview</button>}
       </div>
       {previewOpen && <DemoPreview title={project.title} demoUrl={demo.url} onClose={() => setPreviewOpen(false)} />}

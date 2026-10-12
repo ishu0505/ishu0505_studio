@@ -6,6 +6,7 @@
  */
 import Card from '../components/ui/Card';
 import DemoCard from '../components/DemoCard';
+import ExtraLinks from '../components/ExtraLinks';
 import { projects } from '../data/projects';
 import { stickers as allStickers } from '../data/stickers';
 
@@ -25,9 +26,26 @@ function Preview() {
   );
 }
 
-/** One project card: a normal link card, or a live-demo card (kind "demo"). */
+/** A project with extra buttons (e.g. GitHub + PyPI). The whole card is not one link, so each button is its own link. */
+function ProjectWithButtons({ project }) {
+  return (
+    <Card tone={project.tone} className={project.image ? 'card--media' : ''}>
+      {project.image && <img className="card__img" src={project.image} alt="" loading="lazy" />}
+      <p className="label">{project.category}</p>
+      <h3 className="card__title">{project.title}</h3>
+      <p className="muted small">{project.tech}</p>
+      <div className="actions card-actions">
+        <a className="btn btn--dark" href={project.href} target="_blank" rel="noopener noreferrer">{project.hrefLabel ?? 'Open'} ↗</a>
+        <ExtraLinks links={project.links} />
+      </div>
+    </Card>
+  );
+}
+
+/** One project card: a live-demo card, a card with buttons, or (the default) one big link card. */
 function ProjectCard({ project }) {
   if (project.kind === 'demo') return <DemoCard project={project} />;
+  if (project.links?.length) return <ProjectWithButtons project={project} />;
   return (
     <Card tone={project.tone} href={project.href} className={project.image ? 'card--media' : ''}>
       {project.image && <img className="card__img" src={project.image} alt="" loading="lazy" />}

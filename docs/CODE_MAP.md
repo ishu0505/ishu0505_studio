@@ -39,10 +39,10 @@ saves the changes to GitHub. GitHub then rebuilds and publishes the site.
 | File | Controls |
 |---|---|
 | `profile.json` | Name, job title, intro, photo, email, links, "current job" card, skills tags, certificate, resume PDF path |
-| `projects.json` | Every project and live demo |
+| `projects.json` | Every project and live demo (optional extra buttons via `links`) |
 | `hobbies.json` | The Hobbies tile (title, caption, icons, colour) |
 | `resume.json` | Jobs, education, certifications, skills |
-| `writing.json` | Articles and link cards |
+| `writing.json` | Articles (picture optional) and link cards |
 | `stickers.json` | The doodles stuck on each tile (icon, size, tilt, position) |
 | `icons.json` | Your own uploaded icons |
 | `schema.js` | The **rules** for all of the above (required fields, allowed colours...) |
