@@ -1,0 +1,663 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>How ocr_my_gpu Works — SGLang vs vLLM on an 8 GB GPU</title>
+<meta name="description" content="An interactive, explain-it-like-you're-five tour of ocr_my_gpu (gpu-my-ocr): SGLang vs vLLM multimodal OCR benchmarks on a single 8 GB RTX 4060.">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gochi+Hand&family=Patrick+Hand&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+/* Layout concept: one long scroll of chunky "crayon" cards, one toy per card, matching ishu0505.tech and tokenjuggler.
+   Palette: paper + ink with six crayon tones. Type: Gochi Hand (headings), Patrick Hand (reading), JetBrains Mono (code). */
+:root {
+  --paper: #fff8e8;
+  --card: #fffdf7;
+  --ink: #2a2a35;
+  --muted: #55555f;
+  --line: #2a2a35;
+  --shadow: #2a2a35;
+  --blue: #bfe0ff;
+  --yellow: #ffe98a;
+  --pink: #ffc6dd;
+  --mint: #b9efd3;
+  --lilac: #d9c9fb;
+  --peach: #ffd2b3;
+  --hot: #ff7aa8;
+  --good: #1f8a5b;
+  --bad: #c81e4a;
+  --font-head: "Gochi Hand", "Comic Sans MS", "Chalkboard SE", cursive;
+  --font-body: "Patrick Hand", "Comic Sans MS", "Chalkboard SE", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #1c1b26; --card: #262533; --ink: #f4efe6; --muted: #bdb9c8; --line: #e9e4f2; --shadow: #000;
+    --blue: #2b4966; --yellow: #675b1d; --pink: #693450; --mint: #235846; --lilac: #433769; --peach: #694732;
+    --hot: #ff8fb8; --good: #5fd9a0; --bad: #ff7b9c; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #1c1b26; --card: #262533; --ink: #f4efe6; --muted: #bdb9c8; --line: #e9e4f2; --shadow: #000;
+  --blue: #2b4966; --yellow: #675b1d; --pink: #693450; --mint: #235846; --lilac: #433769; --peach: #694732;
+  --hot: #ff8fb8; --good: #5fd9a0; --bad: #ff7b9c; color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+body { background: var(--paper); color: var(--ink); font-family: var(--font-body); font-size: 19px; line-height: 1.45; padding-inline: 16px; padding-block: 24px 64px; margin: 0; }
+.wrap { max-width: 920px; margin-inline: auto; display: grid; gap: 28px; }
+h1, h2, h3 { font-family: var(--font-head); font-weight: 400; line-height: 1.08; text-wrap: balance; margin: 0; }
+h1 { font-size: clamp(2.4rem, 6.8vw, 4.1rem); }
+h2 { font-size: clamp(1.8rem, 4.5vw, 2.6rem); }
+h3 { font-size: 1.4rem; }
+p { margin: 0; max-width: 65ch; }
+a { color: inherit; text-underline-offset: 3px; }
+code, .mono { font-family: var(--font-mono); font-size: .82em; }
+:focus-visible { outline: 3px dashed var(--hot); outline-offset: 3px; }
+
+/* ---- cards & panels ---- */
+.card { border: 3px solid var(--line); border-radius: 30px 36px 28px 38px / 36px 28px 38px 30px; background: var(--card); box-shadow: 6px 7px 0 var(--shadow); padding: 22px; display: grid; gap: 16px; min-width: 0; }
+.card.blue { background: var(--blue); } .card.yellow { background: var(--yellow); } .card.pink { background: var(--pink); }
+.card.mint { background: var(--mint); } .card.lilac { background: var(--lilac); } .card.peach { background: var(--peach); }
+.kicker { font-family: var(--font-mono); font-size: .72rem; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+.panel { border: 2.5px solid var(--line); border-radius: 18px 24px 16px 26px / 24px 16px 26px 18px; background: var(--card); padding: 14px; min-width: 0; }
+.row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+
+/* ---- buttons & pills ---- */
+.btn { font: inherit; font-family: var(--font-head); font-size: 1.1rem; color: var(--ink); background: var(--card); border: 3px solid var(--line); border-radius: 18px 24px 16px 26px / 24px 16px 26px 18px; padding: 6px 16px; min-height: 42px; box-shadow: 3px 3px 0 var(--shadow); cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; transition: transform .12s, box-shadow .12s; }
+.btn:hover { transform: translate(-1px, -2px); box-shadow: 5px 5px 0 var(--shadow); }
+.btn:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0 var(--shadow); }
+.btn.hot { background: var(--hot); color: #2a2a35; }
+.btn.small { min-height: 36px; font-size: 1rem; padding: 3px 12px; }
+.btn[aria-pressed="true"] { background: var(--yellow); color: #2a2a35; }
+.pill { border: 2px solid var(--line); border-radius: 999px; padding: 2px 11px; font-size: .88rem; background: var(--card); display: inline-flex; align-items: center; gap: 6px; }
+.pill.done { background: var(--mint); }
+.pill.next { background: var(--yellow); }
+
+/* ---- hero & three-step ---- */
+.hero { gap: 14px; background: var(--yellow); }
+.lead { font-size: 1.25rem; }
+.three { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 14px; }
+.three .panel { display: grid; gap: 8px; justify-items: start; }
+.three svg { width: 64px; height: 64px; }
+
+/* ---- phase stepper ---- */
+.phases { display: grid; grid-template-columns: repeat(auto-fit, minmax(145px, 1fr)); gap: 10px; }
+.phase-btn { text-align: left; display: grid; gap: 4px; padding: 10px 12px; border: 2.5px solid var(--line); border-radius: 16px; background: var(--card); cursor: pointer; font: inherit; color: var(--ink); box-shadow: 3px 3px 0 var(--shadow); transition: transform .12s; }
+.phase-btn:hover { transform: translateY(-2px); }
+.phase-btn[aria-selected="true"] { background: var(--yellow); border-width: 3.5px; }
+.phase-btn strong { font-family: var(--font-head); font-size: 1.2rem; font-weight: 400; }
+
+/* ---- Toy 1: SGLang vs vLLM Race ---- */
+.race-grid { display: grid; gap: 14px; }
+.lane { display: grid; gap: 8px; position: relative; padding: 12px; border: 2.5px solid var(--line); border-radius: 16px; background: var(--card); }
+.lane-head { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; align-items: baseline; }
+.lane-head strong { font-family: var(--font-head); font-size: 1.35rem; font-weight: 400; }
+.track { position: relative; height: 30px; border: 2.5px solid var(--line); border-radius: 999px; background: var(--paper); overflow: hidden; }
+.bar-fill { height: 100%; width: 0%; border-right: 2.5px solid var(--line); transition: width .35s cubic-bezier(.2,.8,.2,1); }
+.bar-fill.sglang { background: var(--mint); }
+.bar-fill.vllm { background: var(--blue); }
+.bar-fill.tf { background: var(--peach); }
+.bar-fill.vram-ok { background: var(--mint); }
+.bar-fill.vram-hot { background: var(--hot); }
+.vram-cap { position: absolute; right: 0; top: 0; bottom: 0; width: 6px; background: var(--bad); }
+.metrics-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(135px, 1fr)); gap: 8px; font-size: .95rem; }
+.metric-box { padding: 8px 10px; border: 2px dashed color-mix(in srgb, var(--line) 45%, transparent); border-radius: 12px; }
+.metric-box .big { font-family: var(--font-head); font-size: 1.45rem; display: block; }
+.fly-dot { position: absolute; width: 16px; height: 20px; border: 2px solid var(--line); border-radius: 3px; background: var(--yellow); top: 5px; left: 6px; z-index: 4; pointer-events: none; }
+
+/* ---- Toy 2: Synthetic PDF Degrader ---- */
+.doc-grid { display: grid; grid-template-columns: minmax(220px, 1fr) minmax(240px, 1.2fr); gap: 16px; align-items: start; }
+.doc-sheet { aspect-ratio: 1 / 1.28; max-width: 280px; margin-inline: auto; width: 100%; border: 3px solid var(--line); border-radius: 12px; background: #fffdf7; color: #2a2a35; padding: 14px; box-shadow: 5px 5px 0 var(--shadow); display: grid; gap: 8px; align-content: start; position: relative; overflow: hidden; transition: filter .2s; }
+.doc-sheet.scan-clean { filter: grayscale(1) contrast(1.06); background: #f5f3ee; }
+.doc-sheet.scan-degraded { filter: grayscale(1) blur(0.85px) contrast(0.92); background: #eae6dc; transform: rotate(-0.8deg); }
+.noise-layer { position: absolute; inset: 0; pointer-events: none; opacity: 0; background-image: radial-gradient(#2a2a35 0.75px, transparent 0.75px), radial-gradient(#2a2a35 0.6px, transparent 0.6px); background-size: 11px 11px, 7px 7px; background-position: 0 0, 3px 5px; }
+.doc-sheet.scan-degraded .noise-layer { opacity: .16; }
+
+/* ---- Toy 3 & Tables ---- */
+.table-wrap { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-size: .94rem; }
+th, td { text-align: left; padding: 6px 10px; border-bottom: 2px dashed color-mix(in srgb, var(--line) 35%, transparent); white-space: nowrap; font-variant-numeric: tabular-nums; }
+th { font-family: var(--font-mono); font-size: .72rem; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+dl { margin: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; }
+dl > div { display: grid; gap: 2px; }
+dt { font-family: var(--font-head); font-size: 1.25rem; }
+dd { margin: 0; color: var(--muted); }
+pre { margin: 0; padding: 12px 14px; border: 2.5px solid var(--line); border-radius: 14px; background: var(--card); overflow-x: auto; font-family: var(--font-mono); font-size: .8rem; line-height: 1.55; }
+.copyrow { display: grid; gap: 8px; }
+.note { font-size: .96rem; color: var(--muted); }
+
+@media (max-width: 700px) {
+  .doc-grid { grid-template-columns: 1fr; }
+  body { font-size: 18px; }
+  .card { padding: 16px; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+<main class="wrap">
+  <p><a class="btn small" href="../../">← Back to ishu0505.tech</a></p>
+
+  <!-- ===================== HERO ===================== -->
+  <header class="card hero">
+    <p class="kicker">ocr_my_gpu (gpu-my-ocr) · Phase 2 verified complete · Python · RTX 4060 8 GB</p>
+    <h1>How ocr_my_gpu works</h1>
+    <p class="lead">Explained so a five-year-old could get it. Push the buttons to race <b>SGLang vs vLLM</b> on a tiny 8 GB graphics card, smudge fake financial PDFs, and see why a smart robot can read 99.7% of letters right yet still score 0% on a strict test!</p>
+    <div class="row">
+      <a class="btn hot" href="https://github.com/ishu0505/ocr_my_gpu" target="_blank" rel="noopener noreferrer">GitHub ↗</a>
+      <a class="btn" href="https://github.com/ishu0505/ocr_my_gpu/blob/main/docs/PHASE2_FINDINGS.md" target="_blank" rel="noopener noreferrer">Phase 2 Findings ↗</a>
+      <span class="pill done mono">76 pytest passing · 520 audited files</span>
+    </div>
+  </header>
+
+  <!-- ===================== 1. BIG IDEA & CURRENT STAGE ===================== -->
+  <section class="card" aria-labelledby="idea">
+    <p class="kicker">The big idea &amp; current stage</p>
+    <h2 id="idea">Fitting a giant reader onto a tiny 8 GB desk</h2>
+    <p>Vision-language models (like <span class="mono">Qwen3-VL-2B</span>) can look at a scanned picture of a receipt or invoice and turn it into neat computer data. Most people run them on huge, expensive server GPUs. We wanted to know: <b>how fast and accurately can one normal 8 GB laptop/desktop GPU (RTX 4060 on Fedora Linux) do this</b> when different engines serve the model?</p>
+    <div class="three">
+      <div class="panel">
+        <svg viewBox="0 0 64 64" role="img" aria-label="An 8GB GPU chip"><rect x="10" y="14" width="44" height="36" rx="6" fill="var(--lilac)" stroke="currentColor" stroke-width="3"/><rect x="20" y="22" width="24" height="20" rx="3" fill="var(--yellow)" stroke="currentColor" stroke-width="2.5"/><path d="M18 8v6M32 8v6M46 8v6M18 50v6M32 50v6M46 50v6" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg>
+        <h3>1. One 8 GB desk</h3>
+        <p>Single RTX 4060 (8 GB VRAM, SM 8.9), Fedora 44, no silent CPU offload, no made-up numbers.</p>
+      </div>
+      <div class="panel">
+        <svg viewBox="0 0 64 64" role="img" aria-label="Three document variants"><rect x="8" y="14" width="28" height="38" rx="4" fill="var(--card)" stroke="currentColor" stroke-width="2.5"/><rect x="18" y="10" width="28" height="38" rx="4" fill="var(--blue)" stroke="currentColor" stroke-width="2.5"/><rect x="28" y="18" width="28" height="38" rx="4" fill="var(--pink)" stroke="currentColor" stroke-width="3"/><path d="M34 28h16M34 36h12M34 44h14" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>
+        <h3>2. 150 homemade PDFs</h3>
+        <p>50 secret JSON answers written <i>first</i>, then turned into Digital, Clean Scan, and Smudged Scan PDFs.</p>
+      </div>
+      <div class="panel">
+        <svg viewBox="0 0 64 64" role="img" aria-label="Racing engines"><path d="M10 44h44M10 24h44" stroke="currentColor" stroke-width="2.5" stroke-dasharray="4 4"/><rect x="10" y="14" width="38" height="14" rx="7" fill="var(--mint)" stroke="currentColor" stroke-width="3"/><rect x="10" y="34" width="28" height="14" rx="7" fill="var(--blue)" stroke="currentColor" stroke-width="3"/><circle cx="48" cy="21" r="6" fill="var(--hot)" stroke="currentColor" stroke-width="2.5"/></svg>
+        <h3>3. Three engines race</h3>
+        <p>Compare <b>Transformers</b>, <b>vLLM</b>, and <b>SGLang</b> across 1, 2, 4, and 8 simultaneous callers.</p>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h3>Where the project is right now (click any phase)</h3>
+      <div class="phases" id="phaseBtns" role="tablist" aria-label="Project phases"></div>
+      <div class="panel" id="phaseDetail" style="margin-top:12px;background:var(--paper)" role="tabpanel" aria-live="polite"></div>
+    </div>
+  </section>
+
+  <!-- ===================== 2. TOY 1: SGLANG VS VLLM RACE ===================== -->
+  <section class="card mint" aria-labelledby="raceh">
+    <p class="kicker">Toy 1 · SGLang vs vLLM benchmark</p>
+    <h2 id="raceh">Race the engines on an 8 GB GPU</h2>
+    <p>In Phase 2, both <b>vLLM 0.31.0</b> and <b>SGLang 0.5.6</b> served the exact same pinned <span class="mono">Qwen3-VL-2B-Instruct</span> model in BF16 across 60 requests per level (30 distinct pages × 2 repeats, 150 DPI RGB). Pick how many callers knock at once, then press <b>Run 60-page race</b>!</p>
+
+    <div class="row" role="group" aria-label="Concurrency level">
+      <button class="btn small" type="button" data-conc="1" aria-pressed="false">1 caller (c1)</button>
+      <button class="btn small" type="button" data-conc="2" aria-pressed="false">2 callers (c2)</button>
+      <button class="btn small" type="button" data-conc="4" aria-pressed="true">4 callers (c4 · sweet spot)</button>
+      <button class="btn small" type="button" data-conc="8" aria-pressed="false">8 callers (c8 · traffic jam!)</button>
+      <button class="btn hot" type="button" id="runRaceBtn">▶ Run 60-page race</button>
+    </div>
+
+    <div class="race-grid">
+      <!-- SGLang Lane -->
+      <div class="lane" id="lane-sglang">
+        <div class="lane-head">
+          <strong>⚡ SGLang 0.5.6 <span class="pill done mono">Triton + SDPA</span></strong>
+          <span class="mono" id="sgl-speed-label"></span>
+        </div>
+        <div class="track" id="track-sglang"><div class="bar-fill sglang" id="bar-sglang"></div></div>
+        <div class="lane-head">
+          <span class="note">8.0 GiB VRAM desk limit (red line on right)</span>
+          <span class="mono" id="sgl-vram-label"></span>
+        </div>
+        <div class="track" style="height:18px"><div class="bar-fill vram-hot" id="vram-sglang"></div><div class="vram-cap" title="8.0 GiB Hardware Limit"></div></div>
+        <div class="metrics-row" id="metrics-sglang"></div>
+      </div>
+
+      <!-- vLLM Lane -->
+      <div class="lane" id="lane-vllm">
+        <div class="lane-head">
+          <strong>🚀 vLLM 0.31.0 <span class="pill mono">FlashAttention</span></strong>
+          <span class="mono" id="vllm-speed-label"></span>
+        </div>
+        <div class="track" id="track-vllm"><div class="bar-fill vllm" id="bar-vllm"></div></div>
+        <div class="lane-head">
+          <span class="note">8.0 GiB VRAM desk limit (leaves ~1.28 GiB KV cache room)</span>
+          <span class="mono" id="vllm-vram-label"></span>
+        </div>
+        <div class="track" style="height:18px"><div class="bar-fill vram-ok" id="vram-vllm"></div><div class="vram-cap" title="8.0 GiB Hardware Limit"></div></div>
+        <div class="metrics-row" id="metrics-vllm"></div>
+      </div>
+
+      <!-- Transformers Phase 1 Baseline Lane -->
+      <div class="lane" id="lane-tf">
+        <div class="lane-head">
+          <strong>🐢 Transformers 4.57.6 <span class="pill mono">Phase 1 single-stream baseline</span></strong>
+          <span class="mono" id="tf-speed-label">0.0582 pages/s · 17.17s mean latency · 4.79 GiB VRAM</span>
+        </div>
+        <div class="track" id="track-tf"><div class="bar-fill tf" id="bar-tf" style="width:21.9%"></div></div>
+      </div>
+    </div>
+
+    <div class="panel" id="raceTakeaway" aria-live="polite"></div>
+  </section>
+
+  <!-- ===================== 3. TOY 2: SYNTHETIC PDF DEGRADER ===================== -->
+  <section class="card yellow" aria-labelledby="pdfh">
+    <p class="kicker">Toy 2 · byte-reproducible synthetic dataset (seed 42)</p>
+    <h2 id="pdfh">One secret truth, three PDF disguises</h2>
+    <p>If you test OCR on random PDFs from the internet, you don't know the exact right answer without paying another AI or human to grade it. Instead, <span class="mono">ocr_my_gpu</span> creates <b>50 fictitious financial documents</b> using exact <span class="mono">Decimal</span> math first, locks their SHA-256 hash, and renders <b>3 paired PDF views</b> per document (150 PDFs total).</p>
+
+    <div class="row" role="group" aria-label="Document category" id="catBtns"></div>
+    <div class="row" role="group" aria-label="PDF scan quality" id="variantBtns"></div>
+
+    <div class="panel doc-grid">
+      <div>
+        <div class="doc-sheet" id="docSheet">
+          <div class="noise-layer"></div>
+          <div id="docSheetInner"></div>
+        </div>
+      </div>
+      <div style="display:grid;gap:10px">
+        <h3 id="docTruthTitle">Locked Ground-Truth JSON (saved before rendering)</h3>
+        <pre id="docTruthJson"></pre>
+        <p class="note" id="docVariantNote"></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== 4. TOY 3: THE STRICT GRADER DETECTIVE ===================== -->
+  <section class="card blue" aria-labelledby="deth">
+    <p class="kicker">Toy 3 · Phase 2 accuracy diagnostics</p>
+    <h2 id="deth">Why did a smart reader get a 0% page score?</h2>
+    <p>Here is the funniest mystery from Phase 1 &amp; Phase 2: when we graded all 60 baseline answers with our strict financial grader, <b>usable page success was 0%</b> and <b>schema validity was only 10% (6/60)</b>. Was the model blind? Click the X-ray buttons below to inspect what actually happened inside those 60 answers!</p>
+
+    <div class="row" role="group" aria-label="Diagnostic lens" id="diagBtns"></div>
+    <div class="panel" id="diagPanel" aria-live="polite"></div>
+
+    <div class="panel">
+      <h3>Controlled A/B/C prompt &amp; schema experiment</h3>
+      <p class="note">We tested whether simpler prompts or vLLM's grammar-constrained JSON decoding (<span class="mono">response_format</span>) fixed the bottleneck:</p>
+      <div class="table-wrap" style="margin-top:8px">
+        <table>
+          <thead>
+            <tr><th>Experiment Mode</th><th>Valid Schemas</th><th>Exact Fields</th><th>Numeric Math</th><th>Mean Latency</th><th>Speed (pages/s)</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><b>Mode A · Full Schema v2</b></td><td>2 / 12 (16.7%)</td><td>102 / 116 diag</td><td>36 / 36 (100%)</td><td>16.32 s</td><td>0.0607</td></tr>
+            <tr><td><b>Mode B · Plain OCR Text</b></td><td>No JSON asked</td><td>CER 0.0016</td><td>WER 0.0039</td><td>8.64 s</td><td>0.1145</td></tr>
+            <tr><td><b>Mode C · 3–5 Critical Fields</b></td><td><b>12 / 12 (100%)</b></td><td>36 / 46 (78.3%)</td><td>22 / 22 (100%)</td><td><b>3.49 s</b></td><td><b>0.2863 (4.7×)</b></td></tr>
+            <tr><td><b>vLLM JSON Schema Enforced</b></td><td><b>10 / 10 (100%)</b></td><td>90 / 100 (90.0%)</td><td>30 / 30 (100%)</td><td>14.05 s</td><td>0.0705</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="note" style="margin-top:8px"><b>Key takeaway:</b> Enforcing JSON schema or asking for critical fields fixes JSON formatting 100%, and every single dollar/decimal amount is 100% accurate—but long repetitive reference IDs and multi-row tables remain the true vision-language bottleneck!</p>
+    </div>
+  </section>
+
+  <!-- ===================== 5. TOY 4: UNDER THE HOOD HARDWARE SCARS ===================== -->
+  <section class="card lilac" aria-labelledby="hoodh">
+    <p class="kicker">Toy 4 · real systems engineering</p>
+    <h2 id="hoodh">Three separate rooms &amp; real GPU battle scars</h2>
+    <p>GPU serving libraries fight over PyTorch and CUDA versions all the time. So <span class="mono">ocr_my_gpu</span> keeps a tiny, standard-library-only root controller and puts each engine in its own locked <span class="mono">uv</span> room. Click a room to see what broke and how we fixed it without faking a single number.</p>
+    <div class="row" id="roomBtns" role="group" aria-label="Engine environments"></div>
+    <div class="panel" id="roomDetail" aria-live="polite"></div>
+  </section>
+
+  <!-- ===================== GLOSSARY ===================== -->
+  <section class="card" aria-labelledby="gloss">
+    <p class="kicker">Big words, small words</p>
+    <h2 id="gloss">Cheat sheet</h2>
+    <dl>
+      <div><dt>VRAM (8 GB)</dt><dd>The GPU's own super-fast desk memory. Once you pass 8.0 GiB on an RTX 4060, jobs crash or spill.</dd></div>
+      <div><dt>BF16</dt><dd>16-bit "brain float" numbers—half the size of 32-bit floats, natively supported on RTX 4060 (SM 8.9).</dd></div>
+      <div><dt>Continuous batching</dt><dd>How vLLM and SGLang pack multiple callers' pages together on the GPU instead of waiting one by one.</dd></div>
+      <div><dt>KV Cache &amp; Preemption</dt><dd>Scratchpad memory for active pages. At 8 callers, vLLM ran out of scratchpad 18 times and had to pause callers.</dd></div>
+      <div><dt>TTFT</dt><dd>Time To First Token—how long until the engine starts typing the very first character of the answer.</dd></div>
+      <div><dt>CER / WER</dt><dd>Character / Word Error Rate. Lower is better (<span class="mono">0.003</span> CER means 99.7% of characters matched).</dd></div>
+    </dl>
+  </section>
+
+  <!-- ===================== INSTALL & REPRODUCE ===================== -->
+  <section class="card peach" aria-labelledby="tryh">
+    <p class="kicker">Your turn</p>
+    <h2 id="tryh">Run the benchmark on your GPU</h2>
+    <div class="copyrow">
+      <pre id="c1">uv sync --frozen --python 3.12
+uv run --frozen gpu-my-ocr doctor --torch-python environments/transformers/.venv/bin/python
+uv run --frozen pytest -q</pre>
+      <button class="btn small" type="button" data-copy="c1">Copy</button>
+    </div>
+    <div class="copyrow">
+      <pre id="c2">uv run --frozen gpu-my-ocr dataset-generate --output datasets/generated/financial-v1-seed42 --seed 42
+uv run --frozen gpu-my-ocr dataset-validate datasets/generated/financial-v1-seed42 \
+  --expected-manifest-sha256 e42e5491bceda9ba5b2891c3a8b715654651f763c6c0dc59e30b862022f88976</pre>
+      <button class="btn small" type="button" data-copy="c2">Copy</button>
+    </div>
+    <div class="copyrow">
+      <pre id="c3"># Run controlled 1/2/4/8-client sweeps (one serving engine at a time)
+PYTHONPATH=src uv run --frozen --project environments/vllm python -m gpu_my_ocr.benchmark.serving_run \
+  --engine vllm --concurrency 1 2 4 8 --output results/phase2/new-vllm
+PYTHONPATH=src uv run --frozen --project environments/sglang python -m gpu_my_ocr.benchmark.serving_run \
+  --engine sglang --concurrency 1 2 4 8 --output results/phase2/new-sglang</pre>
+      <button class="btn small" type="button" data-copy="c3">Copy</button>
+    </div>
+    <p class="note">Every number on this page comes straight from <span class="mono">PLAN.md</span>, <span class="mono">PROGRESS.md</span>, and <span class="mono">docs/PHASE2_FINDINGS.md</span> in the repository.</p>
+    <div class="row">
+      <a class="btn hot" href="https://github.com/ishu0505/ocr_my_gpu" target="_blank" rel="noopener noreferrer">Explore ocr_my_gpu on GitHub ↗</a>
+      <a class="btn" href="../../">← Back to portfolio</a>
+    </div>
+  </section>
+</main>
+<script>
+(function () {
+  'use strict';
+  var $ = function (s, r) { return (r || document).querySelector(s); };
+  var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ============================== PHASES ROADMAP ============================== */
+  var PHASES = [
+    {
+      id: 'p0', title: 'Phase 0 · Host & GPU', state: 'Verified Complete (Oct 13)', badge: 'done',
+      body: 'Checked Fedora 44 (glibc 2.43), NVIDIA Driver 615.71.09, RTX 4060 (SM 8.9, 8 GB VRAM), and Python 3.12.15 via uv. Built the stdlib-only "gpu-my-ocr doctor" CLI that probes PyTorch 2.13.0+cu126 in a child process and verifies GPU memory returns to 12 MiB idle on exit.'
+    },
+    {
+      id: 'p1', title: 'Phase 1 · Dataset & Baseline', state: 'Verified Complete (Oct 13)', badge: 'done',
+      body: 'Built a byte-reproducible seed-42 synthetic financial dataset (50 Decimal JSON truths × 3 paired PDFs = 150 pages, SHA-256 locked) + strict evaluator. Ran Qwen3-VL-2B-Instruct BF16 baseline in Transformers: 0.0582 pages/s, 17.17s mean latency, 4.79 GiB peak VRAM.'
+    },
+    {
+      id: 'p2', title: 'Phase 2 · SGLang vs vLLM', state: 'Verified Complete (Oct 14 · Current)', badge: 'done',
+      body: 'Current stage! Completed 480 primary serving requests across vLLM 0.31.0 and SGLang 0.5.6 at 1, 2, 4, and 8 concurrent clients, plus A/B/C prompt diagnostics, torch.profiler BF16 kernel verification (54,126 CUDA events), and vLLM JSON-schema constrained decoding.'
+    },
+    {
+      id: 'p3', title: 'Phase 3 · Quantization & Models', state: 'Up Next (Not Started)', badge: 'next',
+      body: 'Will compare Qwen2.5-VL-3B-Instruct, PaddleOCR-VL-1.5, and quantized olmOCR-2-7B using BF16 c1 as the quality control and c4 (4 clients) as the balanced serving benchmark.'
+    },
+    {
+      id: 'p45', title: 'Phases 4–5 · DuckDB & Publish', state: 'Planned', badge: '',
+      body: 'Deep GPU profiling, multi-seed statistical repeats, DuckDB analytics store + interactive dashboard, and final end-to-end reproducible report.'
+    }
+  ];
+
+  function initPhases() {
+    var box = $('#phaseBtns');
+    PHASES.forEach(function (p, idx) {
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'phase-btn';
+      b.setAttribute('role', 'tab');
+      b.setAttribute('aria-selected', idx === 2 ? 'true' : 'false');
+      b.innerHTML = '<span class="pill ' + p.badge + ' mono" style="font-size:.72rem">' + (p.badge === 'done' ? '✓ Done' : (p.badge === 'next' ? '→ Next' : 'Planned')) + '</span><strong>' + p.title + '</strong>';
+      b.addEventListener('click', function () {
+        $$('.phase-btn', box).forEach(function (el) { el.setAttribute('aria-selected', 'false'); });
+        b.setAttribute('aria-selected', 'true');
+        showPhase(p);
+      });
+      box.appendChild(b);
+    });
+    showPhase(PHASES[2]);
+  }
+  function showPhase(p) {
+    $('#phaseDetail').innerHTML = '<p class="kicker">' + p.state + '</p><p style="margin-top:4px">' + p.body + '</p>';
+  }
+
+  /* ============================== TOY 1: SGLANG VS VLLM RACE ============================== */
+  var SWEEPS = {
+    1: {
+      sgl:  { pps: 0.08525, tps: 47.05, mean: 11.718, p95: 12.682, ttft: 1.685, vram: 7.337, util: '98.30%', note: '0 retractions · 27.1s startup' },
+      vllm: { pps: 0.06931, tps: 38.30, mean: 14.415, p95: 15.701, ttft: 1.366, vram: 6.366, util: '83.34%', note: '0 preemptions · 75.2s startup' },
+      takeaway: '<b>1 caller (c1 · quality control):</b> Even with 1 caller at a time, SGLang (0.085 pages/s) and vLLM (0.069 pages/s) beat raw Transformers (0.058 pages/s). Both produce 100% identical repeat pairs (30/30) at c1!'
+    },
+    2: {
+      sgl:  { pps: 0.13123, tps: 72.46, mean: 15.214, p95: 16.736, ttft: 1.828, vram: 7.337, util: '99.11%', note: '0 retractions · queue 0.0005s' },
+      vllm: { pps: 0.11993, tps: 65.90, mean: 16.652, p95: 18.703, ttft: 1.518, vram: 6.366, util: '94.29%', note: '0 preemptions · queue ~0s' },
+      takeaway: '<b>2 callers (c2):</b> Continuous batching kicks in! Throughput nearly doubles over c1 while Time-To-First-Token (TTFT) stays under 1.9 seconds for both engines.'
+    },
+    4: {
+      sgl:  { pps: 0.20226, tps: 111.75, mean: 19.601, p95: 22.532, ttft: 2.127, vram: 7.366, util: '98.93%', note: '0 retractions · 3.5× faster than Phase 1!' },
+      vllm: { pps: 0.18301, tps: 100.83, mean: 21.628, p95: 24.914, ttft: 1.655, vram: 6.657, util: '94.65%', note: '0 preemptions · 1.34 GiB headroom left' },
+      takeaway: '<b>4 callers (c4 · The Sweet Spot!):</b> Both engines cross <b>100+ output tokens/sec</b> with zero KV preemptions and ~2s TTFT. SGLang is ~10.5% faster in throughput, while vLLM leaves 0.71 GiB more breathing room on the 8 GB card.'
+    },
+    8: {
+      sgl:  { pps: 0.26550, tps: 146.64, mean: 29.440, p95: 37.563, ttft: 5.379, vram: 7.454, util: '99.34%', note: '4 retractions · 2.13s queue · near 8GB cliff!' },
+      vllm: { pps: 0.20371, tps: 114.13, mean: 37.290, p95: 49.689, ttft: 12.155, vram: 6.974, util: '96.00%', note: '18 KV preemptions · 7.39s queue · 1 truncated' },
+      takeaway: '<b>8 callers (c8 · Traffic Jam on 8 GB!):</b> Because 8 visual pages need more KV scratchpad than fits comfortably in 8 GB, vLLM hits <b>18 KV cache preemptions</b> and TTFT jumps to 12.16s. SGLang hits <b>0.266 pages/s (146.6 tok/s)</b> with 4 retractions, but peaks at <b>7.454 GiB</b>—dangerously close to the 8.0 GiB ceiling!'
+    }
+  };
+  var MAX_PPS = 0.28, curConc = 4;
+
+  function renderSweep(c, animateTokens) {
+    curConc = c;
+    var d = SWEEPS[c];
+    $$('[data-conc]').forEach(function (b) {
+      b.setAttribute('aria-pressed', Number(b.getAttribute('data-conc')) === c ? 'true' : 'false');
+    });
+    $('#sgl-speed-label').textContent = d.sgl.pps.toFixed(4) + ' pages/s · ' + d.sgl.tps.toFixed(1) + ' tok/s';
+    $('#vllm-speed-label').textContent = d.vllm.pps.toFixed(4) + ' pages/s · ' + d.vllm.tps.toFixed(1) + ' tok/s';
+    $('#bar-sglang').style.width = Math.min(100, (d.sgl.pps / MAX_PPS) * 100).toFixed(1) + '%';
+    $('#bar-vllm').style.width = Math.min(100, (d.vllm.pps / MAX_PPS) * 100).toFixed(1) + '%';
+
+    $('#sgl-vram-label').textContent = d.sgl.vram.toFixed(3) + ' / 8.000 GiB (' + d.sgl.util + ' GPU util)';
+    $('#vllm-vram-label').textContent = d.vllm.vram.toFixed(3) + ' / 8.000 GiB (' + d.vllm.util + ' GPU util)';
+    $('#vram-sglang').style.width = ((d.sgl.vram / 8.0) * 100).toFixed(1) + '%';
+    $('#vram-vllm').style.width = ((d.vllm.vram / 8.0) * 100).toFixed(1) + '%';
+
+    $('#metrics-sglang').innerHTML =
+      '<div class="metric-box"><span class="note">Mean / p95 latency</span><span class="big">' + d.sgl.mean.toFixed(1) + 's / ' + d.sgl.p95.toFixed(1) + 's</span></div>' +
+      '<div class="metric-box"><span class="note">First token (TTFT)</span><span class="big">' + d.sgl.ttft.toFixed(2) + 's</span></div>' +
+      '<div class="metric-box"><span class="note">Scheduler notes</span><span class="mono" style="font-size:.78rem">' + d.sgl.note + '</span></div>';
+
+    $('#metrics-vllm').innerHTML =
+      '<div class="metric-box"><span class="note">Mean / p95 latency</span><span class="big">' + d.vllm.mean.toFixed(1) + 's / ' + d.vllm.p95.toFixed(1) + 's</span></div>' +
+      '<div class="metric-box"><span class="note">First token (TTFT)</span><span class="big">' + d.vllm.ttft.toFixed(2) + 's</span></div>' +
+      '<div class="metric-box"><span class="note">Scheduler notes</span><span class="mono" style="font-size:.78rem">' + d.vllm.note + '</span></div>';
+
+    $('#raceTakeaway').innerHTML = '<p>' + d.takeaway + '</p>';
+    if (animateTokens) launchRaceAnimation(d);
+  }
+
+  function launchRaceAnimation(d) {
+    if (reduce) return;
+    [['track-sglang', d.sgl.pps], ['track-vllm', d.vllm.pps], ['track-tf', 0.0582]].forEach(function (pair) {
+      var track = $('#' + pair[0]);
+      if (!track || !track.animate) return;
+      for (var i = 0; i < Math.min(curConc, 6); i++) {
+        (function (idx) {
+          setTimeout(function () {
+            var dot = document.createElement('span');
+            dot.className = 'fly-dot';
+            track.appendChild(dot);
+            var w = track.clientWidth - 28;
+            var dur = Math.max(380, Math.round(95 / pair[1]));
+            var anim = dot.animate(
+              [{ transform: 'translateX(0px)' }, { transform: 'translateX(' + w + 'px)' }],
+              { duration: dur, easing: 'ease-out' }
+            );
+            anim.finished.then(function () { dot.remove(); }, function () { dot.remove(); });
+          }, idx * 110);
+        })(i);
+      }
+    });
+  }
+
+  $$('[data-conc]').forEach(function (b) {
+    b.addEventListener('click', function () { renderSweep(Number(b.getAttribute('data-conc')), true); });
+  });
+  $('#runRaceBtn').addEventListener('click', function () { renderSweep(curConc, true); });
+  initPhases();
+  renderSweep(4, false);
+
+  /* ============================== TOY 2: SYNTHETIC PDF DEGRADER ============================== */
+  var DOCS = [
+    {
+      id: 'invoice', label: 'Invoice',
+      head: 'INVOICE #INV-42-001',
+      sub: 'Account: ACC-90042188 · Currency: USD',
+      rows: [['Cloud GPU Node Hours', '1,240.00'], ['Storage Block Tier-1', '185.50'], ['Tax (8.00%)', '114.04'], ['Total Due', '1,539.54']],
+      json: '{\n  "doc_id": "invoice-42-001",\n  "category": "invoice",\n  "account_id": "ACC-90042188",\n  "subtotal": "1425.50",\n  "tax": "114.04",\n  "total_due": "1539.54"\n}'
+    },
+    {
+      id: 'portfolio', label: 'Portfolio',
+      head: 'PORTFOLIO STATEMENT #PF-42-001',
+      sub: 'Holder Ref: REF-77001922 · As of 2026-10-01',
+      rows: [['Global Index ETF', '14,250.00'], ['Treasury Bond Fund', '8,500.75'], ['Cash Sweep', '1,120.25'], ['Net Asset Value', '23,871.00']],
+      json: '{\n  "doc_id": "portfolio-42-001",\n  "category": "portfolio",\n  "reference_id": "REF-77001922",\n  "net_asset_value": "23871.00",\n  "positions_count": "3"\n}'
+    },
+    {
+      id: 'receipt', label: 'Receipt',
+      head: 'MERCHANT RECEIPT #RCP-42-001',
+      sub: 'Terminal: TRM-0044912 · Auth: 88392011',
+      rows: [['NVMe Scratch Disk', '129.99'], ['HDMI Dummy Plug', '14.50'], ['GST (9.00%)', '13.00'], ['Paid Total', '157.49']],
+      json: '{\n  "doc_id": "receipt-42-001",\n  "category": "receipt",\n  "terminal_id": "TRM-0044912",\n  "paid_total": "157.49"\n}'
+    },
+    {
+      id: 'auditor', label: 'Auditor Report',
+      head: 'AUDITOR SCHEDULE #AUD-42-001',
+      sub: 'Control Ref: AUD-00051829 · FY 2026',
+      rows: [['Ledger Balance', '98,400.00'], ['Reconciled Adj.', '-350.00'], ['Verified Balance', '98,050.00']],
+      json: '{\n  "doc_id": "auditor_report-42-001",\n  "category": "auditor_report",\n  "control_ref": "AUD-00051829",\n  "verified_balance": "98050.00"\n}'
+    },
+    {
+      id: 'claim', label: 'Insurance Claim',
+      head: 'CLAIM SUMMARY #CLM-42-001',
+      sub: 'Policy No: 4400991827 · Deductible: 250.00',
+      rows: [['Billed Procedure', '1,890.00'], ['Less Deductible', '-250.00'], ['Approved Payout', '1,640.00']],
+      json: '{\n  "doc_id": "insurance_claim-42-001",\n  "category": "insurance_claim",\n  "policy_number": "4400991827",\n  "approved_payout": "1640.00"\n}'
+    }
+  ];
+  var VARIANTS = [
+    { id: 'digital', label: '1. Digital PDF (ReportLab)', cls: '', note: '<b>Digital PDF:</b> Vector text & crisp lines rendered by ReportLab 5.0.1, then rasterized at 150 DPI RGB (1275×1650 px) so the VLM uses its vision encoder.' },
+    { id: 'clean', label: '2. 150 DPI Grayscale Scan', cls: 'scan-clean', note: '<b>High-Quality Scan:</b> Stripped of embedded text via PyMuPDF 1.28.2 and converted to an image-only 150 DPI grayscale scan.' },
+    { id: 'degraded', label: '3. Degraded Scan (Blur + Noise)', cls: 'scan-degraded', note: '<b>Degraded Scan:</b> Seeded Pillow 12.3.0 Gaussian blur + deterministic modulo-17 pixel noise. Even when plain OCR reads this fine, mild blur can make VLMs slip on repeated digits in long IDs!' }
+  ];
+  var curDoc = DOCS[0], curVar = VARIANTS[0];
+
+  function renderDoc() {
+    $$('#catBtns button').forEach(function (b) { b.setAttribute('aria-pressed', b.getAttribute('data-doc') === curDoc.id ? 'true' : 'false'); });
+    $$('#variantBtns button').forEach(function (b) { b.setAttribute('aria-pressed', b.getAttribute('data-var') === curVar.id ? 'true' : 'false'); });
+    var sheet = $('#docSheet');
+    sheet.className = 'doc-sheet ' + curVar.cls;
+    var rowsHtml = curDoc.rows.map(function (r) {
+      return '<div style="display:flex;justify-content:space-between;border-bottom:1.5px dashed #2a2a35;padding:3px 0;font-size:.82rem"><span>' + r[0] + '</span><span class="mono">' + r[1] + '</span></div>';
+    }).join('');
+    $('#docSheetInner').innerHTML =
+      '<div style="background:#ffe98a;border:2px solid #2a2a35;border-radius:6px;padding:5px 8px;font-family:var(--font-head);font-size:1.05rem">' + curDoc.head + '</div>' +
+      '<div class="mono" style="font-size:.7rem;margin-top:4px;color:#55555f">' + curDoc.sub + '</div>' +
+      '<div style="margin-top:8px;display:grid;gap:4px">' + rowsHtml + '</div>' +
+      '<div class="mono" style="margin-top:12px;font-size:.66rem;color:#55555f">SHA256 locked · 150 DPI RGB (1275×1650)</div>';
+    $('#docTruthJson').textContent = curDoc.json;
+    $('#docVariantNote').innerHTML = curVar.note;
+  }
+
+  DOCS.forEach(function (d) {
+    var b = document.createElement('button');
+    b.type = 'button'; b.className = 'btn small'; b.setAttribute('data-doc', d.id); b.textContent = d.label;
+    b.addEventListener('click', function () { curDoc = d; renderDoc(); });
+    $('#catBtns').appendChild(b);
+  });
+  VARIANTS.forEach(function (v) {
+    var b = document.createElement('button');
+    b.type = 'button'; b.className = 'btn small'; b.setAttribute('data-var', v.id); b.textContent = v.label;
+    b.addEventListener('click', function () { curVar = v; renderDoc(); });
+    $('#variantBtns').appendChild(b);
+  });
+
+  /* ============================== TOY 3: STRICT GRADER DETECTIVE ============================== */
+  var DIAGS = [
+    {
+      id: 'strict', label: '1. Strict Financial Gate (0% pages)',
+      html: '<h3>Why the strict grader gave 0 / 60 pages</h3>' +
+        '<p>Our financial contract (<span class="mono">financial-page-v1</span>) is ruthlessly honest: a page only passes if <b>raw JSON parses without Markdown wrappers</b>, <b>passes the full JSON schema</b>, and <b>100% of fields and ordered table cells match</b>.</p>' +
+        '<p style="margin-top:8px">Under that gate: only <b>38 / 60</b> responses were bare JSON (22 were wrapped in <span class="mono">```json ... ```</span> fences), only <b>6 / 60 (10%)</b> passed the strict table+field schema, and <b>0 / 60</b> got every table cell in exact positional order.</p>'
+    },
+    {
+      id: 'unwrap', label: '2. Unwrapped X-Ray (88.7% fields, 100% math!)',
+      html: '<h3>What was actually inside the 60 answers!</h3>' +
+        '<p>When Phase 2 unwrapped the 22 fenced JSON objects (strictly for diagnostics, never altering official scores), <b>all 60/60 responses contained a valid JSON object</b> with all 600 expected fields present:</p>' +
+        '<ul style="margin:8px 0 0;padding-left:22px">' +
+        '<li><b>Monetary &amp; numeric fields: 180 / 180 (100% exact!)</b> — Not a single dollar amount or Decimal arithmetic error!</li>' +
+        '<li><b>All fields combined: 532 / 600 (88.67% exact)</b> — All 68 wrong fields were long ID / reference / policy digit strings (like dropping one repeated zero).</li>' +
+        '<li><b>Character accuracy: CER 0.00298 (99.7% accurate)</b> — The model could read the page clearly, but tripped on strict table shapes and long ID digits!</li>' +
+        '</ul>'
+    },
+    {
+      id: 'tables', label: '3. The Table Header Trap (0 / 684 cells)',
+      html: '<h3>Why table cells scored 0 / 684</h3>' +
+        '<p>Our evaluator expects ordered data rows only. Instead, <span class="mono">Qwen3-VL-2B</span> frequently inserted an extra header row at index 0 (shifting every row down by one!), flattened nested arrays, or left auditor table cells empty while filling the summary fields.</p>' +
+        '<p style="margin-top:8px">Because ADR-004 forbids silently repairing or dropping rows during scoring, positional cell accuracy stayed 0%—proving that <b>prompt/schema complexity and table structure</b>, not raw OCR legibility, was the real Phase 1 bottleneck.</p>'
+    }
+  ];
+
+  function initDiags() {
+    var box = $('#diagBtns');
+    DIAGS.forEach(function (d, i) {
+      var b = document.createElement('button');
+      b.type = 'button'; b.className = 'btn small';
+      b.setAttribute('aria-pressed', i === 1 ? 'true' : 'false');
+      b.textContent = d.label;
+      b.addEventListener('click', function () {
+        $$('button', box).forEach(function (x) { x.setAttribute('aria-pressed', 'false'); });
+        b.setAttribute('aria-pressed', 'true');
+        $('#diagPanel').innerHTML = d.html;
+      });
+      box.appendChild(b);
+    });
+    $('#diagPanel').innerHTML = DIAGS[1].html;
+  }
+
+  /* ============================== TOY 4: THREE ROOMS & HARDWARE SCARS ============================== */
+  var ROOMS = [
+    {
+      id: 'ctrl', label: 'Root Controller + Doctor',
+      html: '<h3>Stdlib-only controller &amp; subprocess CUDA probe</h3>' +
+        '<p>Fedora 44 ships Python 3.14 by default, which is too new for GPU wheels. Our root controller uses <b>Python 3.12.15 via uv</b> and never imports PyTorch directly. When you run <span class="mono">gpu-my-ocr doctor</span>, it launches the engine\'s isolated interpreter in a subprocess, verifies an exact FP32 matrix calculation on CUDA SM 8.9, and exits so GPU VRAM drops straight back to <b>12 MiB</b>.</p>'
+    },
+    {
+      id: 'vllm', label: 'Room 2 · vLLM 0.31.0',
+      html: '<h3>environments/vllm (PyTorch 2.13.0 · FlashAttention)</h3>' +
+        '<p>Runs native FlashAttention for both vision and language with <b>11,984 KV cache tokens (~1.28 GiB)</b> and 80% GPU memory cap. Peaks at <b>6.37–6.97 GiB VRAM</b>. Also supports official <span class="mono">response_format</span> JSON schema enforcement, jumping schema validity from 2/10 to <b>10/10 (100%)</b> on form digitals!</p>'
+    },
+    {
+      id: 'sglang', label: 'Room 3 · SGLang 0.5.6 (The Battle Scar!)',
+      html: '<h3>environments/sglang (How we fixed 3 real blockers)</h3>' +
+        '<ul style="margin:6px 0 0;padding-left:22px">' +
+        '<li><b>Blocker 1 (No C++ compiler):</b> <span class="mono">SGLang 0.5.21</span> loaded weights but failed on first image inference because mandatory activation JIT needed host <span class="mono">cc1plus</span>. We archived that evidence and pinned <span class="mono">SGLang 0.5.6</span> (`sgl-kernel 0.3.18.post2`) with prebuilt kernels.</li>' +
+        '<li><b>Blocker 2 (cuDNN BF16 Conv3d bug):</b> Default cuDNN 9.10 triggered PyTorch\'s BF16 Conv3d safety guard. We pinned <span class="mono">cuDNN 9.16.0.29</span> in the isolated lockfile and verified <span class="mono">probe_bf16_conv.py</span> returned the exact expected value <span class="mono">1536</span>.</li>' +
+        '<li><b>Blocker 3 (Fair token count):</b> SGLang\'s legacy processor ignored CLI pixel bounds (using 2,557 input tokens instead of Phase 1\'s 1,717). We built a non-destructive local preprocessor overlay so both vLLM and SGLang process identical <b>1,717–1,764 input tokens</b>!</li>' +
+        '</ul>'
+    }
+  ];
+
+  function initRooms() {
+    var box = $('#roomBtns');
+    ROOMS.forEach(function (r, i) {
+      var b = document.createElement('button');
+      b.type = 'button'; b.className = 'btn small';
+      b.setAttribute('aria-pressed', i === 2 ? 'true' : 'false');
+      b.textContent = r.label;
+      b.addEventListener('click', function () {
+        $$('button', box).forEach(function (x) { x.setAttribute('aria-pressed', 'false'); });
+        b.setAttribute('aria-pressed', 'true');
+        $('#roomDetail').innerHTML = r.html;
+      });
+      box.appendChild(b);
+    });
+    $('#roomDetail').innerHTML = ROOMS[2].html;
+  }
+
+  /* ============================== COPY BUTTONS ============================== */
+  document.addEventListener('click', function (e) {
+    var b = e.target.closest('[data-copy]'); if (!b) return;
+    var pre = $('#' + b.getAttribute('data-copy'));
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(pre.textContent).then(function () {
+        b.textContent = 'Copied!';
+        setTimeout(function () { b.textContent = 'Copy'; }, 1500);
+      });
+    }
+  });
+
+  renderDoc();
+  initDiags();
+  initRooms();
+})();
+</script>
+</body>
+</html>

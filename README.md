@@ -32,7 +32,9 @@ without touching code. Changes are saved to this repo and the site republishes a
 ### Common edits
 
 - **Update your resume / job info:** `src/content/resume.json` (and replace `public/assets/resume/Ishaan-parmar-resume.pdf`).
-- **Add a project:** add an object to `src/content/projects.json`.
+- **Add or reorder projects (and front-page thumbnails):** edit `src/content/projects.json` (or `/#/admin` → *Projects & demos*). The first two projects with an `"image"` field appear as the two thumbnails on the front-page **Projects** tile.
+- **Add or reorder articles (and front-page headline):** edit `src/content/writing.json` (or `/#/admin` → *Writing*). The first item in `articles` (`articles[0]`) is shown as the headline on the front-page **Articles & Blogs** tile.
+- **Interactive explainers ("Explained simply"):** standalone interactive pages live in `public/explainers/` (`public/explainers/tokenjuggler/` and `public/explainers/ocr-my-gpu/`) and are linked from `projects.json` / `writing.json`.
 - **Change hobbies:** `src/content/hobbies.json`.
 - **Add a new tile:** create `src/sections/XSection.jsx`, list it in `src/sections/index.js`, and give it a grid area in `src/styles/bento.css`.
 - **Colours:** `src/styles/tokens.css`.
