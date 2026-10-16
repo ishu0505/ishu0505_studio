@@ -15,7 +15,9 @@ function Preview() {
     <div className="profile-preview">
       <img className="avatar" src={profile.avatar} alt={profile.name} width="88" height="88" />
       <div className="profile-preview__body">
-        <p className="eyebrow">Hi, I'm</p>
+        <div className="teaser__top">
+          <span className="teaser__badge tone-mint">Hi, I'm</span>
+        </div>
         <h1>{profile.name}</h1>
         <p className="lead">{profile.role}</p>
         <div className="chips">

@@ -11,13 +11,15 @@ import { stickers as allStickers } from '../data/stickers';
 function Preview() {
   const row = ['shoe', 'cat', 'gamepad', 'coffee', 'penguin'];
   return (
-    <div className="teaser">
+    <div className="teaser teaser--hobbies">
       <div className="doodle-row" aria-hidden="true">
         {row.map((name, i) => (
           <Doodle key={name} name={name} size={46} style={{ transform: `rotate(${(i % 2 ? 1 : -1) * (4 + i * 2)}deg)` }} />
         ))}
       </div>
-      <p className="label">Hobbies</p>
+      <div className="teaser__top">
+        <span className="teaser__badge tone-pink">Hobbies</span>
+      </div>
       <h2>My favourite things</h2>
     </div>
   );

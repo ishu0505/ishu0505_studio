@@ -13,7 +13,7 @@ function Preview() {
   return (
     <div className="teaser teaser--writing">
       <div className="teaser__top">
-        <span className="teaser__badge">Articles &amp; Blogs</span>
+        <span className="teaser__badge tone-yellow">Articles &amp; Blogs</span>
         <span className="muted small teaser__count">{articles.length} write-ups</span>
       </div>
       <h2>{lead.title}</h2>

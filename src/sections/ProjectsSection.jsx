@@ -20,9 +20,11 @@ function Preview() {
           <img key={p.id} src={p.image} alt="" loading="lazy" />
         ))}
       </div>
-      <p className="label">Projects</p>
+      <div className="teaser__top">
+        <span className="teaser__badge tone-yellow">Projects</span>
+        <span className="muted small teaser__count">{projects.length} projects &amp; products</span>
+      </div>
       <h2>Things I've built</h2>
-      <p className="muted small">{projects.length} projects &amp; products</p>
       <div className="teaser__pills">
         {featured.map((p) => (
           <span key={p.id} className="teaser__pill">

@@ -12,8 +12,10 @@ import { stickers as allStickers } from '../data/stickers';
 
 function Preview() {
   return (
-    <div className="teaser">
-      <p className="label">Resume</p>
+    <div className="teaser teaser--resume">
+      <div className="teaser__top">
+        <span className="teaser__badge tone-blue">Resume</span>
+      </div>
       <h2>{profile.current.title}</h2>
       <p className="muted small">Experience · Education · Skills</p>
     </div>
