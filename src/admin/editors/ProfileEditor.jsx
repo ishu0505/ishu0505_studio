@@ -5,6 +5,7 @@
 import { useFileEditor } from '../hooks/useFileEditor';
 import { Group, StringList, TextArea, TextInput } from '../fields/inputs';
 import { ImagePicker } from '../fields/ImagePicker';
+import { LAYOUT_PRESETS } from '../../content/schema';
 
 export default function ProfileEditor() {
   const [profile, setProfile] = useFileEditor('profile');
@@ -13,9 +14,47 @@ export default function ProfileEditor() {
   const set = (patch) => setProfile({ ...profile, ...patch });
   /** Change a nested group:  setIn('links', { github: '...' }) */
   const setIn = (group, patch) => setProfile({ ...profile, [group]: { ...profile[group], ...patch } });
+  const activeLayout = profile.layout || 'projects-first';
 
   return (
     <div className="adm-stack">
+      <Group title="Front-page layout">
+        <p className="adm-hint">
+          Choose how tiles are sized and arranged on the main page. Changes save to <code>profile.json</code> when you press Publish.
+        </p>
+        <div className="adm-layouts" role="radiogroup" aria-label="Front-page layout">
+          {LAYOUT_PRESETS.map((preset) => {
+            const isOn = activeLayout === preset.id;
+            return (
+              <button
+                key={preset.id}
+                type="button"
+                role="radio"
+                aria-checked={isOn}
+                className={`adm-layout-card ${isOn ? 'is-on' : ''}`}
+                onClick={() => set({ layout: preset.id })}
+              >
+                <div className="adm-layout-mini" aria-hidden="true">
+                  {preset.cells.map((cell) => (
+                    <span
+                      key={cell.id}
+                      className={`adm-layout-cell tone-${cell.tone}`}
+                      style={{ gridArea: cell.area }}
+                    >
+                      {cell.label}
+                    </span>
+                  ))}
+                </div>
+                <div className="adm-layout-meta">
+                  <strong>{preset.label}</strong>
+                  <span className="adm-hint">{preset.caption}</span>
+                </div>
+              </button>
+            );
+          })}
+        </div>
+      </Group>
+
       <Group title="About you">
         <TextInput label="Name" value={profile.name} onChange={(name) => set({ name })} />
         <TextInput label="Job title" value={profile.role} onChange={(role) => set({ role })} />

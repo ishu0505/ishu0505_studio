@@ -20,10 +20,67 @@
 .teaser__thumbs img:nth-child(odd) { transform: rotate(-5deg); }
 .teaser__thumbs img:nth-child(even) { transform: rotate(4deg); }
 
+.teaser__summary {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  max-width: 58ch;
+  line-height: 1.25;
+}
+.teaser__pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+}
+.teaser__pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #fffdf7;
+  border: 2.5px solid var(--ink);
+  border-radius: 999px;
+  padding: 2px 12px;
+  font-size: .95rem;
+  box-shadow: 2px 2px 0 var(--ink);
+}
+.teaser__pill strong { font-family: var(--font-head); font-weight: 400; font-size: 1.02rem; }
+.teaser__pill-meta { color: var(--muted); font-size: .85rem; }
+
+/* When Projects is a 2x2 hero tile (projects-first, profile-top-left, dual-showcase), make thumbs & title larger */
+.bento--home:not(.bento--layout-classic) .teaser--projects h2 {
+  font-size: clamp(2.1rem, 3.3vw, 2.9rem);
+}
+.bento--home:not(.bento--layout-classic) .teaser--projects .teaser__thumbs img {
+  width: 88px;
+  height: 88px;
+  border-radius: 20px;
+}
+/* In classic layout, Projects is 2x1 and Writing is 1x1, so hide extra hero pills/summaries */
+.bento--home.bento--layout-classic .teaser__pills,
+.bento--home.bento--layout-classic .teaser__summary {
+  display: none;
+}
+/* In 2x1 Writing (projects-first, profile-top-left), keep pills compact on one line */
+.bento--home.bento--layout-projects-first .teaser--writing .teaser__summary,
+.bento--home.bento--layout-profile-top-left .teaser--writing .teaser__summary {
+  -webkit-line-clamp: 1;
+}
+
 .doodle-row { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: auto; }
+/* When Hobbies is a 1x1 cell, keep doodles compact so they fit cleanly in one row */
+.bento--home:not(.bento--layout-classic) .tile--hobbies .doodle-row .doodle-svg {
+  width: 34px;
+  height: 34px;
+}
+.bento--home:not(.bento--layout-classic) .tile--hobbies .doodle-row .doodle-svg:nth-child(n+4) {
+  display: none;
+}
 
 /* ===== profile ===== */
 .profile-preview { display: flex; flex-direction: column; justify-content: center; gap: 8px; height: 100%; }
+.profile-preview__body { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
 .avatar {
   width: 92px;
   height: 92px;
@@ -31,6 +88,7 @@
   object-fit: cover;
   border: 4px solid var(--ink);
   box-shadow: 4px 4px 0 var(--ink);
+  flex-shrink: 0;
 }
 .eyebrow { color: var(--muted); font-size: 1.3rem; margin-top: 4px; }
 .profile-preview h1 { font-size: clamp(2.8rem, 5.4vw, 4.6rem); line-height: .95; }
@@ -46,6 +104,67 @@
 }
 .chip:nth-child(2) { transform: rotate(-2deg); }
 .chip:nth-child(3) { transform: rotate(1.5deg); }
+
+/* Horizontal 2x1 Profile banner (projects-first & profile-top-left) */
+@media (min-width: 900px) {
+  .bento--home.bento--layout-projects-first .profile-preview,
+  .bento--home.bento--layout-profile-top-left .profile-preview {
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 18px;
+    padding-right: 28px;
+  }
+  .bento--home.bento--layout-projects-first .profile-preview .avatar,
+  .bento--home.bento--layout-profile-top-left .profile-preview .avatar {
+    width: 76px;
+    height: 76px;
+  }
+  .bento--home.bento--layout-projects-first .profile-preview .eyebrow,
+  .bento--home.bento--layout-profile-top-left .profile-preview .eyebrow {
+    font-size: 1rem;
+    margin-top: 0;
+  }
+  .bento--home.bento--layout-projects-first .profile-preview h1,
+  .bento--home.bento--layout-profile-top-left .profile-preview h1 {
+    font-size: clamp(1.8rem, 2.6vw, 2.45rem);
+  }
+  .bento--home.bento--layout-projects-first .profile-preview .lead,
+  .bento--home.bento--layout-profile-top-left .profile-preview .lead {
+    font-size: 1.05rem;
+  }
+  .bento--home.bento--layout-projects-first .profile-preview .chips,
+  .bento--home.bento--layout-profile-top-left .profile-preview .chips {
+    gap: 6px;
+    margin-top: 4px;
+  }
+  .bento--home.bento--layout-projects-first .profile-preview .chip,
+  .bento--home.bento--layout-profile-top-left .profile-preview .chip {
+    padding: 1px 10px;
+    font-size: .9rem;
+  }
+
+  /* Compact 1x1 Profile tile (dual-showcase) */
+  .bento--home.bento--layout-dual-showcase .profile-preview {
+    justify-content: flex-end;
+    gap: 6px;
+  }
+  .bento--home.bento--layout-dual-showcase .profile-preview .avatar {
+    width: 48px;
+    height: 48px;
+    margin-bottom: auto;
+  }
+  .bento--home.bento--layout-dual-showcase .profile-preview .eyebrow,
+  .bento--home.bento--layout-dual-showcase .profile-preview .chips {
+    display: none;
+  }
+  .bento--home.bento--layout-dual-showcase .profile-preview h1 {
+    font-size: clamp(1.5rem, 2vw, 1.9rem);
+  }
+  .bento--home.bento--layout-dual-showcase .profile-preview .lead {
+    font-size: .95rem;
+  }
+}
 
 .intro { display: flex; gap: 20px; align-items: center; }
 .intro__name { font-size: 2.2rem; line-height: 1; }

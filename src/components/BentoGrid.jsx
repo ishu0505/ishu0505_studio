@@ -10,6 +10,7 @@ import { useEffect, useState } from 'react';
 import Tile from './Tile';
 import useHoverCapable from '../hooks/useHoverCapable';
 import { homeHoverStyle, railHoverStyle } from './hoverLayout';
+import { profile } from '../data/profile';
 
 // Lays out every section as a tile. The grid switches between a front-page
 // layout and a focus layout (one big tile + a rail of small ones) via CSS;
@@ -18,6 +19,7 @@ import { homeHoverStyle, railHoverStyle } from './hoverLayout';
 export default function BentoGrid({ sections, active, onOpen, onClose }) {
   const [hovered, setHovered] = useState(null);
   const canHover = useHoverCapable();
+  const layout = profile.layout || 'projects-first';
 
   // opening or closing a tile starts from a clean slate
   useEffect(() => setHovered(null), [active]);
@@ -25,7 +27,7 @@ export default function BentoGrid({ sections, active, onOpen, onClose }) {
   let style;
   if (canHover && hovered) {
     if (!active) {
-      style = homeHoverStyle(hovered);
+      style = homeHoverStyle(hovered, layout);
     } else {
       const railIds = sections.filter((s) => s.id !== active).map((s) => s.id);
       style = railHoverStyle(railIds.indexOf(hovered), railIds.length);
@@ -34,7 +36,7 @@ export default function BentoGrid({ sections, active, onOpen, onClose }) {
 
   return (
     <main
-      className={`bento ${active ? 'bento--focus' : 'bento--home'}`}
+      className={`bento ${active ? 'bento--focus' : `bento--home bento--layout-${layout}`}`}
       style={style}
       onPointerLeave={() => setHovered(null)}
     >

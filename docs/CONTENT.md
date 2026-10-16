@@ -76,6 +76,13 @@ Add `"image": "assets/images/cover.jpg"` for a cover picture.
 
 > **Front-page Articles & Blogs tile headline:** The very first article (`articles[0]`) in `src/content/writing.json` is displayed as the main headline on the front-page **Articles & Blogs** tile (currently `tokenjuggler-explained`). Reorder articles with the ↑ ↓ buttons in `/#/admin` (*Writing*) to change which headline appears on the front page.
 
+## Front-page layout presets (`profile.json`)
+Set `"layout"` in `src/content/profile.json` (or pick a preset card under `/#/admin` → *About & contact* → **Front-page layout**):
+- `"projects-first"` *(default — Option 1)*: **Projects** (`2×2` top-left hero), **Articles & Blogs** (`2×1` bottom-left), **Profile** (`2×1` top-right horizontal banner), **Resume** (`1×2`), **Hobbies** (`1×1`), **Contact** (`1×1`).
+- `"profile-top-left"` *(Option 2)*: **Profile** (`2×1` top-left), **Articles & Blogs** (`2×1` mid-left), **Projects** (`2×2` top-right hero), **Resume** (`2×1` bottom-left), **Hobbies** (`1×1`), **Contact** (`1×1`).
+- `"dual-showcase"` *(Option 3)*: Top row of `1×1` compact tiles (**Profile**, **Resume**, **Hobbies**, **Contact**) above side-by-side `2×2` **Projects** and `2×2` **Articles & Blogs** hero tiles.
+- `"classic"`: Original layout with **Profile** (`2×2` top-left), **Projects** (`2×1` top-right), **Resume** (`1×2`), **Hobbies** (`1×2`), **Articles & Blogs** (`1×1`), **Contact** (`1×1`).
+
 ## Where the same thing lives in the admin
 | File | Admin screen |
 |---|---|
@@ -83,7 +90,7 @@ Add `"image": "assets/images/cover.jpg"` for a cover picture.
 | `writing.json` | Writing |
 | `hobbies.json` | Hobbies |
 | `resume.json`, resume PDF | Resume |
-| `profile.json` | About & contact |
+| `profile.json` (including `"layout"` preset) | About & contact |
 | `stickers.json` | Stickers |
 | `icons.json` | Icons |
 

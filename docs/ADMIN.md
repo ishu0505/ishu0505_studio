@@ -50,6 +50,9 @@ click `site admin` → **Regenerate token**, then log out of the admin and log i
 - **Discard** throws away unpublished edits. **Undo last publish** takes back your latest publish.
 - If the bar shows a red "thing to fix", Publish stays off until you fix it.
 
+## Front-page layout
+In *About & contact* → **Front-page layout**, click any of the 4 visual preset cards (*Projects First*, *Intro Banner + Projects Hero*, *Dual 2×2 Showcase*, or *Classic*) and press **Publish** to rearrange the main-page bento grid anytime.
+
 ## Resume PDF
 Resume → *Upload new resume PDF*. The new file replaces the old one at the same address, so the
 Download button needs no change. Max 5 MB.
