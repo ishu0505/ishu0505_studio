@@ -28,7 +28,7 @@ saves the changes to GitHub. GitHub then rebuilds and publishes the site.
 | `vite.config.js` | Build settings (and the security policy added to the built page). |
 | `package.json` | The project's list of tools and the `npm run ...` commands. |
 | `.github/workflows/deploy.yml` | The robot that builds and publishes the site when `main` changes. |
-| `public/` | Files copied as-is to the site: images, resume PDF, icons, `CNAME`, tab icons, and the curl easter egg files (`secret.txt`, `roll`, `jingle.wav`). |
+| `public/` | Files copied as-is to the site: images (`public/assets/images/`, including crayon thumbnails `ocr-my-gpu-thumb.svg` and `tokenjuggler-thumb.svg`), interactive explainers (`public/explainers/tokenjuggler/` and `public/explainers/ocr-my-gpu/`), resume PDF, icons, `CNAME`, tab icons, and the curl easter egg files (`secret.txt`, `roll`, `jingle.wav`). |
 | `cloudflare/curl-easter-egg/` | The small Cloudflare Worker + setup guide for the `curl` easter egg. |
 | `scripts/validate-content.mjs` | Checks `src/content/` before every build. |
 | `tests/` | The admin test with a pretend GitHub (`npm run test:e2e`) and the easter egg test (`npm run test:easter-egg`). |
@@ -39,10 +39,10 @@ saves the changes to GitHub. GitHub then rebuilds and publishes the site.
 | File | Controls |
 |---|---|
 | `profile.json` | Name, job title, intro, photo, email, links, "current job" card, skills tags, certificate, resume PDF path |
-| `projects.json` | Every project and live demo (optional extra buttons via `links`) |
+| `projects.json` | Every project and live demo (optional extra buttons via `links`; first 2 projects with an `image` show as the front-page Projects tile thumbnails) |
 | `hobbies.json` | The Hobbies tile (title, caption, icons, colour) |
 | `resume.json` | Jobs, education, certifications, skills |
-| `writing.json` | Articles (picture optional) and link cards |
+| `writing.json` | Articles (picture optional; `articles[0]` is the front-page Articles & Blogs tile headline) and link cards |
 | `stickers.json` | The doodles stuck on each tile (icon, size, tilt, position) |
 | `icons.json` | Your own uploaded icons |
 | `schema.js` | The **rules** for all of the above (required fields, allowed colours...) |

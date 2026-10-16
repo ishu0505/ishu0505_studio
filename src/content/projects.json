@@ -1,11 +1,19 @@
 [
   {
-    "id": "adaptive-fraud-detection",
-    "title": "Adaptive Fraud Detection",
-    "category": "Private project",
-    "tech": "Self-improving ML fraud detection · read the write-up on Medium",
-    "href": "https://medium.com/mitb-for-all/adaptive-fraud-detection-building-a-self-improving-ml-powered-fraud-detection-system-196922686d45",
-    "tone": "peach"
+    "id": "ocr-my-gpu",
+    "title": "ocr_my_gpu",
+    "category": "GPU Benchmark · Phase 2",
+    "tech": "Python · SGLang vs vLLM · Qwen3-VL · RTX 4060 8GB",
+    "href": "https://github.com/ishu0505/ocr_my_gpu",
+    "hrefLabel": "GitHub",
+    "links": [
+      {
+        "label": "Explained simply",
+        "href": "explainers/ocr-my-gpu/"
+      }
+    ],
+    "tone": "yellow",
+    "image": "assets/images/ocr-my-gpu-thumb.svg"
   },
   {
     "id": "tokenjuggler",
@@ -24,7 +32,16 @@
         "href": "explainers/tokenjuggler/"
       }
     ],
-    "tone": "mint"
+    "tone": "mint",
+    "image": "assets/images/tokenjuggler-thumb.svg"
+  },
+  {
+    "id": "adaptive-fraud-detection",
+    "title": "Adaptive Fraud Detection",
+    "category": "Private project",
+    "tech": "Self-improving ML fraud detection · read the write-up on Medium",
+    "href": "https://medium.com/mitb-for-all/adaptive-fraud-detection-building-a-self-improving-ml-powered-fraud-detection-system-196922686d45",
+    "tone": "peach"
   },
   {
     "id": "cancer-predictor",

@@ -1,15 +1,6 @@
 {
   "articles": [
     {
-      "id": "adaptive-fraud-detection",
-      "title": "Adaptive Fraud Detection: Building a Self-Improving ML-Powered Fraud Detection System",
-      "category": "Fraud detection · ML",
-      "date": "Medium · MITB For All",
-      "summary": "A write-up on building a self-improving, ML-powered fraud detection system, published by MITB For All on Medium.",
-      "href": "https://medium.com/mitb-for-all/adaptive-fraud-detection-building-a-self-improving-ml-powered-fraud-detection-system-196922686d45",
-      "tone": "mint"
-    },
-    {
       "id": "tokenjuggler-explained",
       "title": "How tokenjuggler works, explained like you're five",
       "category": "Interactive explainer",
@@ -17,6 +8,24 @@
       "summary": "Play with shops, seats, buckets and pizza to see how tokenjuggler picks a free AI provider, fails over, and shares quotas.",
       "href": "explainers/tokenjuggler/",
       "tone": "yellow"
+    },
+    {
+      "id": "ocr-my-gpu-explained",
+      "title": "ocr_my_gpu: SGLang vs vLLM on an 8 GB GPU, explained simply",
+      "category": "Interactive explainer · Phase 2",
+      "date": "Interactive",
+      "summary": "Race SGLang against vLLM on a single 8 GB RTX 4060, degrade synthetic financial PDFs, and see why 99.7% character accuracy still failed strict JSON schemas.",
+      "href": "explainers/ocr-my-gpu/",
+      "tone": "mint"
+    },
+    {
+      "id": "adaptive-fraud-detection",
+      "title": "Adaptive Fraud Detection: Building a Self-Improving ML-Powered Fraud Detection System",
+      "category": "Fraud detection · ML",
+      "date": "Medium · MITB For All",
+      "summary": "A write-up on building a self-improving, ML-powered fraud detection system, published by MITB For All on Medium.",
+      "href": "https://medium.com/mitb-for-all/adaptive-fraud-detection-building-a-self-improving-ml-powered-fraud-detection-system-196922686d45",
+      "tone": "mint"
     },
     {
       "id": "uganda-gender-gap",

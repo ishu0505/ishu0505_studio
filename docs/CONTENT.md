@@ -21,22 +21,25 @@ Add an object to the list in `src/content/projects.json` (new ones at the top sh
 `id` must be unique. `tone` is one of: blue, yellow, pink, mint, lilac, peach, white, cream.
 `image` is optional (the file must be in `public/assets/images/`).
 
-## A project with several buttons (GitHub + PyPI, docs, ...)
+## A project with several buttons (GitHub + PyPI, Explained simply, ...)
 Add `hrefLabel` (name of the main button) and a `links` list:
 
 ```json
 {
-  "id": "tokenjuggler",
-  "title": "tokenjuggler",
-  "category": "Open source · on PyPI",
-  "tech": "Python · Redis · GPT, Gemini & Claude",
-  "href": "https://github.com/ishu0505/token_juggler",
+  "id": "ocr-my-gpu",
+  "title": "ocr_my_gpu",
+  "category": "GPU Benchmark · Phase 2",
+  "tech": "Python · SGLang vs vLLM · Qwen3-VL · RTX 4060 8GB",
+  "href": "https://github.com/ishu0505/ocr_my_gpu",
   "hrefLabel": "GitHub",
-  "links": [{ "label": "PyPI", "href": "https://pypi.org/project/tokenjuggler/" }],
-  "tone": "mint"
+  "links": [{ "label": "Explained simply", "href": "explainers/ocr-my-gpu/" }],
+  "tone": "yellow",
+  "image": "assets/images/ocr-my-gpu-thumb.svg"
 }
 ```
 In the admin: *Projects & demos* → open the project → **Main button name** and **Extra buttons**.
+
+> **Front-page Projects tile preview:** The first **two** projects in `src/content/projects.json` that have an `"image"` field are shown as the two overlapping square thumbnails on the main page **Projects** tile (currently `ocr-my-gpu-thumb.svg` and `tokenjuggler-thumb.svg`). You can change or reorder them anytime in `/#/admin` (*Projects & demos*).
 
 ## A private / confidential project (link to a write-up only)
 Point `href` at the public write-up and say it is private in `category`; share nothing else:
@@ -71,6 +74,8 @@ Add an object to `articles` in `src/content/writing.json`. The picture is option
 ```
 Add `"image": "assets/images/cover.jpg"` for a cover picture.
 
+> **Front-page Articles & Blogs tile headline:** The very first article (`articles[0]`) in `src/content/writing.json` is displayed as the main headline on the front-page **Articles & Blogs** tile (currently `tokenjuggler-explained`). Reorder articles with the ↑ ↓ buttons in `/#/admin` (*Writing*) to change which headline appears on the front page.
+
 ## Where the same thing lives in the admin
 | File | Admin screen |
 |---|---|
@@ -84,7 +89,8 @@ Add `"image": "assets/images/cover.jpg"` for a cover picture.
 
 ## Hosting your own interactive page
 
-Any folder in `public/` is published as-is. The tokenjuggler explainer lives in
-`public/explainers/tokenjuggler/index.html` and is linked from JSON with the plain path
-`explainers/tokenjuggler/` (as a project button or an article `href`). To add another one,
-copy that folder, edit the HTML, and add a card that points at the new folder.
+Any folder in `public/` is published as-is:
+- **`tokenjuggler` explainer:** `public/explainers/tokenjuggler/index.html` → linked from JSON as `explainers/tokenjuggler/`
+- **`ocr_my_gpu` explainer:** `public/explainers/ocr-my-gpu/index.html` → linked from JSON as `explainers/ocr-my-gpu/`
+
+To add another interactive explainer, copy one of those folders under `public/explainers/`, edit the HTML, and add a project button or article in `src/content/` (or via `/#/admin`) pointing to `explainers/<your-folder>/`.
