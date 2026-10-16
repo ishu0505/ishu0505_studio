@@ -3,9 +3,58 @@
  * Styles specific to tile contents: front-page previews, the About tile, live-demo cards and the demo pop-up.
  */
 
-.teaser { display: flex; flex-direction: column; gap: 4px; height: 100%; justify-content: flex-end; }
-.teaser h2 { font-size: clamp(1.6rem, 2.4vw, 2.1rem); line-height: 1.05; }
+.teaser {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  height: 100%;
+  justify-content: flex-end;
+  min-height: 0;
+}
+.teaser h2 {
+  font-size: clamp(1.45rem, 2.1vw, 1.95rem);
+  line-height: 1.08;
+  transition: font-size .22s ease, line-height .22s ease;
+}
+.tile--home:hover .teaser h2 {
+  font-size: clamp(1.65rem, 2.45vw, 2.2rem);
+}
 .teaser .label { margin-bottom: 2px; }
+
+.teaser__top {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 2px;
+  padding-right: 48px;
+}
+.teaser__badge {
+  display: inline-flex;
+  align-items: center;
+  background: var(--yellow);
+  color: var(--ink);
+  border: 2.5px solid var(--ink);
+  border-radius: 999px;
+  padding: 1px 10px;
+  font-family: var(--font-head);
+  font-size: .86rem;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  box-shadow: 2px 2px 0 var(--ink);
+  transition: font-size .22s ease, padding .22s ease, transform .22s ease;
+}
+.tile--home:hover .teaser__badge {
+  font-size: 1rem;
+  padding: 2px 13px;
+  transform: rotate(-1.5deg);
+}
+.teaser__count {
+  font-size: .85rem;
+  transition: font-size .22s ease;
+}
+.tile--home:hover .teaser__count {
+  font-size: .98rem;
+}
 
 .teaser__thumbs { display: flex; margin-bottom: auto; padding-right: 48px; }
 .teaser__thumbs img {
@@ -16,6 +65,7 @@
   border: 3px solid var(--ink);
   margin-right: -10px;
   box-shadow: 3px 3px 0 var(--ink);
+  transition: width .22s ease, height .22s ease;
 }
 .teaser__thumbs img:nth-child(odd) { transform: rotate(-5deg); }
 .teaser__thumbs img:nth-child(even) { transform: rotate(4deg); }
@@ -27,12 +77,14 @@
   overflow: hidden;
   max-width: 58ch;
   line-height: 1.25;
+  transition: font-size .22s ease, max-height .22s ease, opacity .2s ease, margin .22s ease;
 }
 .teaser__pills {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
-  margin-top: 8px;
+  gap: 6px;
+  margin-top: 4px;
+  transition: gap .22s ease, margin-top .22s ease;
 }
 .teaser__pill {
   display: inline-flex;
@@ -41,31 +93,124 @@
   background: #fffdf7;
   border: 2.5px solid var(--ink);
   border-radius: 999px;
-  padding: 2px 12px;
-  font-size: .95rem;
+  padding: 2px 11px;
+  font-size: .88rem;
   box-shadow: 2px 2px 0 var(--ink);
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  transition: font-size .22s ease, padding .22s ease, max-width .22s ease;
 }
-.teaser__pill strong { font-family: var(--font-head); font-weight: 400; font-size: 1.02rem; }
-.teaser__pill-meta { color: var(--muted); font-size: .85rem; }
+.teaser__pill strong {
+  font-family: var(--font-head);
+  font-weight: 400;
+  font-size: .95rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  transition: font-size .22s ease;
+}
+.teaser__pill-meta { color: var(--muted); font-size: .82rem; flex-shrink: 0; }
 
 /* When Projects is a 2x2 hero tile (projects-first, profile-top-left, dual-showcase), make thumbs & title larger */
 .bento--home:not(.bento--layout-classic) .teaser--projects h2 {
-  font-size: clamp(2.1rem, 3.3vw, 2.9rem);
+  font-size: clamp(1.85rem, 2.9vw, 2.6rem);
+}
+.bento--home:not(.bento--layout-classic) .tile--projects:hover .teaser--projects h2 {
+  font-size: clamp(2.15rem, 3.4vw, 2.95rem);
 }
 .bento--home:not(.bento--layout-classic) .teaser--projects .teaser__thumbs img {
-  width: 88px;
-  height: 88px;
+  width: 78px;
+  height: 78px;
   border-radius: 20px;
 }
-/* In classic layout, Projects is 2x1 and Writing is 1x1, so hide extra hero pills/summaries */
-.bento--home.bento--layout-classic .teaser__pills,
-.bento--home.bento--layout-classic .teaser__summary {
-  display: none;
+.bento--home:not(.bento--layout-classic) .tile--projects:hover .teaser--projects .teaser__thumbs img {
+  width: 94px;
+  height: 94px;
 }
-/* In 2x1 Writing (projects-first, profile-top-left), keep pills compact on one line */
+
+/* Writing tile: keep compact & 100% visible when small/unhovered, and scale text up smoothly when hovered */
+.bento--home .tile--writing .tile__preview {
+  padding: 14px 22px;
+  transition: padding .22s ease;
+}
+.bento--home .tile--writing:hover .tile__preview {
+  padding: 20px 24px;
+}
+.teaser--writing {
+  justify-content: center;
+  gap: 4px;
+}
+.teaser--writing h2 {
+  font-size: clamp(1.22rem, 1.65vw, 1.48rem);
+  line-height: 1.12;
+  padding-right: 36px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.tile--writing:hover .teaser--writing h2 {
+  font-size: clamp(1.55rem, 2.2vw, 1.95rem);
+  line-height: 1.12;
+}
+
+/* In 2x1 Writing (projects-first, profile-top-left), keep unhovered state compact so nothing ever clips */
 .bento--home.bento--layout-projects-first .teaser--writing .teaser__summary,
 .bento--home.bento--layout-profile-top-left .teaser--writing .teaser__summary {
+  max-height: 0;
+  opacity: 0;
+  margin: 0;
   -webkit-line-clamp: 1;
+}
+.bento--home.bento--layout-projects-first .tile--writing:hover .teaser--writing .teaser__summary,
+.bento--home.bento--layout-profile-top-left .tile--writing:hover .teaser--writing .teaser__summary {
+  max-height: 2.6em;
+  opacity: 1;
+  margin-top: 2px;
+  font-size: .96rem;
+}
+.bento--home.bento--layout-projects-first .teaser--writing .teaser__pills,
+.bento--home.bento--layout-profile-top-left .teaser--writing .teaser__pills {
+  flex-wrap: nowrap;
+  gap: 6px;
+  margin-top: 2px;
+}
+.bento--home.bento--layout-projects-first .teaser--writing .teaser__pill,
+.bento--home.bento--layout-profile-top-left .teaser--writing .teaser__pill {
+  font-size: .78rem;
+  padding: 1px 10px;
+  max-width: 49%;
+}
+.bento--home.bento--layout-projects-first .teaser--writing .teaser__pill strong,
+.bento--home.bento--layout-profile-top-left .teaser--writing .teaser__pill strong {
+  font-size: .84rem;
+}
+.bento--home.bento--layout-projects-first .tile--writing:hover .teaser--writing .teaser__pill,
+.bento--home.bento--layout-profile-top-left .tile--writing:hover .teaser--writing .teaser__pill {
+  font-size: .92rem;
+  padding: 2px 12px;
+  max-width: 50%;
+}
+.bento--home.bento--layout-projects-first .tile--writing:hover .teaser--writing .teaser__pill strong,
+.bento--home.bento--layout-profile-top-left .tile--writing:hover .teaser--writing .teaser__pill strong {
+  font-size: .98rem;
+}
+
+/* In dual-showcase (2x2 Writing), give larger text both at rest and on hover */
+.bento--home.bento--layout-dual-showcase .teaser--writing h2 {
+  font-size: clamp(1.65rem, 2.4vw, 2.2rem);
+}
+.bento--home.bento--layout-dual-showcase .tile--writing:hover .teaser--writing h2 {
+  font-size: clamp(1.9rem, 2.8vw, 2.55rem);
+}
+
+/* In classic layout, Projects is 2x1 and Writing is 1x1, so hide extra hero pills/summaries/count */
+.bento--home.bento--layout-classic .teaser__pills,
+.bento--home.bento--layout-classic .teaser__summary,
+.bento--home.bento--layout-classic .teaser__count {
+  display: none;
 }
 
 .doodle-row { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: auto; }
