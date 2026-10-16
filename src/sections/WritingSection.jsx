@@ -12,7 +12,10 @@ function Preview() {
   const more = articles.slice(1, 3);
   return (
     <div className="teaser teaser--writing">
-      <p className="label">Articles &amp; Blogs</p>
+      <div className="teaser__top">
+        <span className="teaser__badge">Articles &amp; Blogs</span>
+        <span className="muted small teaser__count">{articles.length} write-ups</span>
+      </div>
       <h2>{lead.title}</h2>
       {lead.summary && <p className="muted small teaser__summary">{lead.summary}</p>}
       {more.length > 0 && (

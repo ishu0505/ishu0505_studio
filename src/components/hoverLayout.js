@@ -8,8 +8,8 @@
 // Front page grid is 4 columns x 3 rows (see styles/bento.css for tile areas).
 const HOME_BY_LAYOUT = {
   'projects-first': {
-    projects: { cols: [1.25, 1.25, 0.8, 0.8], rows: [1.15, 1.15, 0.8] },
-    writing:  { cols: [1.15, 1.15, 0.85, 0.85], rows: [0.85, 0.85, 1.35] },
+    projects: { cols: [1.25, 1.25, 0.8, 0.8], rows: [1.12, 1.12, 0.85] },
+    writing:  { cols: [1.18, 1.18, 0.82, 0.82], rows: [0.76, 0.76, 1.55] },
     profile:  { cols: [0.85, 0.85, 1.15, 1.15], rows: [1.3, 0.85, 0.85] },
     resume:   { cols: [0.92, 0.92, 1.35, 0.92], rows: [0.85, 1.1, 1.1] },
     hobbies:  { cols: [0.92, 0.92, 0.92, 1.35], rows: [0.85, 1.3, 0.85] },
@@ -17,8 +17,8 @@ const HOME_BY_LAYOUT = {
   },
   'profile-top-left': {
     profile:  { cols: [1.15, 1.15, 0.85, 0.85], rows: [1.3, 0.85, 0.85] },
-    writing:  { cols: [1.15, 1.15, 0.85, 0.85], rows: [0.85, 1.3, 0.85] },
-    projects: { cols: [0.8, 0.8, 1.25, 1.25], rows: [1.15, 1.15, 0.8] },
+    writing:  { cols: [1.18, 1.18, 0.82, 0.82], rows: [0.76, 1.55, 0.76] },
+    projects: { cols: [0.8, 0.8, 1.25, 1.25], rows: [1.12, 1.12, 0.85] },
     resume:   { cols: [1.15, 1.15, 0.85, 0.85], rows: [0.85, 0.85, 1.3] },
     hobbies:  { cols: [0.92, 0.92, 1.35, 0.92], rows: [0.85, 0.85, 1.3] },
     contact:  { cols: [0.92, 0.92, 0.92, 1.35], rows: [0.85, 0.85, 1.3] },
