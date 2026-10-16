@@ -9,8 +9,10 @@ import { stickers as allStickers } from '../data/stickers';
 
 function Preview() {
   return (
-    <div className="teaser">
-      <p className="label">Contact</p>
+    <div className="teaser teaser--contact">
+      <div className="teaser__top">
+        <span className="teaser__badge tone-yellow">Contact</span>
+      </div>
       <h2>Say hello</h2>
       <p className="muted small">{profile.email}</p>
     </div>

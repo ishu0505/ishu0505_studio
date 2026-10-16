@@ -74,13 +74,19 @@
    - dual-showcase (Option 3): Top row 1x1 pills, Projects 2x2 bottom-left, Writing 2x2 bottom-right
    - classic: Profile 2x2 top-left, Projects 2x1 top-right, Writing 1x1 bottom-left */
 .bento--home {
-  grid-template-columns: var(--cols, repeat(4, minmax(0, 1fr)));
-  grid-template-rows: var(--rows, repeat(3, minmax(0, 1fr)));
+  --base-cols: minmax(0, 1.05fr) minmax(0, 1.05fr) minmax(0, 0.95fr) minmax(0, 0.95fr);
+  --base-rows: minmax(0, 0.85fr) minmax(0, 0.85fr) minmax(0, 1.3fr);
+  grid-template-columns: var(--cols, var(--base-cols));
+  grid-template-rows: var(--rows, var(--base-rows));
   height: max(var(--stage-h), 560px);
   padding: 14px 8px 8px 4px; /* room for hanging stickers + hard shadows */
 }
 
-/* Preset 1 (default): projects-first */
+/* Preset 1 (default): projects-first — balanced 56% / 44% vertical split so Projects isn't overly tall and Writing has generous room */
+.bento--home.bento--layout-projects-first {
+  --base-cols: minmax(0, 1.05fr) minmax(0, 1.05fr) minmax(0, 0.95fr) minmax(0, 0.95fr);
+  --base-rows: minmax(0, 0.85fr) minmax(0, 0.85fr) minmax(0, 1.3fr);
+}
 .bento--home .tile--projects,
 .bento--home.bento--layout-projects-first .tile--projects { grid-area: 1 / 1 / 3 / 3; }
 .bento--home .tile--writing,
@@ -94,7 +100,11 @@
 .bento--home .tile--contact,
 .bento--home.bento--layout-projects-first .tile--contact  { grid-area: 3 / 4 / 4 / 5; }
 
-/* Preset 2: profile-top-left */
+/* Preset 2: profile-top-left — balanced middle Writing row and bottom row */
+.bento--home.bento--layout-profile-top-left {
+  --base-cols: minmax(0, 1.04fr) minmax(0, 1.04fr) minmax(0, 0.96fr) minmax(0, 0.96fr);
+  --base-rows: minmax(0, 0.92fr) minmax(0, 1.16fr) minmax(0, 0.92fr);
+}
 .bento--home.bento--layout-profile-top-left .tile--profile  { grid-area: 1 / 1 / 2 / 3; }
 .bento--home.bento--layout-profile-top-left .tile--writing  { grid-area: 2 / 1 / 3 / 3; }
 .bento--home.bento--layout-profile-top-left .tile--projects { grid-area: 1 / 3 / 3 / 5; }
@@ -102,7 +112,11 @@
 .bento--home.bento--layout-profile-top-left .tile--hobbies  { grid-area: 3 / 3 / 4 / 4; }
 .bento--home.bento--layout-profile-top-left .tile--contact  { grid-area: 3 / 4 / 4 / 5; }
 
-/* Preset 3: dual-showcase */
+/* Preset 3: dual-showcase — roomy top row + twin bottom hero tiles */
+.bento--home.bento--layout-dual-showcase {
+  --base-cols: repeat(4, minmax(0, 1fr));
+  --base-rows: minmax(0, 1.08fr) minmax(0, 0.96fr) minmax(0, 0.96fr);
+}
 .bento--home.bento--layout-dual-showcase .tile--profile  { grid-area: 1 / 1 / 2 / 2; }
 .bento--home.bento--layout-dual-showcase .tile--resume   { grid-area: 1 / 2 / 2 / 3; }
 .bento--home.bento--layout-dual-showcase .tile--hobbies  { grid-area: 1 / 3 / 2 / 4; }
@@ -110,7 +124,11 @@
 .bento--home.bento--layout-dual-showcase .tile--projects { grid-area: 2 / 1 / 4 / 3; }
 .bento--home.bento--layout-dual-showcase .tile--writing  { grid-area: 2 / 3 / 4 / 5; }
 
-/* Preset 4: classic */
+/* Preset 4: classic — balanced top 2 rows and taller bottom row */
+.bento--home.bento--layout-classic {
+  --base-cols: minmax(0, 1.04fr) minmax(0, 1.04fr) minmax(0, 0.96fr) minmax(0, 0.96fr);
+  --base-rows: minmax(0, 0.88fr) minmax(0, 0.88fr) minmax(0, 1.24fr);
+}
 .bento--home.bento--layout-classic .tile--profile  { grid-area: 1 / 1 / 3 / 3; }
 .bento--home.bento--layout-classic .tile--projects { grid-area: 1 / 3 / 2 / 5; }
 .bento--home.bento--layout-classic .tile--resume   { grid-area: 2 / 3 / 4 / 4; }

@@ -25,35 +25,35 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  margin-bottom: 2px;
+  margin-bottom: 4px;
   padding-right: 48px;
 }
 .teaser__badge {
   display: inline-flex;
   align-items: center;
-  background: var(--yellow);
+  background: var(--tone, var(--yellow));
   color: var(--ink);
   border: 2.5px solid var(--ink);
   border-radius: 999px;
-  padding: 1px 10px;
+  padding: 2px 12px;
   font-family: var(--font-head);
-  font-size: .86rem;
+  font-size: .92rem;
   letter-spacing: .04em;
   text-transform: uppercase;
   box-shadow: 2px 2px 0 var(--ink);
   transition: font-size .22s ease, padding .22s ease, transform .22s ease;
 }
 .tile--home:hover .teaser__badge {
-  font-size: 1rem;
-  padding: 2px 13px;
+  font-size: 1.02rem;
+  padding: 3px 14px;
   transform: rotate(-1.5deg);
 }
 .teaser__count {
-  font-size: .85rem;
+  font-size: .9rem;
   transition: font-size .22s ease;
 }
 .tile--home:hover .teaser__count {
-  font-size: .98rem;
+  font-size: 1rem;
 }
 
 .teaser__thumbs { display: flex; margin-bottom: auto; padding-right: 48px; }
@@ -82,8 +82,8 @@
 .teaser__pills {
   display: flex;
   flex-wrap: wrap;
-  gap: 6px;
-  margin-top: 4px;
+  gap: 8px;
+  margin-top: 6px;
   transition: gap .22s ease, margin-top .22s ease;
 }
 .teaser__pill {
@@ -93,8 +93,8 @@
   background: #fffdf7;
   border: 2.5px solid var(--ink);
   border-radius: 999px;
-  padding: 2px 11px;
-  font-size: .88rem;
+  padding: 3px 12px;
+  font-size: .92rem;
   box-shadow: 2px 2px 0 var(--ink);
   max-width: 100%;
   overflow: hidden;
@@ -105,46 +105,46 @@
 .teaser__pill strong {
   font-family: var(--font-head);
   font-weight: 400;
-  font-size: .95rem;
+  font-size: .98rem;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
   transition: font-size .22s ease;
 }
-.teaser__pill-meta { color: var(--muted); font-size: .82rem; flex-shrink: 0; }
+.teaser__pill-meta { color: var(--muted); font-size: .84rem; flex-shrink: 0; }
 
-/* When Projects is a 2x2 hero tile (projects-first, profile-top-left, dual-showcase), make thumbs & title larger */
+/* Balanced Projects 2x2 hero tile */
 .bento--home:not(.bento--layout-classic) .teaser--projects h2 {
-  font-size: clamp(1.85rem, 2.9vw, 2.6rem);
+  font-size: clamp(1.75rem, 2.6vw, 2.35rem);
 }
 .bento--home:not(.bento--layout-classic) .tile--projects:hover .teaser--projects h2 {
-  font-size: clamp(2.15rem, 3.4vw, 2.95rem);
+  font-size: clamp(2rem, 3vw, 2.7rem);
 }
 .bento--home:not(.bento--layout-classic) .teaser--projects .teaser__thumbs img {
-  width: 78px;
-  height: 78px;
-  border-radius: 20px;
+  width: 72px;
+  height: 72px;
+  border-radius: 18px;
 }
 .bento--home:not(.bento--layout-classic) .tile--projects:hover .teaser--projects .teaser__thumbs img {
-  width: 94px;
-  height: 94px;
+  width: 86px;
+  height: 86px;
 }
 
-/* Writing tile: keep compact & 100% visible when small/unhovered, and scale text up smoothly when hovered */
+/* Writing tile: larger, clearly readable text at rest that grows smoothly on hover */
 .bento--home .tile--writing .tile__preview {
-  padding: 14px 22px;
+  padding: 18px 24px;
   transition: padding .22s ease;
 }
 .bento--home .tile--writing:hover .tile__preview {
-  padding: 20px 24px;
+  padding: 22px 26px;
 }
 .teaser--writing {
   justify-content: center;
-  gap: 4px;
+  gap: 6px;
 }
 .teaser--writing h2 {
-  font-size: clamp(1.22rem, 1.65vw, 1.48rem);
-  line-height: 1.12;
+  font-size: clamp(1.48rem, 2.05vw, 1.82rem);
+  line-height: 1.1;
   padding-right: 36px;
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -152,11 +152,11 @@
   overflow: hidden;
 }
 .tile--writing:hover .teaser--writing h2 {
-  font-size: clamp(1.55rem, 2.2vw, 1.95rem);
+  font-size: clamp(1.7rem, 2.4vw, 2.15rem);
   line-height: 1.12;
 }
 
-/* In 2x1 Writing (projects-first, profile-top-left), keep unhovered state compact so nothing ever clips */
+/* In 2x1 Writing (projects-first, profile-top-left), keep summary revealed on hover while pills & title stay large at rest */
 .bento--home.bento--layout-projects-first .teaser--writing .teaser__summary,
 .bento--home.bento--layout-profile-top-left .teaser--writing .teaser__summary {
   max-height: 0;
@@ -169,33 +169,33 @@
   max-height: 2.6em;
   opacity: 1;
   margin-top: 2px;
-  font-size: .96rem;
+  font-size: .98rem;
 }
 .bento--home.bento--layout-projects-first .teaser--writing .teaser__pills,
 .bento--home.bento--layout-profile-top-left .teaser--writing .teaser__pills {
   flex-wrap: nowrap;
-  gap: 6px;
-  margin-top: 2px;
+  gap: 8px;
+  margin-top: 4px;
 }
 .bento--home.bento--layout-projects-first .teaser--writing .teaser__pill,
 .bento--home.bento--layout-profile-top-left .teaser--writing .teaser__pill {
-  font-size: .78rem;
-  padding: 1px 10px;
+  font-size: .9rem;
+  padding: 3px 12px;
   max-width: 49%;
 }
 .bento--home.bento--layout-projects-first .teaser--writing .teaser__pill strong,
 .bento--home.bento--layout-profile-top-left .teaser--writing .teaser__pill strong {
-  font-size: .84rem;
+  font-size: .95rem;
 }
 .bento--home.bento--layout-projects-first .tile--writing:hover .teaser--writing .teaser__pill,
 .bento--home.bento--layout-profile-top-left .tile--writing:hover .teaser--writing .teaser__pill {
-  font-size: .92rem;
-  padding: 2px 12px;
+  font-size: .98rem;
+  padding: 4px 14px;
   max-width: 50%;
 }
 .bento--home.bento--layout-projects-first .tile--writing:hover .teaser--writing .teaser__pill strong,
 .bento--home.bento--layout-profile-top-left .tile--writing:hover .teaser--writing .teaser__pill strong {
-  font-size: .98rem;
+  font-size: 1.04rem;
 }
 
 /* In dual-showcase (2x2 Writing), give larger text both at rest and on hover */
@@ -214,10 +214,18 @@
 }
 
 .doodle-row { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: auto; }
-/* When Hobbies is a 1x1 cell, keep doodles compact so they fit cleanly in one row */
+/* When Hobbies & Contact are 1x1 cells, keep padding and doodles compact so they fit cleanly even when another row is hovered */
+.bento--home:not(.bento--layout-classic) .tile--hobbies .tile__preview,
+.bento--home:not(.bento--layout-classic) .tile--contact .tile__preview {
+  padding: 16px 22px;
+}
+.bento--home:not(.bento--layout-classic) .tile--hobbies .teaser h2,
+.bento--home:not(.bento--layout-classic) .tile--contact .teaser h2 {
+  font-size: clamp(1.35rem, 1.85vw, 1.7rem);
+}
 .bento--home:not(.bento--layout-classic) .tile--hobbies .doodle-row .doodle-svg {
-  width: 34px;
-  height: 34px;
+  width: 30px;
+  height: 30px;
 }
 .bento--home:not(.bento--layout-classic) .tile--hobbies .doodle-row .doodle-svg:nth-child(n+4) {
   display: none;
