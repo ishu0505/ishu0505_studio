@@ -20,6 +20,61 @@ export const DEMO_HOSTS = [
   { value: 'other', label: 'Other' },
 ];
 export const SECTION_IDS = ['profile', 'projects', 'resume', 'hobbies', 'writing', 'contact'];
+export const LAYOUT_PRESETS = [
+  {
+    id: 'projects-first',
+    label: 'Projects First (Option 1)',
+    caption: 'Projects 2×2 top-left · Blogs 2×1 bottom-left · Profile 2×1 top-right',
+    cells: [
+      { id: 'projects', label: 'Projects', area: '1 / 1 / 3 / 3', tone: 'blue' },
+      { id: 'writing', label: 'Blogs', area: '3 / 1 / 4 / 3', tone: 'pink' },
+      { id: 'profile', label: 'Profile', area: '1 / 3 / 2 / 5', tone: 'cream' },
+      { id: 'resume', label: 'Resume', area: '2 / 3 / 4 / 4', tone: 'yellow' },
+      { id: 'hobbies', label: 'Hobbies', area: '2 / 4 / 3 / 5', tone: 'mint' },
+      { id: 'contact', label: 'Contact', area: '3 / 4 / 4 / 5', tone: 'lilac' },
+    ],
+  },
+  {
+    id: 'profile-top-left',
+    label: 'Intro Banner + Projects Hero (Option 2)',
+    caption: 'Profile 2×1 top-left · Blogs 2×1 mid-left · Projects 2×2 top-right',
+    cells: [
+      { id: 'profile', label: 'Profile', area: '1 / 1 / 2 / 3', tone: 'cream' },
+      { id: 'writing', label: 'Blogs', area: '2 / 1 / 3 / 3', tone: 'pink' },
+      { id: 'projects', label: 'Projects', area: '1 / 3 / 3 / 5', tone: 'blue' },
+      { id: 'resume', label: 'Resume', area: '3 / 1 / 4 / 3', tone: 'yellow' },
+      { id: 'hobbies', label: 'Hobbies', area: '3 / 3 / 4 / 4', tone: 'mint' },
+      { id: 'contact', label: 'Contact', area: '3 / 4 / 4 / 5', tone: 'lilac' },
+    ],
+  },
+  {
+    id: 'dual-showcase',
+    label: 'Dual 2×2 Showcase (Option 3)',
+    caption: 'Top row 1×1 pills · Projects 2×2 bottom-left · Blogs 2×2 bottom-right',
+    cells: [
+      { id: 'profile', label: 'Profile', area: '1 / 1 / 2 / 2', tone: 'cream' },
+      { id: 'resume', label: 'Resume', area: '1 / 2 / 2 / 3', tone: 'yellow' },
+      { id: 'hobbies', label: 'Hobbies', area: '1 / 3 / 2 / 4', tone: 'mint' },
+      { id: 'contact', label: 'Contact', area: '1 / 4 / 2 / 5', tone: 'lilac' },
+      { id: 'projects', label: 'Projects', area: '2 / 1 / 4 / 3', tone: 'blue' },
+      { id: 'writing', label: 'Blogs', area: '2 / 3 / 4 / 5', tone: 'pink' },
+    ],
+  },
+  {
+    id: 'classic',
+    label: 'Classic (Profile Hero)',
+    caption: 'Profile 2×2 top-left · Projects 2×1 top-right · Blogs 1×1 bottom-left',
+    cells: [
+      { id: 'profile', label: 'Profile', area: '1 / 1 / 3 / 3', tone: 'cream' },
+      { id: 'projects', label: 'Projects', area: '1 / 3 / 2 / 5', tone: 'blue' },
+      { id: 'resume', label: 'Resume', area: '2 / 3 / 4 / 4', tone: 'yellow' },
+      { id: 'hobbies', label: 'Hobbies', area: '2 / 4 / 4 / 5', tone: 'mint' },
+      { id: 'writing', label: 'Blogs', area: '3 / 1 / 4 / 2', tone: 'pink' },
+      { id: 'contact', label: 'Contact', area: '3 / 2 / 4 / 3', tone: 'lilac' },
+    ],
+  },
+];
+export const LAYOUT_PRESET_IDS = LAYOUT_PRESETS.map((p) => p.id);
 const POS_KEYS = ['top', 'bottom', 'left', 'right'];
 const EXTERNAL = /^(?:[a-z][a-z0-9+.-]*:|#|\/\/)/i;
 
@@ -98,6 +153,9 @@ export function validateContent(content, ctx = {}) {
   const p = content.profile;
   if (!isObj(p)) err('profile.json', 'must be an object');
   else {
+    if (p.layout !== undefined && !LAYOUT_PRESET_IDS.includes(p.layout)) {
+      err('profile.json', `"layout" must be one of: ${LAYOUT_PRESET_IDS.join(', ')}`);
+    }
     ['name', 'role', 'lead', 'location', 'school', 'status'].forEach((k) => str(p, k, 'profile.json'));
     if (!isStr(p.email) || !p.email.includes('@')) err('profile.json', '"email" must look like an email address');
     file(p.avatar, 'profile.json', 'avatar');

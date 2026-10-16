@@ -14,13 +14,15 @@ function Preview() {
   return (
     <div className="profile-preview">
       <img className="avatar" src={profile.avatar} alt={profile.name} width="88" height="88" />
-      <p className="eyebrow">Hi, I'm</p>
-      <h1>{profile.name}</h1>
-      <p className="lead">{profile.role}</p>
-      <div className="chips">
-        <span className="chip">{profile.location}</span>
-        <span className="chip">{profile.school}</span>
-        <span className="chip">{profile.status}</span>
+      <div className="profile-preview__body">
+        <p className="eyebrow">Hi, I'm</p>
+        <h1>{profile.name}</h1>
+        <p className="lead">{profile.role}</p>
+        <div className="chips">
+          <span className="chip">{profile.location}</span>
+          <span className="chip">{profile.school}</span>
+          <span className="chip">{profile.status}</span>
+        </div>
       </div>
     </div>
   );

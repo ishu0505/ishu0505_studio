@@ -12,8 +12,9 @@ import { stickers as allStickers } from '../data/stickers';
 
 function Preview() {
   const withImages = projects.filter((p) => p.image).slice(0, 2);
+  const featured = projects.slice(0, 3);
   return (
-    <div className="teaser">
+    <div className="teaser teaser--projects">
       <div className="teaser__thumbs">
         {withImages.map((p) => (
           <img key={p.id} src={p.image} alt="" loading="lazy" />
@@ -22,6 +23,14 @@ function Preview() {
       <p className="label">Projects</p>
       <h2>Things I've built</h2>
       <p className="muted small">{projects.length} projects &amp; products</p>
+      <div className="teaser__pills">
+        {featured.map((p) => (
+          <span key={p.id} className="teaser__pill">
+            <strong>{p.title}</strong>
+            <span className="teaser__pill-meta">{p.category}</span>
+          </span>
+        ))}
+      </div>
     </div>
   );
 }

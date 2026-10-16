@@ -38,14 +38,14 @@ saves the changes to GitHub. GitHub then rebuilds and publishes the site.
 
 | File | Controls |
 |---|---|
-| `profile.json` | Name, job title, intro, photo, email, links, "current job" card, skills tags, certificate, resume PDF path |
+| `profile.json` | Front-page `"layout"` preset (`projects-first`, `profile-top-left`, `dual-showcase`, `classic`), name, job title, intro, photo, email, links, "current job" card, skills tags, certificate, resume PDF path |
 | `projects.json` | Every project and live demo (optional extra buttons via `links`; first 2 projects with an `image` show as the front-page Projects tile thumbnails) |
 | `hobbies.json` | The Hobbies tile (title, caption, icons, colour) |
 | `resume.json` | Jobs, education, certifications, skills |
 | `writing.json` | Articles (picture optional; `articles[0]` is the front-page Articles & Blogs tile headline) and link cards |
 | `stickers.json` | The doodles stuck on each tile (icon, size, tilt, position) |
 | `icons.json` | Your own uploaded icons |
-| `schema.js` | The **rules** for all of the above (required fields, allowed colours...) |
+| `schema.js` | The **rules** for all of the above (required fields, allowed colours, `LAYOUT_PRESETS`...) |
 
 ### `src/sections/` — one file per tile
 Each exports `{ id, title, icon, tone, stickers, Preview, Full }`.
@@ -55,9 +55,9 @@ Each exports `{ id, title, icon, tone, stickers, Preview, Full }`.
 ### `src/components/`
 | File | What it does |
 |---|---|
-| `BentoGrid.jsx` | Lays out all tiles; switches between front page and "one big tile + rail". |
+| `BentoGrid.jsx` | Lays out all tiles using the active `profile.layout` preset (`bento--layout-<preset>`); switches between front page and "one big tile + rail". |
 | `Tile.jsx` | One tile, animating between its three modes. |
-| `hoverLayout.js` | The numbers for "hovered tile grows, others make room". |
+| `hoverLayout.js` | Preset-aware track weights for "hovered tile grows, others make room". |
 | `Header.jsx` | Top bar. |
 | `DemoCard.jsx`, `DemoPreview.jsx` | The live-demo card and its pop-up preview window. |
 | `doodles/icons.jsx` | **All built-in icons** (hand-drawn SVG). Add new ones here. |

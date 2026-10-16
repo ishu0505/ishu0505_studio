@@ -68,21 +68,55 @@
 
 /* ===== FRONT PAGE: all tiles visible =====
    Desktop: 4 x 3 grid that fits the viewport.
-     profile profile projects projects
-     profile profile resume   hobbies
-     writing contact resume   hobbies                                  */
+   Supports 4 presets controlled by profile.layout in src/content/profile.json:
+   - projects-first (Option 1 — default): Projects 2x2 top-left, Writing 2x1 bottom-left, Profile 2x1 top-right
+   - profile-top-left (Option 2): Profile 2x1 top-left, Writing 2x1 mid-left, Projects 2x2 top-right
+   - dual-showcase (Option 3): Top row 1x1 pills, Projects 2x2 bottom-left, Writing 2x2 bottom-right
+   - classic: Profile 2x2 top-left, Projects 2x1 top-right, Writing 1x1 bottom-left */
 .bento--home {
   grid-template-columns: var(--cols, repeat(4, minmax(0, 1fr)));
   grid-template-rows: var(--rows, repeat(3, minmax(0, 1fr)));
   height: max(var(--stage-h), 560px);
   padding: 14px 8px 8px 4px; /* room for hanging stickers + hard shadows */
 }
-.bento--home .tile--profile  { grid-area: 1 / 1 / 3 / 3; }
-.bento--home .tile--projects { grid-area: 1 / 3 / 2 / 5; }
-.bento--home .tile--resume   { grid-area: 2 / 3 / 4 / 4; }
-.bento--home .tile--hobbies  { grid-area: 2 / 4 / 4 / 5; }
-.bento--home .tile--writing  { grid-area: 3 / 1 / 4 / 2; }
-.bento--home .tile--contact  { grid-area: 3 / 2 / 4 / 3; }
+
+/* Preset 1 (default): projects-first */
+.bento--home .tile--projects,
+.bento--home.bento--layout-projects-first .tile--projects { grid-area: 1 / 1 / 3 / 3; }
+.bento--home .tile--writing,
+.bento--home.bento--layout-projects-first .tile--writing  { grid-area: 3 / 1 / 4 / 3; }
+.bento--home .tile--profile,
+.bento--home.bento--layout-projects-first .tile--profile  { grid-area: 1 / 3 / 2 / 5; }
+.bento--home .tile--resume,
+.bento--home.bento--layout-projects-first .tile--resume   { grid-area: 2 / 3 / 4 / 4; }
+.bento--home .tile--hobbies,
+.bento--home.bento--layout-projects-first .tile--hobbies  { grid-area: 2 / 4 / 3 / 5; }
+.bento--home .tile--contact,
+.bento--home.bento--layout-projects-first .tile--contact  { grid-area: 3 / 4 / 4 / 5; }
+
+/* Preset 2: profile-top-left */
+.bento--home.bento--layout-profile-top-left .tile--profile  { grid-area: 1 / 1 / 2 / 3; }
+.bento--home.bento--layout-profile-top-left .tile--writing  { grid-area: 2 / 1 / 3 / 3; }
+.bento--home.bento--layout-profile-top-left .tile--projects { grid-area: 1 / 3 / 3 / 5; }
+.bento--home.bento--layout-profile-top-left .tile--resume   { grid-area: 3 / 1 / 4 / 3; }
+.bento--home.bento--layout-profile-top-left .tile--hobbies  { grid-area: 3 / 3 / 4 / 4; }
+.bento--home.bento--layout-profile-top-left .tile--contact  { grid-area: 3 / 4 / 4 / 5; }
+
+/* Preset 3: dual-showcase */
+.bento--home.bento--layout-dual-showcase .tile--profile  { grid-area: 1 / 1 / 2 / 2; }
+.bento--home.bento--layout-dual-showcase .tile--resume   { grid-area: 1 / 2 / 2 / 3; }
+.bento--home.bento--layout-dual-showcase .tile--hobbies  { grid-area: 1 / 3 / 2 / 4; }
+.bento--home.bento--layout-dual-showcase .tile--contact  { grid-area: 1 / 4 / 2 / 5; }
+.bento--home.bento--layout-dual-showcase .tile--projects { grid-area: 2 / 1 / 4 / 3; }
+.bento--home.bento--layout-dual-showcase .tile--writing  { grid-area: 2 / 3 / 4 / 5; }
+
+/* Preset 4: classic */
+.bento--home.bento--layout-classic .tile--profile  { grid-area: 1 / 1 / 3 / 3; }
+.bento--home.bento--layout-classic .tile--projects { grid-area: 1 / 3 / 2 / 5; }
+.bento--home.bento--layout-classic .tile--resume   { grid-area: 2 / 3 / 4 / 4; }
+.bento--home.bento--layout-classic .tile--hobbies  { grid-area: 2 / 4 / 4 / 5; }
+.bento--home.bento--layout-classic .tile--writing  { grid-area: 3 / 1 / 4 / 2; }
+.bento--home.bento--layout-classic .tile--contact  { grid-area: 3 / 2 / 4 / 3; }
 
 /* ===== FOCUS: one tile big, the rest shrink into a rail =====
    Desktop: big tile on the left, rail of small tiles on the right.   */
@@ -171,10 +205,42 @@
     height: auto;
     padding: 18px 8px 12px 4px;
   }
-  .bento--home .tile { grid-area: auto; }
-  .bento--home .tile--profile,
-  .bento--home .tile--contact { grid-column: span 2; }
-  .bento--home .tile--profile { min-height: 320px; }
+  .bento--home .tile,
+  .bento--home.bento--layout-projects-first .tile,
+  .bento--home.bento--layout-profile-top-left .tile,
+  .bento--home.bento--layout-dual-showcase .tile,
+  .bento--home.bento--layout-classic .tile {
+    grid-area: auto;
+  }
+
+  /* Projects-first mobile: Projects & Writing get full-width hero span first */
+  .bento--home.bento--layout-projects-first .tile--projects { grid-column: span 2; min-height: 240px; order: 1; }
+  .bento--home.bento--layout-projects-first .tile--writing  { grid-column: span 2; order: 2; }
+  .bento--home.bento--layout-projects-first .tile--profile  { grid-column: span 2; order: 3; }
+  .bento--home.bento--layout-projects-first .tile--resume   { order: 4; }
+  .bento--home.bento--layout-projects-first .tile--hobbies  { order: 5; }
+  .bento--home.bento--layout-projects-first .tile--contact  { grid-column: span 2; order: 6; }
+
+  /* Profile-top-left mobile */
+  .bento--home.bento--layout-profile-top-left .tile--profile  { grid-column: span 2; order: 1; }
+  .bento--home.bento--layout-profile-top-left .tile--projects { grid-column: span 2; min-height: 240px; order: 2; }
+  .bento--home.bento--layout-profile-top-left .tile--writing  { grid-column: span 2; order: 3; }
+  .bento--home.bento--layout-profile-top-left .tile--resume   { order: 4; }
+  .bento--home.bento--layout-profile-top-left .tile--hobbies  { order: 5; }
+  .bento--home.bento--layout-profile-top-left .tile--contact  { grid-column: span 2; order: 6; }
+
+  /* Dual-showcase mobile */
+  .bento--home.bento--layout-dual-showcase .tile--projects { grid-column: span 2; min-height: 240px; order: 1; }
+  .bento--home.bento--layout-dual-showcase .tile--writing  { grid-column: span 2; min-height: 200px; order: 2; }
+  .bento--home.bento--layout-dual-showcase .tile--profile  { grid-column: span 2; order: 3; }
+  .bento--home.bento--layout-dual-showcase .tile--resume   { order: 4; }
+  .bento--home.bento--layout-dual-showcase .tile--hobbies  { order: 5; }
+  .bento--home.bento--layout-dual-showcase .tile--contact  { grid-column: span 2; order: 6; }
+
+  /* Classic mobile */
+  .bento--home.bento--layout-classic .tile--profile,
+  .bento--home.bento--layout-classic .tile--contact { grid-column: span 2; }
+  .bento--home.bento--layout-classic .tile--profile { min-height: 320px; }
 
   /* focus: big tile on top, rail of five small tiles along the bottom */
   .bento--focus {

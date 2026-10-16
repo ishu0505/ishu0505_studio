@@ -8,10 +8,22 @@ import { articles, writingLinks } from '../data/writing';
 import { stickers as allStickers } from '../data/stickers';
 
 function Preview() {
+  const lead = articles[0];
+  const more = articles.slice(1, 3);
   return (
-    <div className="teaser">
+    <div className="teaser teaser--writing">
       <p className="label">Articles &amp; Blogs</p>
-      <h2>{articles[0].title}</h2>
+      <h2>{lead.title}</h2>
+      {lead.summary && <p className="muted small teaser__summary">{lead.summary}</p>}
+      {more.length > 0 && (
+        <div className="teaser__pills">
+          {more.map((a) => (
+            <span key={a.id} className="teaser__pill">
+              <strong>{a.title}</strong>
+            </span>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

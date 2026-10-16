@@ -31,6 +31,7 @@ without touching code. Changes are saved to this repo and the site republishes a
 
 ### Common edits
 
+- **Switch the front-page bento grid layout preset:** open `/#/admin` → *About & contact* → **Front-page layout** (or set `"layout"` in `src/content/profile.json` to `"projects-first"`, `"profile-top-left"`, `"dual-showcase"`, or `"classic"`).
 - **Update your resume / job info:** `src/content/resume.json` (and replace `public/assets/resume/Ishaan-parmar-resume.pdf`).
 - **Add or reorder projects (and front-page thumbnails):** edit `src/content/projects.json` (or `/#/admin` → *Projects & demos*). The first two projects with an `"image"` field appear as the two thumbnails on the front-page **Projects** tile.
 - **Add or reorder articles (and front-page headline):** edit `src/content/writing.json` (or `/#/admin` → *Writing*). The first item in `articles` (`articles[0]`) is shown as the headline on the front-page **Articles & Blogs** tile.
