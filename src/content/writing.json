@@ -6,7 +6,7 @@
       "category": "Interactive explainer",
       "date": "Interactive",
       "summary": "Play with shops, seats, buckets and pizza to see how tokenjuggler picks a free AI provider, fails over, and shares quotas.",
-      "href": "explainers/tokenjuggler/",
+      "href": "https://ishu0505.tech/explainers/tokenjuggler/",
       "tone": "yellow"
     },
     {
@@ -15,7 +15,7 @@
       "category": "Interactive explainer · Phase 2",
       "date": "Interactive",
       "summary": "Race SGLang against vLLM on a single 8 GB RTX 4060, degrade synthetic financial PDFs, and see why 99.7% character accuracy still failed strict JSON schemas.",
-      "href": "explainers/ocr-my-gpu/",
+      "href": "https://ishu0505.tech/explainers/ocr-my-gpu/",
       "tone": "mint"
     },
     {

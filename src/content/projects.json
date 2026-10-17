@@ -9,7 +9,7 @@
     "links": [
       {
         "label": "Explained simply",
-        "href": "explainers/ocr-my-gpu/"
+        "href": "https://ishu0505.tech/explainers/ocr-my-gpu/"
       }
     ],
     "tone": "yellow",
@@ -29,7 +29,7 @@
       },
       {
         "label": "Explained simply",
-        "href": "explainers/tokenjuggler/"
+        "href": "https://ishu0505.tech/explainers/tokenjuggler/"
       }
     ],
     "tone": "mint",
