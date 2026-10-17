@@ -107,7 +107,14 @@ export function useSiteContent(client) {
     [pending],
   );
 
-  const assetExists = useCallback((assetPath) => repoFiles.has(repoPathFor(assetPath)) || Boolean(pending[repoPathFor(assetPath)]), [repoFiles, pending]);
+  const assetExists = useCallback(
+    (assetPath) => {
+      const p = repoPathFor(assetPath);
+      const indexFile = p.endsWith('/') ? `${p}index.html` : `${p}/index.html`;
+      return repoFiles.has(p) || repoFiles.has(indexFile) || Boolean(pending[p]);
+    },
+    [repoFiles, pending],
+  );
 
   /** Same rules as the build check, so you hear about mistakes before publishing. */
   const problems = useMemo(() => {

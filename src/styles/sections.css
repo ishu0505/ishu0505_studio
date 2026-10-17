@@ -9,11 +9,19 @@
   gap: 4px;
   height: 100%;
   justify-content: flex-end;
+  min-width: 0;
   min-height: 0;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 .teaser h2 {
   font-size: clamp(1.45rem, 2.1vw, 1.95rem);
   line-height: 1.08;
+  min-width: 0;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  word-break: break-word;
   transition: font-size .22s ease, line-height .22s ease;
 }
 .tile--home:hover .teaser h2 {
