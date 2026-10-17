@@ -20,6 +20,20 @@ src/styles/*.css     <- how everything looks
 The **admin** (`src/admin/`) is a separate screen that edits `src/content/*.json` and
 saves the changes to GitHub. GitHub then rebuilds and publishes the site.
 
+## Tech stack & animations (JavaScript, CSS, HTML)
+
+- **JavaScript & Build:**
+  - **React 18** (`react`, `react-dom`) for the component UI and state.
+  - **Vite 8** (`vite`, `@vitejs/plugin-react`) for fast local dev and production bundling.
+  - **Framer Motion 11** (`framer-motion`) in `src/components/Tile.jsx`: drives the spring layout morph (`layout` prop with `{ type: 'spring', stiffness: 260, damping: 32, mass: 0.9 }`) when a tile expands from the home grid into the full-view + side-rail layout, plus staggered entry fade-ins and tap scaling (`whileTap={{ scale: 0.98 }}`).
+  - **Zero-dependency Vanilla JS** on standalone explainer pages (`public/explainers/tokenjuggler/index.html` and `public/explainers/ocr-my-gpu/index.html`) and inside the Admin Portal's GitHub REST client (`src/admin/lib/`).
+- **CSS (Plain modular CSS — no Tailwind/Sass required):**
+  - **CSS Grid track transitions** (`src/components/hoverLayout.js` + `src/styles/bento.css`): hovering a tile updates `--cols` and `--rows` `fr` weights so the hovered tile's tracks expand while neighbor tracks make room.
+  - **CSS Keyframe & transition animations** (`src/styles/ui.css`, `src/styles/sections.css`): floating doodle stickers (`@keyframes bob`), wobbly hand-drawn borders (`--wobble-a`, `--wobble-b`), SVG `feTurbulence` paper grain (`--grain`), button/card hover lifts, and responsive typography scaling (`clamp(...)` + `overflow-wrap: anywhere` so long text or emails never overflow a tile or card).
+- **HTML & Multi-page routing:**
+  - Single-page main app (`index.html` + hash routing for `#/admin`, with a static redirect at `public/admin/index.html` so `/admin` works too).
+  - Multi-page static explainers served directly from `public/explainers/<name>/index.html`.
+
 ## Folder by folder
 
 | Folder / file | What it is |

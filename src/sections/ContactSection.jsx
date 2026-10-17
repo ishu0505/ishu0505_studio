@@ -22,7 +22,7 @@ function Preview() {
 function Full() {
   const { links } = profile;
   return (
-    <div className="card-grid">
+    <div className="card-grid card-grid--wide">
       <Card tone="yellow" label="Email" title={`${profile.email} ↗`} href={`mailto:${profile.email}`} icons={['speech']} />
       <Card tone="blue" label="Contact form" title="Send me a message ↗" href={links.form} />
       <Card tone="lilac" label="LinkedIn" title="ishaan-parmar5 ↗" href={links.linkedin} />

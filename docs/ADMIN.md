@@ -1,6 +1,6 @@
 # Using the admin
 
-Open **`https://ishu0505.tech/#/admin`** (works on your phone too).
+Open **`https://ishu0505.tech/#/admin`** (or **`https://ishu0505.tech/admin`**, which redirects automatically; works on your phone too).
 
 ## First time: create a token
 
